@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import Stripe from "stripe";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
-import { insertCourseSchema, insertModuleSchema, insertUserProgressSchema, insertCertificateSchema } from "@shared/schema";
+import { insertCourseSchema, insertModuleSchema, insertCertificateSchema } from "@shared/schema";
 import { z } from "zod";
 
 // Initialize Stripe only if secret key is provided
@@ -67,6 +67,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Price mapping for different tiers
       const priceMapping = {
         recruit: process.env.STRIPE_RECRUIT_PRICE_ID || 'price_recruit',
+        operative: process.env.STRIPE_OPERATIVE_PRICE_ID || 'price_operative',
         operator: process.env.STRIPE_OPERATOR_PRICE_ID || 'price_operator', 
         shadow: process.env.STRIPE_SHADOW_PRICE_ID || 'price_shadow'
       };
@@ -155,48 +156,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Progress endpoints
+  // Progress tracking removed - access is tier-based only
   app.get('/api/user/progress', async (req, res) => {
     if (!req.isAuthenticated()) {
       return res.sendStatus(401);
     }
-
-    try {
-      const progress = await storage.getUserProgress(req.user!.id);
-      res.json(progress);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
-  });
-
-  app.get('/api/user/progress/:courseId', async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.sendStatus(401);
-    }
-
-    try {
-      const progress = await storage.getCourseProgress(req.user!.id, req.params.courseId);
-      res.json(progress);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
-  });
-
-  app.post('/api/user/progress', async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.sendStatus(401);
-    }
-
-    try {
-      const progressData = insertUserProgressSchema.parse({
-        ...req.body,
-        userId: req.user!.id
-      });
-      const progress = await storage.updateProgress(progressData);
-      res.json(progress);
-    } catch (error: any) {
-      res.status(400).json({ message: error.message });
-    }
+    // Return empty array since progress tracking is removed
+    res.json([]);
   });
 
   // Certificates endpoints

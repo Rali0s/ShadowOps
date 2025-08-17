@@ -6,7 +6,7 @@ import { TerminalSwitches, type TerminalBuffers } from "@/components/terminal-sw
 import { EnhancedTerminal } from "@/components/enhanced-terminal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
-import type { Course, UserProgress } from "@shared/schema";
+import type { Course } from "@shared/schema";
 
 export default function AdvancedTerminalPage() {
   const { user } = useAuth();
@@ -31,9 +31,7 @@ export default function AdvancedTerminalPage() {
     queryKey: ["/api/courses"],
   });
 
-  const { data: userProgress = [] } = useQuery<UserProgress[]>({
-    queryKey: ["/api/user/progress"],
-  });
+  // Progress tracking removed - access is tier-based only
 
   if (!user) {
     return (

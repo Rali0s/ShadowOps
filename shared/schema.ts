@@ -9,7 +9,7 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
-  subscriptionTier: text("subscription_tier").default("none"), // none, recruit, operator, shadow
+  subscriptionTier: text("subscription_tier").default("none"), // none, recruit, operative, operator, shadow
   stripeCustomerId: text("stripe_customer_id"),
   stripeSubscriptionId: text("stripe_subscription_id"),
   isActive: boolean("is_active").default(true),
@@ -23,7 +23,7 @@ export const courses = pgTable("courses", {
   description: text("description").notNull(),
   difficulty: integer("difficulty").notNull(), // 1-5 stars
   duration: integer("duration").notNull(), // in hours
-  requiredTier: text("required_tier").notNull(), // recruit, operator, shadow
+  requiredTier: text("required_tier").notNull(), // recruit, operative, operator, shadow
   icon: text("icon").default("fas fa-shield-alt"),
   color: text("color").default("terminal-green"),
   isActive: boolean("is_active").default(true),
@@ -40,15 +40,7 @@ export const modules = pgTable("modules", {
   isActive: boolean("is_active").default(true),
 });
 
-export const userProgress = pgTable("user_progress", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").references(() => users.id).notNull(),
-  courseId: varchar("course_id").references(() => courses.id).notNull(),
-  moduleId: varchar("module_id").references(() => modules.id),
-  completedAt: timestamp("completed_at"),
-  progress: integer("progress").default(0), // 0-100
-  createdAt: timestamp("created_at").defaultNow(),
-});
+// User progress tracking removed - access is tier-based only
 
 export const certificates = pgTable("certificates", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -60,25 +52,16 @@ export const certificates = pgTable("certificates", {
 
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
-  progress: many(userProgress),
   certificates: many(certificates),
 }));
 
 export const coursesRelations = relations(courses, ({ many }) => ({
   modules: many(modules),
-  progress: many(userProgress),
   certificates: many(certificates),
 }));
 
-export const modulesRelations = relations(modules, ({ one, many }) => ({
+export const modulesRelations = relations(modules, ({ one }) => ({
   course: one(courses, { fields: [modules.courseId], references: [courses.id] }),
-  progress: many(userProgress),
-}));
-
-export const userProgressRelations = relations(userProgress, ({ one }) => ({
-  user: one(users, { fields: [userProgress.userId], references: [users.id] }),
-  course: one(courses, { fields: [userProgress.courseId], references: [courses.id] }),
-  module: one(modules, { fields: [userProgress.moduleId], references: [modules.id] }),
 }));
 
 export const certificatesRelations = relations(certificates, ({ one }) => ({
@@ -105,11 +88,6 @@ export const insertModuleSchema = createInsertSchema(modules).omit({
   id: true,
 });
 
-export const insertUserProgressSchema = createInsertSchema(userProgress).omit({
-  id: true,
-  createdAt: true,
-});
-
 export const insertCertificateSchema = createInsertSchema(certificates).omit({
   id: true,
   issuedAt: true,
@@ -122,7 +100,5 @@ export type InsertCourse = z.infer<typeof insertCourseSchema>;
 export type Course = typeof courses.$inferSelect;
 export type InsertModule = z.infer<typeof insertModuleSchema>;
 export type Module = typeof modules.$inferSelect;
-export type InsertUserProgress = z.infer<typeof insertUserProgressSchema>;
-export type UserProgress = typeof userProgress.$inferSelect;
 export type InsertCertificate = z.infer<typeof insertCertificateSchema>;
 export type Certificate = typeof certificates.$inferSelect;

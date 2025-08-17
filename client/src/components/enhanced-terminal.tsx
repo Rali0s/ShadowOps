@@ -236,7 +236,9 @@ export function EnhancedTerminal({ user, courses, userProgress }: EnhancedTermin
         </div>
         <div className="flex items-center space-x-2">
           <AccessibilitySymbol 
-            type={user.subscriptionTier === 'shadow' ? 'Shadow' : user.subscriptionTier === 'operator' ? 'Operator' : 'Recruit'} 
+            type={user.subscriptionTier === 'shadow' ? 'Shadow' : 
+                  user.subscriptionTier === 'operator' ? 'Operator' : 
+                  user.subscriptionTier === 'operative' ? 'Operative' : 'Recruit'} 
             className="w-4 h-4" 
           />
           <span className="text-xs text-terminal-red-secondary font-mono">

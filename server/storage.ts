@@ -1,4 +1,4 @@
-import { users, courses, modules, userProgress, certificates, type User, type InsertUser, type Course, type InsertCourse, type Module, type InsertModule, type UserProgress, type InsertUserProgress, type Certificate, type InsertCertificate } from "@shared/schema";
+import { users, courses, modules, certificates, type User, type InsertUser, type Course, type InsertCourse, type Module, type InsertModule, type Certificate, type InsertCertificate } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc } from "drizzle-orm";
 import session from "express-session";
@@ -24,16 +24,11 @@ export interface IStorage {
   getModule(id: string): Promise<Module | undefined>;
   createModule(module: InsertModule): Promise<Module>;
   
-  getUserProgress(userId: string): Promise<UserProgress[]>;
-  getCourseProgress(userId: string, courseId: string): Promise<UserProgress[]>;
-  updateProgress(progress: InsertUserProgress): Promise<UserProgress>;
-  
   getUserCertificates(userId: string): Promise<Certificate[]>;
   createCertificate(certificate: InsertCertificate): Promise<Certificate>;
   
   getSystemStats(): Promise<{
     activeUsers: number;
-    completedModules: number;
     certificates: number;
     revenue: number;
   }>;
@@ -100,7 +95,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getCoursesByTier(tier: string): Promise<Course[]> {
-    const tierHierarchy = { none: 0, recruit: 1, operator: 2, shadow: 3 };
+    const tierHierarchy = { none: 0, recruit: 1, operative: 2, operator: 3, shadow: 4 };
     const userTierLevel = tierHierarchy[tier as keyof typeof tierHierarchy] || 0;
     
     return await db.select().from(courses).where(eq(courses.isActive, true));
@@ -138,47 +133,7 @@ export class DatabaseStorage implements IStorage {
     return newModule;
   }
 
-  async getUserProgress(userId: string): Promise<UserProgress[]> {
-    return await db.select().from(userProgress)
-      .where(eq(userProgress.userId, userId))
-      .orderBy(desc(userProgress.createdAt));
-  }
-
-  async getCourseProgress(userId: string, courseId: string): Promise<UserProgress[]> {
-    return await db.select().from(userProgress)
-      .where(and(
-        eq(userProgress.userId, userId),
-        eq(userProgress.courseId, courseId)
-      ));
-  }
-
-  async updateProgress(progress: InsertUserProgress): Promise<UserProgress> {
-    // Check if progress already exists
-    const [existing] = await db.select().from(userProgress)
-      .where(and(
-        eq(userProgress.userId, progress.userId),
-        eq(userProgress.courseId, progress.courseId),
-        progress.moduleId ? eq(userProgress.moduleId, progress.moduleId) : eq(userProgress.moduleId, null)
-      ));
-
-    if (existing) {
-      const [updated] = await db
-        .update(userProgress)
-        .set({ 
-          progress: progress.progress,
-          completedAt: progress.progress === 100 ? new Date() : null
-        })
-        .where(eq(userProgress.id, existing.id))
-        .returning();
-      return updated;
-    } else {
-      const [newProgress] = await db
-        .insert(userProgress)
-        .values(progress)
-        .returning();
-      return newProgress;
-    }
-  }
+  // Progress tracking removed - access is tier-based only
 
   async getUserCertificates(userId: string): Promise<Certificate[]> {
     return await db.select().from(certificates)
@@ -196,21 +151,18 @@ export class DatabaseStorage implements IStorage {
 
   async getSystemStats(): Promise<{
     activeUsers: number;
-    completedModules: number;
     certificates: number;
     revenue: number;
   }> {
-    const activeUsers = await db.$count(users, eq(users.isActive, true));
-    const completedModules = await db.$count(userProgress, eq(userProgress.progress, 100));
-    const certificateCount = await db.$count(certificates);
+    const activeUsers = await db.select().from(users).where(eq(users.isActive, true));
+    const certificatesData = await db.select().from(certificates);
     
     // Mock revenue calculation - would integrate with Stripe in production
-    const revenue = activeUsers * 79; // Average revenue per user
+    const revenue = activeUsers.length * 79; // Average revenue per user
     
     return {
-      activeUsers,
-      completedModules,
-      certificates: certificateCount,
+      activeUsers: activeUsers.length,
+      certificates: certificatesData.length,
       revenue
     };
   }
