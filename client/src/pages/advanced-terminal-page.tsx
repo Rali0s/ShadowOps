@@ -114,7 +114,7 @@ export default function AdvancedTerminalPage() {
                     <EnhancedTerminal 
                       user={user} 
                       courses={courses} 
-                      userProgress={userProgress}
+                      userProgress={[]}
                     />
                   </div>
                 </TabsContent>
@@ -124,7 +124,7 @@ export default function AdvancedTerminalPage() {
                     <DatabaseTerminal 
                       user={user} 
                       courses={courses} 
-                      userProgress={userProgress}
+                      userProgress={[]}
                       buffers={terminalBuffers}
                     />
                   </div>
