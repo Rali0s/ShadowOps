@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import type { User, Course, UserProgress } from "@shared/schema";
+import type { User, Course } from "@shared/schema";
+
+type UserProgress = any; // Removed from schema, keeping for compatibility
 import { StatusIndicator, AccessibilitySymbol } from "./terminal-symbols";
 
 interface EnhancedTerminalProps {

@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "./lib/protected-route";
+import Navigation from "@/components/ui/navigation";
 import HomePage from "@/pages/home-page";
 import AuthPage from "@/pages/auth-page";
 import TerminalPage from "@/pages/terminal-page";
@@ -34,8 +35,13 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <TooltipProvider>
-          <Toaster />
-          <Router />
+          <div className="min-h-screen bg-terminal-bg text-gray-100">
+            <Navigation />
+            <main className="pt-0">
+              <Router />
+            </main>
+            <Toaster />
+          </div>
         </TooltipProvider>
       </AuthProvider>
     </QueryClientProvider>

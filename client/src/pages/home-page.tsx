@@ -7,61 +7,19 @@ export default function HomePage() {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-terminal-bg text-gray-100">
-      {/* Header */}
-      <header className="border-b border-gray-800 bg-card-bg/90 backdrop-blur-sm">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-terminal-green rounded-lg flex items-center justify-center">
-                <Code className="text-terminal-bg text-lg font-bold" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-terminal-green font-mono">BlackRaven OS</h1>
-                <p className="text-xs text-gray-400">Cybersecurity Training Platform</p>
-              </div>
-            </div>
-            <nav className="flex items-center space-x-6">
-              {user ? (
-                <>
-                  <Link href="/terminal" className="text-gray-300 hover:text-terminal-green transition-colors" data-testid="link-terminal">
-                    Terminal
-                  </Link>
-                  <Link href="/advanced-terminal" className="text-gray-300 hover:text-terminal-green transition-colors" data-testid="link-advanced-terminal">
-                    Advanced
-                  </Link>
-                  <Link href="/courses" className="text-gray-300 hover:text-terminal-green transition-colors" data-testid="link-courses">
-                    Courses
-                  </Link>
-                  <Link href="/courses" data-testid="button-dashboard">
-                    <Button className="px-4 py-2 bg-terminal-green text-terminal-bg rounded-lg font-semibold hover:bg-terminal-amber transition-colors">
-                      Dashboard
-                    </Button>
-                  </Link>
-                </>
-              ) : (
-                <Link href="/auth" data-testid="button-login">
-                  <Button className="px-4 py-2 bg-terminal-green text-terminal-bg rounded-lg font-semibold hover:bg-terminal-amber transition-colors">
-                    Login
-                  </Button>
-                </Link>
-              )}
-            </nav>
-          </div>
-        </div>
-      </header>
+    <div className="bg-terminal-bg text-gray-100">
 
       {/* Main Content */}
       <main className="container mx-auto px-6 py-20">
         <div className="max-w-4xl mx-auto text-center">
           {/* Hero Section */}
           <div className="mb-16">
-            <div className="inline-block p-6 bg-card-bg rounded-2xl glass-effect mb-8">
-              <div className="w-20 h-20 bg-gradient-to-br from-terminal-green to-cyber-blue rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Shield className="text-3xl text-terminal-bg" />
+            <div className="inline-block p-8 bg-card-bg rounded-2xl glass-effect mb-8 border border-terminal-red-muted">
+              <div className="w-20 h-20 bg-gradient-to-br from-terminal-red-primary to-terminal-red-secondary rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Shield className="text-3xl text-white" />
               </div>
-              <h2 className="text-4xl md:text-6xl font-bold text-terminal-green mb-2 font-mono">BlackRaven OS</h2>
-              <p className="text-terminal-amber font-mono text-sm">Elite Cybersecurity Training</p>
+              <h2 className="text-4xl md:text-6xl font-bold text-terminal-red-bright mb-2 font-mono tracking-tight">BlackRaven OS</h2>
+              <p className="text-terminal-red-secondary font-mono text-base font-medium">Elite Cybersecurity Training</p>
             </div>
             
             <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
