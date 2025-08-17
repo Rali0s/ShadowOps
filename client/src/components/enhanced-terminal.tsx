@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
-// @ts-ignore - react-console-emulator doesn't have TypeScript definitions
-import Terminal from "react-console-emulator";
+import { useState, useEffect, useRef } from "react";
 import type { User, Course, UserProgress } from "@shared/schema";
 
 interface EnhancedTerminalProps {
@@ -10,7 +8,34 @@ interface EnhancedTerminalProps {
 }
 
 export function EnhancedTerminal({ user, courses, userProgress }: EnhancedTerminalProps) {
-  const [terminal, setTerminal] = useState<any>(null);
+  const [output, setOutput] = useState<string[]>([]);
+  const [currentInput, setCurrentInput] = useState("");
+  const [commandHistory, setCommandHistory] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const terminalRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Boot sequence
+  useEffect(() => {
+    const bootSequence = [
+      "[SYSTEM] BlackRaven OS v2.0.1 - CLASSIFIED",
+      "[BOOT] Initializing PsychProject training environment...",
+      `[AUTH] User authenticated: ${user.username.toUpperCase()}_${user.id.slice(-4)}`,
+      `[INFO] Access level: ${user.subscriptionTier?.toUpperCase() || 'NONE'}`,
+      "[INFO] Welcome to advanced cybersecurity training",
+      "",
+      "Type 'help' to see available commands.",
+      ""
+    ];
+    setOutput(bootSequence);
+  }, [user]);
+
+  // Auto scroll to bottom
+  useEffect(() => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+    }
+  }, [output]);
 
   const canAccessCourse = (requiredTier: string) => {
     const tierLevels = { none: 0, recruit: 1, operator: 2, shadow: 3 };
@@ -19,12 +44,17 @@ export function EnhancedTerminal({ user, courses, userProgress }: EnhancedTermin
     return userLevel >= requiredLevel;
   };
 
-  const commands = {
-    help: {
-      description: 'Display available commands',
-      usage: 'help',
-      fn: () => {
-        return [
+  const processCommand = (command: string) => {
+    const trimmed = command.trim();
+    const args = trimmed.split(' ');
+    const cmd = args[0].toLowerCase();
+
+    // Add command to output
+    const newOutput = [...output, `${user.username}@psychproject:~$ ${command}`];
+
+    switch (cmd) {
+      case 'help':
+        newOutput.push(
           "Available Commands:",
           "  help          - Display this help message",
           "  modules       - List available training modules",
@@ -33,171 +63,165 @@ export function EnhancedTerminal({ user, courses, userProgress }: EnhancedTermin
           "  cert [course] - Generate completion certificate",
           "  whoami        - Display user information",
           "  clear         - Clear terminal screen",
-          "  exit          - Terminate session",
-        ];
-      }
-    },
-    whoami: {
-      description: 'Display user information',
-      usage: 'whoami',
-      fn: () => {
-        return [
+          "  exit          - Terminate session"
+        );
+        break;
+
+      case 'whoami':
+        newOutput.push(
           `Username: ${user.username}`,
           `Access Level: ${user.subscriptionTier?.toUpperCase() || 'NONE'}`,
           `User ID: ${user.id}`,
-          `Status: ACTIVE`,
-        ];
-      }
-    },
-    modules: {
-      description: 'List available training modules',
-      usage: 'modules',
-      fn: () => {
-        if (courses.length === 0) {
-          return ["No training modules available."];
-        }
-        
-        const result = ["Available Training Modules:"];
-        courses.forEach((course, index) => {
-          const requiredTier = course.requiredTier.toUpperCase();
-          const hasAccess = canAccessCourse(course.requiredTier);
-          const status = hasAccess ? '[ACCESSIBLE]' : '[LOCKED]';
-          result.push(`  ${index + 1}. ${course.title} - ${requiredTier} ${status}`);
-        });
-        return result;
-      }
-    },
-    progress: {
-      description: 'Show your training progress',
-      usage: 'progress',
-      fn: () => {
-        if (userProgress.length === 0) {
-          return ["No training progress recorded."];
-        }
-        
-        const result = [
-          "Training Progress Report:",
-          "────────────────────────────────────"
-        ];
-        
-        const courseProgress = new Map<string, number[]>();
-        userProgress.forEach(p => {
-          if (!courseProgress.has(p.courseId)) {
-            courseProgress.set(p.courseId, []);
-          }
-          courseProgress.get(p.courseId)!.push(p.progress || 0);
-        });
+          `Status: ACTIVE`
+        );
+        break;
 
-        courseProgress.forEach((progresses, courseId) => {
-          const course = courses.find(c => c.id === courseId);
-          if (course) {
-            const avgProgress = Math.round(progresses.reduce((sum, p) => sum + p, 0) / progresses.length);
-            const progressBar = '█'.repeat(Math.floor(avgProgress / 10)) + '░'.repeat(10 - Math.floor(avgProgress / 10));
-            result.push(`${course.title}: [${progressBar}] ${avgProgress}%`);
-          }
-        });
-        
-        return result;
-      }
-    },
-    scenario: {
-      description: 'Start a training scenario',
-      usage: 'scenario [module_id]',
-      fn: (...args: string[]) => {
-        if (args.length === 0) {
-          return [
-            "Usage: scenario [module_id]",
-            "Use 'modules' command to see available scenarios."
-          ];
-        }
-        
-        const moduleId = parseInt(args[0] || '0') - 1;
-        if (moduleId >= 0 && moduleId < courses.length) {
-          const course = courses[moduleId];
-          if (canAccessCourse(course.requiredTier)) {
-            return [
-              `Starting scenario: ${course.title}`,
-              "────────────────────────────────────",
-              `[SCENARIO] ${course.description}`,
-              "[TASK] Complete the objectives to progress.",
-              "[INFO] This is a simulated training environment."
-            ];
-          } else {
-            return [`Access denied. Required tier: ${course.requiredTier.toUpperCase()}`];
-          }
+      case 'modules':
+        if (courses.length === 0) {
+          newOutput.push("No training modules available.");
         } else {
-          return ["Invalid module ID. Use 'modules' to see available options."];
+          newOutput.push("Available Training Modules:");
+          courses.forEach((course, index) => {
+            const requiredTier = course.requiredTier.toUpperCase();
+            const hasAccess = canAccessCourse(course.requiredTier);
+            const status = hasAccess ? '[ACCESSIBLE]' : '[LOCKED]';
+            newOutput.push(`  ${index + 1}. ${course.title} - ${requiredTier} ${status}`);
+          });
         }
-      }
-    },
-    cert: {
-      description: 'Generate completion certificate',
-      usage: 'cert [course_name]',
-      fn: (...args: string[]) => {
-        if (args.length === 0) {
-          return ["Usage: cert [course_name]"];
-        }
-        
-        const courseName = args.join(' ');
-        const course = courses.find(c => c.title.toLowerCase().includes(courseName.toLowerCase()));
-        if (course) {
-          const courseProgress = userProgress.filter(p => p.courseId === course.id);
-          const avgProgress = courseProgress.length > 0 ? 
-            Math.round(courseProgress.reduce((sum, p) => sum + (p.progress || 0), 0) / courseProgress.length) : 0;
+        break;
+
+      case 'progress':
+        if (userProgress.length === 0) {
+          newOutput.push("No training progress recorded.");
+        } else {
+          newOutput.push("Training Progress Report:", "────────────────────────────────────");
           
-          if (avgProgress >= 100) {
-            return [
-              "Certificate Generation Request Submitted",
-              "────────────────────────────────────",
-              `Course: ${course.title}`,
-              `Completion: ${avgProgress}%`,
-              `Certificate ID: CERT_${Date.now().toString(36).toUpperCase()}`,
-              "Certificate will be available in your dashboard."
-            ];
-          } else {
-            return [`Course not completed. Current progress: ${avgProgress}%`];
-          }
-        } else {
-          return ["Course not found."];
+          const courseProgress = new Map<string, number[]>();
+          userProgress.forEach(p => {
+            if (!courseProgress.has(p.courseId)) {
+              courseProgress.set(p.courseId, []);
+            }
+            courseProgress.get(p.courseId)!.push(p.progress || 0);
+          });
+
+          courseProgress.forEach((progresses, courseId) => {
+            const course = courses.find(c => c.id === courseId);
+            if (course) {
+              const avgProgress = Math.round(progresses.reduce((sum, p) => sum + p, 0) / progresses.length);
+              const progressBar = '█'.repeat(Math.floor(avgProgress / 10)) + '░'.repeat(10 - Math.floor(avgProgress / 10));
+              newOutput.push(`${course.title}: [${progressBar}] ${avgProgress}%`);
+            }
+          });
         }
-      }
-    },
-    exit: {
-      description: 'Terminate session',
-      usage: 'exit',
-      fn: () => {
+        break;
+
+      case 'scenario':
+        if (args.length < 2) {
+          newOutput.push("Usage: scenario [module_id]", "Use 'modules' command to see available scenarios.");
+        } else {
+          const moduleId = parseInt(args[1] || '0') - 1;
+          if (moduleId >= 0 && moduleId < courses.length) {
+            const course = courses[moduleId];
+            if (canAccessCourse(course.requiredTier)) {
+              newOutput.push(
+                `Starting scenario: ${course.title}`,
+                "────────────────────────────────────",
+                `[SCENARIO] ${course.description}`,
+                "[TASK] Complete the objectives to progress.",
+                "[INFO] This is a simulated training environment."
+              );
+            } else {
+              newOutput.push(`Access denied. Required tier: ${course.requiredTier.toUpperCase()}`);
+            }
+          } else {
+            newOutput.push("Invalid module ID. Use 'modules' to see available options.");
+          }
+        }
+        break;
+
+      case 'cert':
+        if (args.length < 2) {
+          newOutput.push("Usage: cert [course_name]");
+        } else {
+          const courseName = args.slice(1).join(' ');
+          const course = courses.find(c => c.title.toLowerCase().includes(courseName.toLowerCase()));
+          if (course) {
+            const courseProgress = userProgress.filter(p => p.courseId === course.id);
+            const avgProgress = courseProgress.length > 0 ? 
+              Math.round(courseProgress.reduce((sum, p) => sum + (p.progress || 0), 0) / courseProgress.length) : 0;
+            
+            if (avgProgress >= 100) {
+              newOutput.push(
+                "Certificate Generation Request Submitted",
+                "────────────────────────────────────",
+                `Course: ${course.title}`,
+                `Completion: ${avgProgress}%`,
+                `Certificate ID: CERT_${Date.now().toString(36).toUpperCase()}`,
+                "Certificate will be available in your dashboard."
+              );
+            } else {
+              newOutput.push(`Course not completed. Current progress: ${avgProgress}%`);
+            }
+          } else {
+            newOutput.push("Course not found.");
+          }
+        }
+        break;
+
+      case 'clear':
+        setOutput([]);
+        return;
+
+      case 'exit':
+        newOutput.push("Terminating session...", "Connection closed.");
         setTimeout(() => {
           window.location.href = '/';
         }, 1000);
-        return [
-          "Terminating session...",
-          "Connection closed."
-        ];
-      }
+        break;
+
+      case '':
+        // Empty command, just show prompt again
+        break;
+
+      default:
+        newOutput.push(`Command not found: ${cmd}`, "Type 'help' for available commands.");
+        break;
+    }
+
+    newOutput.push(""); // Empty line after command
+    setOutput(newOutput);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (currentInput.trim()) {
+      setCommandHistory(prev => [...prev, currentInput]);
+      setHistoryIndex(-1);
+      processCommand(currentInput);
+      setCurrentInput("");
     }
   };
 
-  const welcomeMessage = [
-    "[SYSTEM] BlackRaven OS v2.0.1 - CLASSIFIED",
-    "[BOOT] Initializing PsychProject training environment...",
-    `[AUTH] User authenticated: ${user.username.toUpperCase()}_${user.id.slice(-4)}`,
-    `[INFO] Access level: ${user.subscriptionTier?.toUpperCase() || 'NONE'}`,
-    "[INFO] Welcome to advanced cybersecurity training",
-    "",
-    "Type 'help' to see available commands.",
-    ""
-  ];
-
-  const terminalStyle = {
-    backgroundColor: '#000000',
-    minHeight: '400px',
-    maxHeight: '600px',
-    overflow: 'auto',
-    fontFamily: 'Monaco, "Lucida Console", monospace',
-    fontSize: '14px',
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (commandHistory.length > 0 && historyIndex < commandHistory.length - 1) {
+        const newIndex = historyIndex + 1;
+        setHistoryIndex(newIndex);
+        setCurrentInput(commandHistory[commandHistory.length - 1 - newIndex]);
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        const newIndex = historyIndex - 1;
+        setHistoryIndex(newIndex);
+        setCurrentInput(commandHistory[commandHistory.length - 1 - newIndex]);
+      } else if (historyIndex === 0) {
+        setHistoryIndex(-1);
+        setCurrentInput("");
+      }
+    }
   };
-
-  const promptLabel = `${user.username}@psychproject:~$`;
 
   return (
     <div className="h-full bg-black rounded-lg border border-gray-700 overflow-hidden">
@@ -214,19 +238,29 @@ export function EnhancedTerminal({ user, courses, userProgress }: EnhancedTermin
         </div>
       </div>
 
-      {/* Terminal */}
-      <div className="p-4" data-testid="enhanced-terminal">
-        <Terminal
-          ref={setTerminal}
-          commands={commands}
-          welcomeMessage={welcomeMessage}
-          promptLabel={promptLabel}
-          style={terminalStyle}
-          noAutomaticStdout={false}
-          noHistory={false}
-          noHelp={true}
-          className="terminal-content"
-        />
+      {/* Terminal Content */}
+      <div ref={terminalRef} className="p-4 h-96 overflow-y-auto font-mono text-sm" data-testid="enhanced-terminal">
+        {output.map((line, index) => (
+          <div key={index} className={line.startsWith('[') ? 'text-terminal-green' : line.includes('Command not found') || line.includes('Access denied') ? 'text-red-400' : 'text-gray-300'}>
+            {line}
+          </div>
+        ))}
+        
+        {/* Input line */}
+        <form onSubmit={handleSubmit} className="flex items-center mt-2">
+          <span className="text-terminal-green mr-2">{user.username}@psychproject:~$</span>
+          <input
+            ref={inputRef}
+            type="text"
+            value={currentInput}
+            onChange={(e) => setCurrentInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="flex-1 bg-transparent border-none outline-none text-white font-mono"
+            autoComplete="off"
+            autoFocus
+            data-testid="terminal-input"
+          />
+        </form>
       </div>
     </div>
   );
