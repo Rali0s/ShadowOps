@@ -232,7 +232,7 @@ export function EnhancedTerminal({ user, courses, userProgress }: EnhancedTermin
           <StatusIndicator status="error" size="sm" />
           <StatusIndicator status="warning" size="sm" />
           <StatusIndicator status="online" size="sm" />
-          <span className="ml-4 text-terminal-fire text-sm font-mono font-bold">BlackRaven OS Terminal v2.0.1</span>
+          <span className="ml-4 text-terminal-red-bright text-sm font-mono font-bold">BlackRaven OS Terminal v2.0.1</span>
         </div>
         <div className="flex items-center space-x-2">
           <AccessibilitySymbol 
@@ -241,7 +241,7 @@ export function EnhancedTerminal({ user, courses, userProgress }: EnhancedTermin
                   user.subscriptionTier === 'operative' ? 'Operative' : 'Recruit'} 
             className="w-4 h-4" 
           />
-          <span className="text-xs text-terminal-coral font-mono font-bold">
+          <span className="text-xs text-terminal-red-secondary font-mono font-bold">
             {user.username}@psychproject | {user.subscriptionTier?.toUpperCase() || 'GUEST'}
           </span>
         </div>
@@ -251,13 +251,13 @@ export function EnhancedTerminal({ user, courses, userProgress }: EnhancedTermin
       <div ref={terminalRef} className="p-4 h-96 overflow-y-auto font-mono text-sm" data-testid="enhanced-terminal">
         {output.map((line, index) => (
           <div key={index} className={
-            line.startsWith('[SYSTEM]') || line.startsWith('[BOOT]') ? 'text-terminal-fire' :
-            line.startsWith('[AUTH]') || line.startsWith('[INFO]') ? 'text-terminal-coral' :
+            line.startsWith('[SYSTEM]') || line.startsWith('[BOOT]') ? 'text-terminal-red-primary' :
+            line.startsWith('[AUTH]') || line.startsWith('[INFO]') ? 'text-terminal-red-secondary' :
             line.includes('Command not found') || line.includes('Access denied') ? 'text-terminal-scarlet' :
-            line.includes('[ACCESSIBLE]') ? 'text-terminal-rose' :
-            line.includes('[LOCKED]') ? 'text-terminal-wine' :
+            line.includes('[ACCESSIBLE]') ? 'text-terminal-red-bright' :
+            line.includes('[LOCKED]') ? 'text-terminal-red-muted' :
             line.startsWith('[') ? 'text-terminal-crimson' :
-            'text-terminal-coral'
+            'text-terminal-red-bright'
           }>
             {line.includes('[ACCESSIBLE]') && (
               <AccessibilitySymbol type="Accessible" className="inline w-3 h-3 mr-1" />
@@ -272,14 +272,14 @@ export function EnhancedTerminal({ user, courses, userProgress }: EnhancedTermin
         {/* Input line */}
         <form onSubmit={handleSubmit} className="flex items-center mt-2">
           <AccessibilitySymbol type="Command" className="inline w-3 h-3 mr-1" />
-          <span className="text-terminal-fire mr-2 font-bold">{user.username}@psychproject:~$</span>
+          <span className="text-terminal-red-primary mr-2 font-bold">{user.username}@psychproject:~$</span>
           <input
             ref={inputRef}
             type="text"
             value={currentInput}
             onChange={(e) => setCurrentInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 bg-transparent border-none outline-none text-terminal-coral font-mono"
+            className="flex-1 bg-transparent border-none outline-none text-terminal-red-bright font-mono"
             autoComplete="off"
             autoFocus
             data-testid="terminal-input"

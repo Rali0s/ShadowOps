@@ -36,7 +36,7 @@ export default function AdvancedTerminalPage() {
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-terminal-fire font-mono">Authenticating...</div>
+        <div className="text-terminal-red-primary font-mono">Authenticating...</div>
       </div>
     );
   }
@@ -46,22 +46,22 @@ export default function AdvancedTerminalPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-terminal-bg via-black to-terminal-wine p-4">
+    <div className="min-h-screen bg-gradient-to-br from-terminal-bg via-black to-terminal-red-dark p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-terminal-fire font-mono tracking-wide">
+              <h1 className="text-3xl font-bold text-terminal-red-primary font-mono tracking-wide">
                 BLACKRAVEN ADVANCED TERMINAL
               </h1>
-              <p className="text-terminal-coral mt-2 font-mono text-sm">
+              <p className="text-terminal-red-secondary mt-2 font-mono text-sm">
                 Advanced cybersecurity training environment with database access
               </p>
             </div>
-            <div className="text-right text-sm font-mono text-terminal-coral">
-              <div>User: <span className="text-terminal-rose">{user.username}</span></div>
-              <div>Clearance: <span className="text-terminal-fire font-bold">{user.subscriptionTier?.toUpperCase() || 'NONE'}</span></div>
+            <div className="text-right text-sm font-mono text-terminal-red-secondary">
+              <div>User: <span className="text-terminal-red-bright">{user.username}</span></div>
+              <div>Clearance: <span className="text-terminal-red-primary font-bold">{user.subscriptionTier?.toUpperCase() || 'NONE'}</span></div>
               <div>Session: <span className="text-terminal-scarlet">{terminalBuffers.sessionId || 'INITIALIZING'}</span></div>
             </div>
           </div>
@@ -85,17 +85,17 @@ export default function AdvancedTerminalPage() {
           <ResizablePanel defaultSize={75} minSize={50}>
             <div className="h-full">
               <Tabs defaultValue="standard" className="h-full">
-                <TabsList className="grid w-full grid-cols-3 bg-terminal-burgundy border-terminal-wine">
+                <TabsList className="grid w-full grid-cols-3 bg-terminal-red-dark border-terminal-red-muted">
                   <TabsTrigger 
                     value="standard" 
-                    className="font-mono text-xs data-[state=active]:bg-terminal-fire data-[state=active]:text-white text-terminal-coral"
+                    className="font-mono text-xs data-[state=active]:bg-terminal-red-primary data-[state=active]:text-white text-terminal-red-secondary"
                     data-testid="tab-standard-terminal"
                   >
                     STANDARD TERMINAL
                   </TabsTrigger>
                   <TabsTrigger 
                     value="database" 
-                    className="font-mono text-xs data-[state=active]:bg-terminal-fire data-[state=active]:text-white text-terminal-coral"
+                    className="font-mono text-xs data-[state=active]:bg-terminal-red-primary data-[state=active]:text-white text-terminal-red-secondary"
                     data-testid="tab-database-terminal"
                   >
                     DATABASE ACCESS
