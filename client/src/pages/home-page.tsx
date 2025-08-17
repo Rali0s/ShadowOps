@@ -31,13 +31,13 @@ export default function HomePage() {
               {user ? (
                 <>
                   <Link href="/terminal" data-testid="button-access-terminal">
-                    <Button className="px-8 py-4 bg-terminal-green text-terminal-bg font-semibold rounded-xl hover:bg-terminal-amber transition-all transform hover:scale-105">
+                    <Button className="px-8 py-4 bg-terminal-red-primary text-white font-semibold rounded-xl hover:bg-terminal-red-secondary transition-all transform hover:scale-105">
                       <Terminal className="mr-2" />
                       Basic Terminal
                     </Button>
                   </Link>
                   <Link href="/advanced-terminal" data-testid="button-access-advanced-terminal">
-                    <Button className="px-8 py-4 bg-cyber-blue text-white font-semibold rounded-xl hover:bg-terminal-green hover:text-terminal-bg transition-all transform hover:scale-105">
+                    <Button className="px-8 py-4 bg-terminal-red-secondary text-white font-semibold rounded-xl hover:bg-terminal-red-primary transition-all transform hover:scale-105">
                       <Shield className="mr-2" />
                       Advanced Terminal
                     </Button>
@@ -45,7 +45,7 @@ export default function HomePage() {
                 </>
               ) : (
                 <Link href="/auth" data-testid="button-get-started">
-                  <Button className="px-8 py-4 bg-terminal-green text-terminal-bg font-semibold rounded-xl hover:bg-terminal-amber transition-all transform hover:scale-105">
+                  <Button className="px-8 py-4 bg-terminal-red-primary text-white font-semibold rounded-xl hover:bg-terminal-red-secondary transition-all transform hover:scale-105">
                     <Terminal className="mr-2" />
                     Get Started
                   </Button>
@@ -89,7 +89,7 @@ export default function HomePage() {
             <div className="mt-16 text-center">
               <p className="text-gray-400 mb-4">Ready to start your cybersecurity journey?</p>
               <Link href="/auth" data-testid="button-signup">
-                <Button variant="outline" className="px-6 py-3 border-2 border-terminal-green text-terminal-green font-semibold rounded-xl hover:bg-terminal-green hover:text-terminal-bg transition-all">
+                <Button variant="outline" className="px-6 py-3 border-2 border-terminal-red-primary text-terminal-red-primary font-semibold rounded-xl hover:bg-terminal-red-primary hover:text-white transition-all">
                   Create Account
                 </Button>
               </Link>

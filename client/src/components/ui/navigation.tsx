@@ -1,7 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
-import { Code, Terminal, BookOpen, Settings, LogOut, User } from "lucide-react";
+import { Code, Terminal, Settings, LogOut, User } from "lucide-react";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -68,22 +68,7 @@ export function Navigation() {
                 </Button>
               </Link>
               
-              <Link href="/courses">
-                <Button 
-                  variant={isActive("/courses") ? "default" : "ghost"}
-                  size="sm"
-                  className={`
-                    ${isActive("/courses") 
-                      ? "bg-terminal-red-primary text-white" 
-                      : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
-                    }
-                    font-medium transition-colors
-                  `}
-                >
-                  <BookOpen className="w-4 h-4 mr-2" />
-                  Courses
-                </Button>
-              </Link>
+
             </nav>
           )}
 
