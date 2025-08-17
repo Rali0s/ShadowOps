@@ -95,9 +95,9 @@ export function TerminalSwitches({ onBufferChange, isConnected }: TerminalSwitch
   };
 
   return (
-    <div className="space-y-4 p-4 bg-black/90 rounded-lg border border-gray-700">
+    <div className="space-y-4 p-4 bg-terminal-bg/90 rounded-lg border border-terminal-red-muted">
       <div className="text-center">
-        <h3 className="text-terminal-green font-mono text-sm font-bold">
+        <h3 className="text-terminal-red-primary font-mono text-sm font-bold">
           TERMINAL BUFFER CONTROL SYSTEM
         </h3>
         <div className="text-xs text-gray-400 mt-1">
@@ -106,9 +106,9 @@ export function TerminalSwitches({ onBufferChange, isConnected }: TerminalSwitch
       </div>
 
       {/* Boolean Switches */}
-      <Card className="bg-gray-900 border-gray-700">
+      <Card className="bg-terminal-burgundy border-terminal-red-muted">
         <CardHeader className="pb-3">
-          <CardTitle className="text-terminal-green text-sm font-mono">
+          <CardTitle className="text-terminal-red-primary text-sm font-mono">
             BOOLEAN SWITCHES
           </CardTitle>
         </CardHeader>

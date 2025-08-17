@@ -1,6 +1,6 @@
 # Overview
 
-BlackRaven OS is a cybersecurity training platform built as a full-stack web application. It provides an interactive terminal-based learning environment where users can access cybersecurity courses through tiered subscriptions. The platform features a dark, terminal-inspired UI with hacker/military aesthetics and includes subscription management through Stripe payments.
+BlackRaven OS is a cybersecurity training platform built as a full-stack web application. It provides an interactive terminal-based learning environment where users can access cybersecurity courses through tiered subscriptions. The platform features a dark, terminal-inspired UI with red color theme variants and accessibility features including SVG symbol rendering and shape vectors for color blind users. Includes subscription management through Stripe payments.
 
 # User Preferences
 
@@ -49,10 +49,11 @@ Preferred communication style: Simple, everyday language.
 - **Webhook Handling**: Not implemented yet but structured for future webhook processing
 
 ## Terminal Emulator
-- **Implementation**: React-based terminal simulator with command processing
-- **Features**: Command history, boot sequences, course interaction simulation
-- **Theming**: Retro terminal aesthetics with green/amber color schemes
-- **Interactivity**: Real-time command processing with educational scenarios
+- **Implementation**: React-based terminal simulator with command processing and async buffer switches
+- **Features**: Command history, boot sequences, course interaction simulation, database access terminals
+- **Theming**: Red color theme with multiple variants (primary, secondary, dark, bright, muted, orange, amber, crimson, scarlet, burgundy)
+- **Accessibility**: SVG symbol rendering system with shape vectors for color blind accessibility
+- **Interactivity**: Real-time command processing with educational scenarios and database terminal integration
 
 # External Dependencies
 
@@ -67,7 +68,9 @@ Preferred communication style: Simple, everyday language.
 ## UI Framework
 - **Radix UI**: Accessible, unstyled UI primitives for complex components
 - **shadcn/ui**: Pre-built component library with consistent design system
-- **Tailwind CSS**: Utility-first CSS framework with custom design tokens
+- **Tailwind CSS**: Utility-first CSS framework with custom red theme design tokens
+- **SVG Symbols**: Custom SVG rendering system for terminal symbols with accessibility features
+- **Color Accessibility**: Red theme variants with shape vector indicators for color blind users
 
 ## Development Tools
 - **Vite**: Fast development server with HMR and optimized production builds  
