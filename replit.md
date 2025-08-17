@@ -30,11 +30,11 @@ Preferred communication style: Simple, everyday language.
 - **Connection**: Connection pooling with @neondatabase/serverless
 
 ## Database Schema
-- **Users**: Authentication, subscription tiers, Stripe integration
+- **Users**: Authentication, subscription tiers (none, recruit, operative, operator, shadow), Stripe integration
 - **Courses**: Hierarchical content with difficulty levels and tier requirements
 - **Modules**: Course content with JSON-based lesson data
-- **Progress Tracking**: User completion status per module/course
 - **Certificates**: Achievement system for completed courses
+- **Access Control**: Tier-based access without progress tracking
 
 ## Authentication & Authorization
 - **Strategy**: Session-based authentication with encrypted passwords (scrypt)
