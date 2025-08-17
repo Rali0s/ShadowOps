@@ -113,7 +113,7 @@ export const TerminalSymbols = {
   Operative: ({ className = "w-4 h-4" }: { className?: string }) => (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" 
-               fill="hsl(var(--terminal-coral))" />
+               fill="hsl(var(--terminal-red-secondary))" />
       <text x="12" y="15" textAnchor="middle" fontSize="7" fill="white">★★</text>
     </svg>
   ),
@@ -121,9 +121,9 @@ export const TerminalSymbols = {
   Operator: ({ className = "w-4 h-4" }: { className?: string }) => (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" 
-               fill="hsl(var(--terminal-fire))" />
+               fill="hsl(var(--terminal-red-primary))" />
       <polygon points="12,4 14,8 18,8 15,11 16,16 12,13 8,16 9,11 6,8 10,8" 
-               fill="hsl(var(--terminal-orange))" />
+               fill="hsl(var(--terminal-red-bright))" />
       <text x="12" y="15" textAnchor="middle" fontSize="6" fill="white">★★★</text>
     </svg>
   ),
@@ -131,10 +131,10 @@ export const TerminalSymbols = {
   Shadow: ({ className = "w-4 h-4" }: { className?: string }) => (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" 
-               fill="hsl(var(--terminal-blood))" />
+               fill="hsl(var(--terminal-scarlet))" />
       <polygon points="12,4 14,8 18,8 15,11 16,16 12,13 8,16 9,11 6,8 10,8" 
-               fill="hsl(var(--terminal-crimson))" />
-      <circle cx="12" cy="12" r="3" fill="hsl(var(--terminal-wine))" />
+               fill="hsl(var(--terminal-red-bright))" />
+      <circle cx="12" cy="12" r="3" fill="hsl(var(--terminal-red-dark))" />
       <text x="12" y="15" textAnchor="middle" fontSize="5" fill="white">★★★★</text>
     </svg>
   ),

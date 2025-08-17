@@ -43,27 +43,27 @@
   --font-cyber: 'Orbitron', sans-serif;
   --radius: 1.3rem;
   
-  /* Enhanced Terminal Colors - Rich Red Theme with Accessibility */
-  --terminal-red-primary: hsl(0, 95%, 62%);
-  --terminal-red-secondary: hsl(348, 88%, 58%);
-  --terminal-red-dark: hsl(355, 85%, 32%);
-  --terminal-red-bright: hsl(5, 100%, 70%);
-  --terminal-red-muted: hsl(15, 55%, 35%);
-  --terminal-orange: hsl(18, 95%, 62%);
-  --terminal-amber: hsl(35, 100%, 55%);
-  --terminal-crimson: hsl(348, 90%, 52%);
-  --terminal-scarlet: hsl(0, 100%, 55%);
-  --terminal-burgundy: hsl(345, 78%, 28%);
-  --terminal-rose: hsl(351, 85%, 65%);
-  --terminal-cherry: hsl(355, 88%, 48%);
-  --terminal-coral: hsl(16, 100%, 68%);
-  --terminal-ruby: hsl(0, 82%, 42%);
-  --terminal-wine: hsl(342, 70%, 30%);
-  --terminal-blood: hsl(0, 90%, 38%);
-  --terminal-fire: hsl(14, 100%, 58%);
-  --terminal-bg: hsl(355, 20%, 3%);
-  --card-bg: hsl(355, 25%, 6%);
-  --glass-bg: hsla(355, 25%, 6%, 0.85);
+  /* Pure Red Theme with Traditional Red Shades */
+  --terminal-red-primary: hsl(0, 85%, 55%);
+  --terminal-red-secondary: hsl(0, 75%, 45%);
+  --terminal-red-dark: hsl(0, 90%, 30%);
+  --terminal-red-bright: hsl(0, 100%, 65%);
+  --terminal-red-muted: hsl(0, 50%, 35%);
+  --terminal-orange: hsl(0, 85%, 55%);
+  --terminal-amber: hsl(0, 85%, 55%);
+  --terminal-crimson: hsl(0, 80%, 40%);
+  --terminal-scarlet: hsl(0, 100%, 50%);
+  --terminal-burgundy: hsl(0, 70%, 25%);
+  --terminal-rose: hsl(0, 90%, 60%);
+  --terminal-cherry: hsl(0, 85%, 45%);
+  --terminal-coral: hsl(0, 95%, 58%);
+  --terminal-ruby: hsl(0, 75%, 38%);
+  --terminal-wine: hsl(0, 60%, 25%);
+  --terminal-blood: hsl(0, 85%, 35%);
+  --terminal-fire: hsl(0, 100%, 55%);
+  --terminal-bg: hsl(0, 15%, 4%);
+  --card-bg: hsl(0, 20%, 8%);
+  --glass-bg: hsla(0, 20%, 8%, 0.85);
   
   /* Legacy support - redirected to red variants */
   --terminal-green: hsl(0, 95%, 62%);

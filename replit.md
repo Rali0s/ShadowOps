@@ -51,7 +51,7 @@ Preferred communication style: Simple, everyday language.
 ## Terminal Emulator
 - **Implementation**: React-based terminal simulator with command processing and async buffer switches
 - **Features**: Command history, boot sequences, course interaction simulation, database access terminals
-- **Theming**: Red color theme with multiple variants (primary, secondary, dark, bright, muted, orange, amber, crimson, scarlet, burgundy)
+- **Theming**: Pure red color theme with traditional red shades (primary, secondary, dark, bright, muted, scarlet, crimson, burgundy)
 - **Accessibility**: SVG symbol rendering system with shape vectors for color blind accessibility
 - **Interactivity**: Real-time command processing with educational scenarios and database terminal integration
 
