@@ -190,9 +190,9 @@ export const SVGSymbols = {
   TierBadge: ({ tier, className = "w-6 h-6" }: { tier: 'recruit' | 'operative' | 'operator' | 'shadow'; className?: string }) => {
     const tierConfig = {
       recruit: { stars: 1, color: '--terminal-red-muted', shape: '●' },
-      operative: { stars: 2, color: '--terminal-red-secondary', shape: '■' },
-      operator: { stars: 3, color: '--terminal-orange', shape: '▲' },
-      shadow: { stars: 4, color: '--terminal-scarlet', shape: '◆' }
+      operative: { stars: 2, color: '--terminal-coral', shape: '■' },
+      operator: { stars: 3, color: '--terminal-fire', shape: '▲' },
+      shadow: { stars: 4, color: '--terminal-blood', shape: '◆' }
     };
     const config = tierConfig[tier];
     
