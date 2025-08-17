@@ -27,6 +27,9 @@ export default function HomePage() {
                   <Link href="/terminal" className="text-gray-300 hover:text-terminal-green transition-colors" data-testid="link-terminal">
                     Terminal
                   </Link>
+                  <Link href="/advanced-terminal" className="text-gray-300 hover:text-terminal-green transition-colors" data-testid="link-advanced-terminal">
+                    Advanced
+                  </Link>
                   <Link href="/courses" className="text-gray-300 hover:text-terminal-green transition-colors" data-testid="link-courses">
                     Courses
                   </Link>
@@ -68,12 +71,20 @@ export default function HomePage() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
               {user ? (
-                <Link href="/terminal" data-testid="button-access-terminal">
-                  <Button className="px-8 py-4 bg-terminal-green text-terminal-bg font-semibold rounded-xl hover:bg-terminal-amber transition-all transform hover:scale-105">
-                    <Terminal className="mr-2" />
-                    Access Terminal
-                  </Button>
-                </Link>
+                <>
+                  <Link href="/terminal" data-testid="button-access-terminal">
+                    <Button className="px-8 py-4 bg-terminal-green text-terminal-bg font-semibold rounded-xl hover:bg-terminal-amber transition-all transform hover:scale-105">
+                      <Terminal className="mr-2" />
+                      Basic Terminal
+                    </Button>
+                  </Link>
+                  <Link href="/advanced-terminal" data-testid="button-access-advanced-terminal">
+                    <Button className="px-8 py-4 bg-cyber-blue text-white font-semibold rounded-xl hover:bg-terminal-green hover:text-terminal-bg transition-all transform hover:scale-105">
+                      <Shield className="mr-2" />
+                      Advanced Terminal
+                    </Button>
+                  </Link>
+                </>
               ) : (
                 <Link href="/auth" data-testid="button-get-started">
                   <Button className="px-8 py-4 bg-terminal-green text-terminal-bg font-semibold rounded-xl hover:bg-terminal-amber transition-all transform hover:scale-105">
