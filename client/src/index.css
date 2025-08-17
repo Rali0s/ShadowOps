@@ -1,0 +1,256 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 0%);
+  --foreground: hsl(200, 6.6667%, 91.1765%);
+  --card: hsl(0, 0%, 11.7647%);
+  --card-foreground: hsl(200, 6.6667%, 91.1765%);
+  --popover: hsl(0, 0%, 0%);
+  --popover-foreground: hsl(200, 6.6667%, 91.1765%);
+  --primary: hsl(130, 100%, 31.3725%);
+  --primary-foreground: hsl(0, 0%, 5.0980%);
+  --secondary: hsl(210, 25%, 7.8431%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --muted: hsl(0, 0%, 9.4118%);
+  --muted-foreground: hsl(210, 3.3898%, 46.2745%);
+  --accent: hsl(130, 100%, 31.3725%);
+  --accent-foreground: hsl(0, 0%, 5.0980%);
+  --destructive: hsl(356.3033, 90.5579%, 54.3137%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(210, 5.2632%, 14.9020%);
+  --input: hsl(207.6923, 27.6596%, 18.4314%);
+  --ring: hsl(130, 100%, 31.3725%);
+  --chart-1: hsl(130, 100%, 31.3725%);
+  --chart-2: hsl(195, 100%, 50%);
+  --chart-3: hsl(42.0290, 92.8251%, 56.2745%);
+  --chart-4: hsl(147.1429, 78.5047%, 41.9608%);
+  --chart-5: hsl(341.4894, 75.2000%, 50.9804%);
+  --sidebar: hsl(0, 0%, 11.7647%);
+  --sidebar-foreground: hsl(200, 6.6667%, 91.1765%);
+  --sidebar-primary: hsl(130, 100%, 31.3725%);
+  --sidebar-primary-foreground: hsl(0, 0%, 5.0980%);
+  --sidebar-accent: hsl(130, 100%, 31.3725%);
+  --sidebar-accent-foreground: hsl(0, 0%, 5.0980%);
+  --sidebar-border: hsl(210, 5.2632%, 14.9020%);
+  --sidebar-ring: hsl(130, 100%, 31.3725%);
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: 'Fira Code', monospace;
+  --font-cyber: 'Orbitron', sans-serif;
+  --radius: 1.3rem;
+  
+  /* Terminal Colors */
+  --terminal-green: hsl(130, 100%, 31.3725%);
+  --terminal-amber: hsl(42, 100%, 50%);
+  --cyber-blue: hsl(195, 100%, 50%);
+  --terminal-bg: hsl(0, 0%, 5.0980%);
+  --card-bg: hsl(0, 0%, 11.7647%);
+  --glass-bg: hsla(0, 0%, 11.7647%, 0.8);
+}
+
+.dark {
+  --background: hsl(0, 0%, 0%);
+  --foreground: hsl(200, 6.6667%, 91.1765%);
+  --card: hsl(0, 0%, 11.7647%);
+  --card-foreground: hsl(200, 6.6667%, 91.1765%);
+  --popover: hsl(0, 0%, 0%);
+  --popover-foreground: hsl(200, 6.6667%, 91.1765%);
+  --primary: hsl(130, 100%, 31.3725%);
+  --primary-foreground: hsl(0, 0%, 5.0980%);
+  --secondary: hsl(195, 15.3846%, 94.9020%);
+  --secondary-foreground: hsl(210, 25%, 7.8431%);
+  --muted: hsl(0, 0%, 9.4118%);
+  --muted-foreground: hsl(210, 3.3898%, 46.2745%);
+  --accent: hsl(130, 100%, 31.3725%);
+  --accent-foreground: hsl(0, 0%, 5.0980%);
+  --destructive: hsl(356.3033, 90.5579%, 54.3137%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(210, 5.2632%, 14.9020%);
+  --input: hsl(207.6923, 27.6596%, 18.4314%);
+  --ring: hsl(130, 100%, 31.3725%);
+  --chart-1: hsl(130, 100%, 31.3725%);
+  --chart-2: hsl(195, 100%, 50%);
+  --chart-3: hsl(42.0290, 92.8251%, 56.2745%);
+  --chart-4: hsl(147.1429, 78.5047%, 41.9608%);
+  --chart-5: hsl(341.4894, 75.2000%, 50.9804%);
+  --sidebar: hsl(0, 0%, 11.7647%);
+  --sidebar-foreground: hsl(200, 6.6667%, 91.1765%);
+  --sidebar-primary: hsl(130, 100%, 31.3725%);
+  --sidebar-primary-foreground: hsl(0, 0%, 5.0980%);
+  --sidebar-accent: hsl(130, 100%, 31.3725%);
+  --sidebar-accent-foreground: hsl(0, 0%, 5.0980%);
+  --sidebar-border: hsl(210, 5.2632%, 14.9020%);
+  --sidebar-ring: hsl(130, 100%, 31.3725%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+/* Terminal-specific styles */
+.terminal-green {
+  color: #00FF41;
+}
+
+.terminal-amber {
+  color: #FFB000;
+}
+
+.cyber-blue {
+  color: #00D4FF;
+}
+
+.terminal-bg {
+  background-color: #0D0D0D;
+}
+
+.card-bg {
+  background-color: #1E1E1E;
+}
+
+.glass-bg {
+  background-color: rgba(30, 30, 30, 0.8);
+}
+
+.glass-effect {
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.terminal-text {
+  text-shadow: 0 0 5px currentColor;
+}
+
+.terminal-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00FF41, transparent);
+  animation: scanline 2s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100vh); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes boot {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.animate-boot {
+  animation: boot 3s ease-in-out;
+}
+
+.animate-terminal-blink {
+  animation: blink 1s infinite;
+}
+
+/* Background colors for Tailwind classes */
+.bg-terminal-green {
+  background-color: #00FF41;
+}
+
+.bg-terminal-amber {
+  background-color: #FFB000;
+}
+
+.bg-cyber-blue {
+  background-color: #00D4FF;
+}
+
+.bg-terminal-bg {
+  background-color: #0D0D0D;
+}
+
+.bg-card-bg {
+  background-color: #1E1E1E;
+}
+
+/* Text colors */
+.text-terminal-green {
+  color: #00FF41;
+}
+
+.text-terminal-amber {
+  color: #FFB000;
+}
+
+.text-cyber-blue {
+  color: #00D4FF;
+}
+
+.text-terminal-bg {
+  color: #0D0D0D;
+}
+
+/* Border colors */
+.border-terminal-green {
+  border-color: #00FF41;
+}
+
+.border-terminal-amber {
+  border-color: #FFB000;
+}
+
+.border-cyber-blue {
+  border-color: #00D4FF;
+}
+
+/* Font families */
+.font-mono {
+  font-family: 'Fira Code', monospace;
+}
+
+.font-cyber {
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* Hover states */
+.hover\:bg-terminal-amber:hover {
+  background-color: #FFB000;
+}
+
+.hover\:bg-terminal-green:hover {
+  background-color: #00FF41;
+}
+
+.hover\:text-terminal-green:hover {
+  color: #00FF41;
+}
+
+.hover\:text-terminal-amber:hover {
+  color: #FFB000;
+}
+
+.hover\:border-terminal-green:hover {
+  border-color: #00FF41;
+}
+
+/* Focus states */
+.focus\:border-terminal-green:focus {
+  border-color: #00FF41;
+}
+
+.focus\:ring-terminal-green:focus {
+  --tw-ring-color: #00FF41;
+}
