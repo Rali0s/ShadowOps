@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { apiRequest } from "@/lib/queryClient";
-import type { User, Course, UserProgress } from "@shared/schema";
+import type { User } from "@shared/schema";
 import type { TerminalBuffers } from "./terminal-switches";
 import { StatusIndicator, AccessibilitySymbol } from "./terminal-symbols";
 
 interface DatabaseTerminalProps {
   user: User;
-  courses: Course[];
-  userProgress: UserProgress[];
   buffers: TerminalBuffers;
 }
 
@@ -19,7 +17,7 @@ interface DatabaseDocument {
   accessLevel: string;
 }
 
-export function DatabaseTerminal({ user, courses, userProgress, buffers }: DatabaseTerminalProps) {
+export function DatabaseTerminal({ user, buffers }: DatabaseTerminalProps) {
   const [output, setOutput] = useState<string[]>([]);
   const [currentInput, setCurrentInput] = useState("");
   const [commandHistory, setCommandHistory] = useState<string[]>([]);

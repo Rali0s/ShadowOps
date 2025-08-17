@@ -6,6 +6,7 @@ BlackRaven OS is a cybersecurity training platform built as a full-stack web app
 
 Preferred communication style: Simple, everyday language.
 Navigation preferences: Removed courses tab from navigation system per user request.
+System architecture: Completely removed course system - platform now uses pure tier-based access only.
 
 # System Architecture
 

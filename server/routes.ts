@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import Stripe from "stripe";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
-import { insertCourseSchema, insertModuleSchema, insertCertificateSchema } from "@shared/schema";
+
 import { z } from "zod";
 
 // Initialize Stripe only if secret key is provided
@@ -96,105 +96,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Courses endpoints
-  app.get('/api/courses', async (req, res) => {
-    try {
-      const courses = await storage.getCourses();
-      res.json(courses);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
-  });
 
-  app.get('/api/courses/:id', async (req, res) => {
-    try {
-      const course = await storage.getCourse(req.params.id);
-      if (!course) {
-        return res.status(404).json({ message: 'Course not found' });
-      }
-      res.json(course);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
-  });
-
-  app.post('/api/courses', async (req, res) => {
-    if (!req.isAuthenticated() || !req.user?.isAdmin) {
-      return res.sendStatus(403);
-    }
-
-    try {
-      const courseData = insertCourseSchema.parse(req.body);
-      const course = await storage.createCourse(courseData);
-      res.status(201).json(course);
-    } catch (error: any) {
-      res.status(400).json({ message: error.message });
-    }
-  });
-
-  // Modules endpoints
-  app.get('/api/courses/:courseId/modules', async (req, res) => {
-    try {
-      const modules = await storage.getModulesByCourse(req.params.courseId);
-      res.json(modules);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
-  });
-
-  app.post('/api/modules', async (req, res) => {
-    if (!req.isAuthenticated() || !req.user?.isAdmin) {
-      return res.sendStatus(403);
-    }
-
-    try {
-      const moduleData = insertModuleSchema.parse(req.body);
-      const module = await storage.createModule(moduleData);
-      res.status(201).json(module);
-    } catch (error: any) {
-      res.status(400).json({ message: error.message });
-    }
-  });
-
-  // Progress tracking removed - access is tier-based only
-  app.get('/api/user/progress', async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.sendStatus(401);
-    }
-    // Return empty array since progress tracking is removed
-    res.json([]);
-  });
-
-  // Certificates endpoints
-  app.get('/api/user/certificates', async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.sendStatus(401);
-    }
-
-    try {
-      const certificates = await storage.getUserCertificates(req.user!.id);
-      res.json(certificates);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
-  });
-
-  app.post('/api/user/certificates', async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.sendStatus(401);
-    }
-
-    try {
-      const certificateData = insertCertificateSchema.parse({
-        ...req.body,
-        userId: req.user!.id
-      });
-      const certificate = await storage.createCertificate(certificateData);
-      res.json(certificate);
-    } catch (error: any) {
-      res.status(400).json({ message: error.message });
-    }
-  });
 
   // Admin endpoints
   app.get('/api/admin/stats', async (req, res) => {

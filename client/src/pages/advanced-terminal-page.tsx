@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import { DatabaseTerminal } from "@/components/database-terminal";
 import { TerminalSwitches, type TerminalBuffers } from "@/components/terminal-switches";
 import { EnhancedTerminal } from "@/components/enhanced-terminal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
-import type { Course } from "@shared/schema";
 
 export default function AdvancedTerminalPage() {
   const { user } = useAuth();
@@ -27,11 +25,7 @@ export default function AdvancedTerminalPage() {
     terminator: ";"
   });
 
-  const { data: courses = [] } = useQuery<Course[]>({
-    queryKey: ["/api/courses"],
-  });
-
-  // Progress tracking removed - access is tier-based only
+  // Course system removed - access is tier-based only
 
   if (!user) {
     return (
@@ -113,8 +107,6 @@ export default function AdvancedTerminalPage() {
                   <div className="h-[500px]">
                     <EnhancedTerminal 
                       user={user} 
-                      courses={courses} 
-                      userProgress={[]}
                     />
                   </div>
                 </TabsContent>
@@ -123,8 +115,6 @@ export default function AdvancedTerminalPage() {
                   <div className="h-[500px]">
                     <DatabaseTerminal 
                       user={user} 
-                      courses={courses} 
-                      userProgress={[]}
                       buffers={terminalBuffers}
                     />
                   </div>
