@@ -17,56 +17,11 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const courses = pgTable("courses", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-  difficulty: integer("difficulty").notNull(), // 1-5 stars
-  duration: integer("duration").notNull(), // in hours
-  requiredTier: text("required_tier").notNull(), // recruit, operative, operator, shadow
-  icon: text("icon").default("fas fa-shield-alt"),
-  color: text("color").default("terminal-green"),
-  isActive: boolean("is_active").default(true),
-  createdAt: timestamp("created_at").defaultNow(),
-});
+// Course and progress tracking removed - platform now uses tier-based access only
 
-export const modules = pgTable("modules", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  courseId: varchar("course_id").references(() => courses.id).notNull(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-  content: jsonb("content").notNull(), // Terminal commands, scenarios, etc.
-  order: integer("order").notNull(),
-  isActive: boolean("is_active").default(true),
-});
-
-// User progress tracking removed - access is tier-based only
-
-export const certificates = pgTable("certificates", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").references(() => users.id).notNull(),
-  courseId: varchar("course_id").references(() => courses.id).notNull(),
-  issuedAt: timestamp("issued_at").defaultNow(),
-  certificateData: jsonb("certificate_data"), // PDF data, verification code, etc.
-});
-
-// Relations
+// Relations - simplified for tier-based access only
 export const usersRelations = relations(users, ({ many }) => ({
-  certificates: many(certificates),
-}));
-
-export const coursesRelations = relations(courses, ({ many }) => ({
-  modules: many(modules),
-  certificates: many(certificates),
-}));
-
-export const modulesRelations = relations(modules, ({ one }) => ({
-  course: one(courses, { fields: [modules.courseId], references: [courses.id] }),
-}));
-
-export const certificatesRelations = relations(certificates, ({ one }) => ({
-  user: one(users, { fields: [certificates.userId], references: [users.id] }),
-  course: one(courses, { fields: [certificates.courseId], references: [courses.id] }),
+  // Relations removed with course system
 }));
 
 // Insert schemas
@@ -79,26 +34,8 @@ export const insertUserSchema = createInsertSchema(users).omit({
   isAdmin: true,
 });
 
-export const insertCourseSchema = createInsertSchema(courses).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertModuleSchema = createInsertSchema(modules).omit({
-  id: true,
-});
-
-export const insertCertificateSchema = createInsertSchema(certificates).omit({
-  id: true,
-  issuedAt: true,
-});
+// Insert schemas for courses removed
 
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
-export type InsertCourse = z.infer<typeof insertCourseSchema>;
-export type Course = typeof courses.$inferSelect;
-export type InsertModule = z.infer<typeof insertModuleSchema>;
-export type Module = typeof modules.$inferSelect;
-export type InsertCertificate = z.infer<typeof insertCertificateSchema>;
-export type Certificate = typeof certificates.$inferSelect;
