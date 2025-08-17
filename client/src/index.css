@@ -43,13 +43,24 @@
   --font-cyber: 'Orbitron', sans-serif;
   --radius: 1.3rem;
   
-  /* Terminal Colors */
-  --terminal-green: hsl(130, 100%, 31.3725%);
-  --terminal-amber: hsl(42, 100%, 50%);
+  /* Terminal Colors - Red Theme with Accessibility */
+  --terminal-red-primary: hsl(0, 85%, 55%);
+  --terminal-red-secondary: hsl(15, 80%, 45%);
+  --terminal-red-dark: hsl(355, 90%, 35%);
+  --terminal-red-bright: hsl(8, 95%, 65%);
+  --terminal-red-muted: hsl(20, 60%, 25%);
+  --terminal-orange: hsl(25, 95%, 55%);
+  --terminal-amber: hsl(35, 100%, 50%);
+  --terminal-crimson: hsl(348, 83%, 47%);
+  --terminal-scarlet: hsl(0, 100%, 50%);
+  --terminal-burgundy: hsl(345, 63%, 24%);
+  --terminal-bg: hsl(0, 0%, 2%);
+  --card-bg: hsl(355, 15%, 8%);
+  --glass-bg: hsla(355, 15%, 8%, 0.8);
+  
+  /* Legacy support */
+  --terminal-green: hsl(0, 85%, 55%);
   --cyber-blue: hsl(195, 100%, 50%);
-  --terminal-bg: hsl(0, 0%, 5.0980%);
-  --card-bg: hsl(0, 0%, 11.7647%);
-  --glass-bg: hsla(0, 0%, 11.7647%, 0.8);
 }
 
 .dark {
@@ -97,18 +108,45 @@
   }
 }
 
-/* Terminal-specific styles */
+/* Terminal-specific styles - Red Theme */
 .terminal-green {
-  color: #00FF41;
+  color: hsl(var(--terminal-red-primary));
 }
 
 .terminal-amber {
-  color: #FFB000;
+  color: hsl(var(--terminal-amber));
 }
 
 .cyber-blue {
-  color: #00D4FF;
+  color: hsl(var(--cyber-blue));
 }
+
+/* New Red Terminal Color Classes */
+.text-terminal-red-primary { color: hsl(var(--terminal-red-primary)); }
+.text-terminal-red-secondary { color: hsl(var(--terminal-red-secondary)); }
+.text-terminal-red-dark { color: hsl(var(--terminal-red-dark)); }
+.text-terminal-red-bright { color: hsl(var(--terminal-red-bright)); }
+.text-terminal-red-muted { color: hsl(var(--terminal-red-muted)); }
+.text-terminal-orange { color: hsl(var(--terminal-orange)); }
+.text-terminal-amber { color: hsl(var(--terminal-amber)); }
+.text-terminal-crimson { color: hsl(var(--terminal-crimson)); }
+.text-terminal-scarlet { color: hsl(var(--terminal-scarlet)); }
+.text-terminal-burgundy { color: hsl(var(--terminal-burgundy)); }
+
+.bg-terminal-red-primary { background-color: hsl(var(--terminal-red-primary)); }
+.bg-terminal-red-secondary { background-color: hsl(var(--terminal-red-secondary)); }
+.bg-terminal-red-dark { background-color: hsl(var(--terminal-red-dark)); }
+.bg-terminal-red-bright { background-color: hsl(var(--terminal-red-bright)); }
+.bg-terminal-red-muted { background-color: hsl(var(--terminal-red-muted)); }
+.bg-terminal-orange { background-color: hsl(var(--terminal-orange)); }
+.bg-terminal-amber { background-color: hsl(var(--terminal-amber)); }
+.bg-terminal-crimson { background-color: hsl(var(--terminal-crimson)); }
+.bg-terminal-scarlet { background-color: hsl(var(--terminal-scarlet)); }
+.bg-terminal-burgundy { background-color: hsl(var(--terminal-burgundy)); }
+
+.border-terminal-red-primary { border-color: hsl(var(--terminal-red-primary)); }
+.border-terminal-red-secondary { border-color: hsl(var(--terminal-red-secondary)); }
+.border-terminal-red-muted { border-color: hsl(var(--terminal-red-muted)); }
 
 .terminal-bg {
   background-color: #0D0D0D;

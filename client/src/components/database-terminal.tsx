@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { apiRequest } from "@/lib/queryClient";
 import type { User, Course, UserProgress } from "@shared/schema";
 import type { TerminalBuffers } from "./terminal-switches";
+import { StatusIndicator, AccessibilitySymbol } from "./terminal-symbols";
 
 interface DatabaseTerminalProps {
   user: User;
@@ -335,15 +336,19 @@ export function DatabaseTerminal({ user, courses, userProgress, buffers }: Datab
   return (
     <div className="h-full bg-black rounded-lg border border-gray-700 overflow-hidden">
       {/* Terminal Header */}
-      <div className="bg-gray-800 px-4 py-2 flex items-center justify-between border-b border-gray-700">
+      <div className="bg-terminal-burgundy px-4 py-2 flex items-center justify-between border-b border-terminal-red-muted">
         <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-          <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          <span className="ml-4 text-gray-400 text-sm font-mono">Database Terminal v2.0.1</span>
+          <StatusIndicator status="error" size="sm" />
+          <StatusIndicator status="warning" size="sm" />
+          <StatusIndicator status={buffers.dbConnected ? "online" : "offline"} size="sm" />
+          <AccessibilitySymbol type="Database" className="w-4 h-4 ml-2" />
+          <span className="ml-2 text-terminal-red-bright text-sm font-mono">Database Terminal v2.0.1</span>
         </div>
-        <div className="text-xs text-gray-500 font-mono">
-          {buffers.currentUser}@{buffers.targetSystem} | DB: {buffers.dbConnected ? 'ONLINE' : 'OFFLINE'}
+        <div className="flex items-center space-x-2">
+          <StatusIndicator status={buffers.dbConnected ? "online" : "offline"} size="sm" />
+          <span className="text-xs text-terminal-red-secondary font-mono">
+            {buffers.currentUser}@{buffers.targetSystem} | DB: {buffers.dbConnected ? 'ONLINE' : 'OFFLINE'}
+          </span>
         </div>
       </div>
 
@@ -351,20 +356,35 @@ export function DatabaseTerminal({ user, courses, userProgress, buffers }: Datab
       <div ref={terminalRef} className="p-4 h-96 overflow-y-auto font-mono text-sm" data-testid="database-terminal">
         {output.map((line, index) => (
           <div key={index} className={
-            line.startsWith('[SYSTEM]') || line.startsWith('[BOOT]') ? 'text-terminal-green' :
-            line.includes('[ERROR]') || line.includes('[ACCESS DENIED]') ? 'text-red-400' :
-            line.includes('[DB]') ? 'text-blue-400' :
-            line.includes('[LOG]') ? 'text-yellow-400' :
-            line.startsWith('[') ? 'text-cyan-400' :
+            line.startsWith('[SYSTEM]') || line.startsWith('[BOOT]') ? 'text-terminal-red-primary' :
+            line.includes('[ERROR]') || line.includes('[ACCESS DENIED]') ? 'text-terminal-scarlet' :
+            line.includes('[DB]') ? 'text-terminal-red-secondary' :
+            line.includes('[LOG]') ? 'text-terminal-amber' :
+            line.includes('[ACCESSIBLE]') ? 'text-terminal-red-bright' :
+            line.includes('[CLASSIFIED]') ? 'text-terminal-red-muted' :
+            line.startsWith('[') ? 'text-terminal-orange' :
             'text-gray-300'
           }>
+            {line.includes('[ACCESSIBLE]') && (
+              <AccessibilitySymbol type="Accessible" className="inline w-3 h-3 mr-1" />
+            )}
+            {line.includes('[CLASSIFIED]') && (
+              <AccessibilitySymbol type="Classified" className="inline w-3 h-3 mr-1" />
+            )}
+            {line.includes('[ERROR]') && (
+              <AccessibilitySymbol type="Error" className="inline w-3 h-3 mr-1" />
+            )}
+            {line.includes('[DB]') && (
+              <AccessibilitySymbol type="Database" className="inline w-3 h-3 mr-1" />
+            )}
             {line}
           </div>
         ))}
         
         {/* Input line */}
         <form onSubmit={handleSubmit} className="flex items-center mt-2">
-          <span className="text-terminal-green mr-2">
+          <AccessibilitySymbol type="Command" className="inline w-3 h-3 mr-1" />
+          <span className="text-terminal-red-primary mr-2">
             {buffers.currentUser}@{buffers.targetSystem}:~{buffers.commandPrefix}
           </span>
           <input

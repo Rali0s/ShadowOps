@@ -38,7 +38,7 @@ export default function AdvancedTerminalPage() {
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-terminal-green font-mono">Authenticating...</div>
+        <div className="text-terminal-red-primary font-mono">Authenticating...</div>
       </div>
     );
   }
@@ -54,14 +54,14 @@ export default function AdvancedTerminalPage() {
         <div className="mb-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-terminal-green font-mono">
+              <h1 className="text-3xl font-bold text-terminal-red-primary font-mono">
                 BLACKRAVEN ADVANCED TERMINAL
               </h1>
-              <p className="text-gray-400 mt-2 font-mono text-sm">
+              <p className="text-terminal-red-muted mt-2 font-mono text-sm">
                 Advanced cybersecurity training environment with database access
               </p>
             </div>
-            <div className="text-right text-sm font-mono text-gray-400">
+            <div className="text-right text-sm font-mono text-terminal-red-secondary">
               <div>User: {user.username}</div>
               <div>Clearance: {user.subscriptionTier?.toUpperCase() || 'NONE'}</div>
               <div>Session: {terminalBuffers.sessionId || 'INITIALIZING'}</div>

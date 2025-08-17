@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import type { User, Course, UserProgress } from "@shared/schema";
+import { StatusIndicator, AccessibilitySymbol } from "./terminal-symbols";
 
 interface EnhancedTerminalProps {
   user: User;
@@ -226,29 +227,50 @@ export function EnhancedTerminal({ user, courses, userProgress }: EnhancedTermin
   return (
     <div className="h-full bg-black rounded-lg border border-gray-700 overflow-hidden">
       {/* Terminal Header */}
-      <div className="bg-gray-800 px-4 py-2 flex items-center justify-between border-b border-gray-700">
+      <div className="bg-terminal-burgundy px-4 py-2 flex items-center justify-between border-b border-terminal-red-muted">
         <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-          <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          <span className="ml-4 text-gray-400 text-sm font-mono">BlackRaven OS Terminal v2.0.1</span>
+          <StatusIndicator status="error" size="sm" />
+          <StatusIndicator status="warning" size="sm" />
+          <StatusIndicator status="online" size="sm" />
+          <span className="ml-4 text-terminal-red-bright text-sm font-mono">BlackRaven OS Terminal v2.0.1</span>
         </div>
-        <div className="text-xs text-gray-500 font-mono">
-          {user.username}@psychproject | {user.subscriptionTier?.toUpperCase() || 'GUEST'}
+        <div className="flex items-center space-x-2">
+          <AccessibilitySymbol 
+            type={user.subscriptionTier === 'shadow' ? 'Shadow' : user.subscriptionTier === 'operator' ? 'Operator' : 'Recruit'} 
+            className="w-4 h-4" 
+          />
+          <span className="text-xs text-terminal-red-secondary font-mono">
+            {user.username}@psychproject | {user.subscriptionTier?.toUpperCase() || 'GUEST'}
+          </span>
         </div>
       </div>
 
       {/* Terminal Content */}
       <div ref={terminalRef} className="p-4 h-96 overflow-y-auto font-mono text-sm" data-testid="enhanced-terminal">
         {output.map((line, index) => (
-          <div key={index} className={line.startsWith('[') ? 'text-terminal-green' : line.includes('Command not found') || line.includes('Access denied') ? 'text-red-400' : 'text-gray-300'}>
+          <div key={index} className={
+            line.startsWith('[SYSTEM]') || line.startsWith('[BOOT]') ? 'text-terminal-red-primary' :
+            line.startsWith('[AUTH]') || line.startsWith('[INFO]') ? 'text-terminal-red-secondary' :
+            line.includes('Command not found') || line.includes('Access denied') ? 'text-terminal-scarlet' :
+            line.includes('[ACCESSIBLE]') ? 'text-terminal-red-bright' :
+            line.includes('[LOCKED]') ? 'text-terminal-red-muted' :
+            line.startsWith('[') ? 'text-terminal-orange' :
+            'text-gray-300'
+          }>
+            {line.includes('[ACCESSIBLE]') && (
+              <AccessibilitySymbol type="Accessible" className="inline w-3 h-3 mr-1" />
+            )}
+            {line.includes('[LOCKED]') && (
+              <AccessibilitySymbol type="Classified" className="inline w-3 h-3 mr-1" />
+            )}
             {line}
           </div>
         ))}
         
         {/* Input line */}
         <form onSubmit={handleSubmit} className="flex items-center mt-2">
-          <span className="text-terminal-green mr-2">{user.username}@psychproject:~$</span>
+          <AccessibilitySymbol type="Command" className="inline w-3 h-3 mr-1" />
+          <span className="text-terminal-red-primary mr-2">{user.username}@psychproject:~$</span>
           <input
             ref={inputRef}
             type="text"
