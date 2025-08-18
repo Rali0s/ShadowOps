@@ -203,15 +203,16 @@ export function StatusIndicator({
   };
 
   const config = statusConfig[status];
-  
+
   return (
     <div className={`flex items-center space-x-1 ${config.color}`}>
       <AccessibilitySymbol 
         type={config.symbol as keyof typeof TerminalSymbols}
         className={sizeClasses[size]}
-        ariaLabel={config.text}
+        fallbackText={config.text}
+        ariaLabel={`Status: ${status}`}
       />
-      <span className="font-mono text-xs">{config.text}</span>
+      <span className="text-xs font-mono">{config.text}</span>
     </div>
   );
 }
