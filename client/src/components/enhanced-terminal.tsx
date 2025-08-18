@@ -166,8 +166,8 @@ export function EnhancedTerminal({ user }: EnhancedTerminalProps) {
           <span className="ml-4 text-gray-400 text-xs">BlackRaven Terminal - Enhanced Mode</span>
         </div>
         <div className="flex items-center space-x-4 text-xs text-gray-400">
-          <StatusIndicator status="connected" />
-          <AccessibilitySymbol type="secure" />
+          <StatusIndicator status="online" />
+          <AccessibilitySymbol type="Classified" />
         </div>
       </div>
 
