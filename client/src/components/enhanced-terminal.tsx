@@ -67,6 +67,9 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
           "  tiedown       - Initiate tiedown protocol",
           "  schema [type] - Load psychological schema (A, B, C)",
           "  knot          - Knot-So-lution programming interface",
+          "  blackbriar    - Access infiltration archives",
+          "  treadstone    - View acquired classified documents",
+          "  infiltrate    - Display backstory and mission details",
           "  status        - Show system status",
           "  clear         - Clear terminal screen",
           "  exit          - Terminate session"
@@ -342,6 +345,70 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
         addToOutput([
           "Terminating session...",
           "Connection closed."
+        ]);
+        break;
+
+      case 'blackbriar':
+        addToOutput([
+          "═══ BLACKBRIAR INFILTRATION ARCHIVES ═══",
+          "",
+          "⚠ ACCESSING CLASSIFIED DOCUMENTS ⚠",
+          "",
+          "Infiltration successful through age falsification.",
+          "Access gained to pre-public release materials.",
+          "",
+          "Documents acquired:",
+          "• Blackbriar Psychological Programming Manual",
+          "• Treadstone Memory Implantation Protocols", 
+          "• Outcome Program Enhancement Documentation",
+          "",
+          "Classification: FORMERLY TOP SECRET - NOW DECLASSIFIED",
+          "Current status: Integrated into civilian training platform",
+          "",
+          "Navigate to /blackbriar for full archive access."
+        ]);
+        break;
+
+      case 'treadstone':
+        addToOutput([
+          "═══ TREADSTONE MEMORY OPERATIONS ═══",
+          "",
+          "Deep cover infiltration complete.",
+          "Memory manipulation techniques acquired.",
+          "",
+          "Techniques learned:",
+          "• Visual recall anchor implementation",
+          "• Flashlight trigger systems", 
+          "• Phone-based audio cues (Cisco 90s)",
+          "• Internal dial visualization",
+          "• Exit sequence protocols",
+          "",
+          "All military techniques adapted for cognitive enhancement.",
+          "Sacred geometry wheel serves as civilian-safe replacement.",
+          "",
+          "Access full documentation at /blackbriar"
+        ]);
+        break;
+
+      case 'infiltrate':
+        addToOutput([
+          "═══ INFILTRATION MISSION BRIEFING ═══",
+          "",
+          "SUBJECT: Age falsification and facility penetration",
+          "TARGET: Blackbriar training facility", 
+          "OBJECTIVE: Acquire classified programming manuals",
+          "",
+          "MISSION PHASES:",
+          "Phase 1: False documentation created",
+          "Phase 2: Facility infiltration successful",
+          "Phase 3: Manual acquisition complete",
+          "Phase 4: Knowledge integration achieved",
+          "",
+          "OUTCOME: Military-grade psychological programming",
+          "evolved into beneficial civilian cognitive training.",
+          "",
+          "Mission status: SUCCESS - Full evolution complete",
+          "Current platform: _Fq Brainwave Frequency Training"
         ]);
         break;
 

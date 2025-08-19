@@ -10,6 +10,7 @@ import AdvancedTerminalPage from "@/pages/advanced-terminal-page";
 import AdminPage from "@/pages/admin-page";
 import SubscribePage from "@/pages/subscribe-page";
 import OpsManualPage from "@/pages/ops-manual-page";
+import BlackbriarBackstory from "@/pages/blackbriar-backstory";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -21,6 +22,7 @@ function Router() {
       <Route path="/admin" component={AdminPage} />
       <Route path="/subscribe" component={SubscribePage} />
       <Route path="/ops-manual" component={OpsManualPage} />
+      <Route path="/blackbriar" component={BlackbriarBackstory} />
       <Route component={NotFound} />
     </Switch>
   );
