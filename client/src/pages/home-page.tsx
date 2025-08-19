@@ -22,7 +22,7 @@ export default function HomePage() {
                 <FrequencyLogo size={80} className="bg-terminal-bg rounded-xl p-2 border border-terminal-red-primary" />
               </div>
               <h2 className="text-2xl sm:text-4xl md:text-6xl font-bold text-terminal-red-bright mb-2 font-mono tracking-tight">_Fq</h2>
-              <p className="text-terminal-red-secondary font-mono text-sm sm:text-base font-medium">Brainwave Frequency Training</p>
+              <p className="text-terminal-red-secondary font-mono text-sm sm:text-base font-medium">Is This A Simulation</p>
             </div>
             
             <p className="text-base sm:text-lg lg:text-xl text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">

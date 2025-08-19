@@ -15,6 +15,7 @@ KSP Dossier integration: ADDED - Complete Knot Solution Programming dossier with
 Anchor Words System: ADDED - Custom input fields for anchor word programming over visual matrix with categories (trigger, anchor, codeoff, pleasure), frequency/duration controls, and real-time overlay integration with sacred geometry wheel.
 Code-Off and Pleasure Sequences: ADDED - Interactive sequences with music integration, reality grounding mechanisms, flow state optimization, and visual matrix overlay functionality for enhanced psychological programming operations.
 Faraday Black Box Study: ADDED - Complete turnkey psychological research methodology featuring interactive inference game with deterministic, probabilistic, adversarial, and null box conditions for studying black-box reasoning, noise tolerance, query strategy efficiency, and metacognitive calibration.
+Platform Tagline: UPDATED - Changed tagline from "Brainwave Frequency Training" to "Is This A Simulation" per user request.
 
 # System Architecture
 
