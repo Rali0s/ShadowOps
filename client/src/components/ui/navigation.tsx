@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Code, Terminal, Settings, Shield, Eye, FileText } from "lucide-react";
+import { Code, Terminal, Settings, Shield, Eye, FileText, Box } from "lucide-react";
 
 export function Navigation() {
   const [location] = useLocation();
@@ -106,6 +106,23 @@ export function Navigation() {
               >
                 <FileText className="w-4 h-4 mr-2" />
                 KSP Dossier
+              </Button>
+            </Link>
+
+            <Link href="/faraday-study">
+              <Button 
+                variant={isActive("/faraday-study") ? "default" : "ghost"}
+                size="sm"
+                className={`
+                  ${isActive("/faraday-study") 
+                    ? "bg-terminal-red-primary text-white" 
+                    : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
+                  }
+                  font-medium transition-colors
+                `}
+              >
+                <Box className="w-4 h-4 mr-2" />
+                Faraday Study
               </Button>
             </Link>
 
