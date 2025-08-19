@@ -1,6 +1,6 @@
 # Overview
 
-_Fq is a brainwave frequency analysis training platform built as a full-stack web application. It provides an interactive terminal-based learning environment where users can access frequency training across Alpha (8-12 Hz), Beta (12-30 Hz), Theta (4-8 Hz), and Gamma (30-100+ Hz) frequencies through tiered subscriptions. The platform features a dark, terminal-inspired UI with red color theme variants, custom frequency logo, and accessibility features including SVG symbol rendering and shape vectors for color blind users. Includes subscription management through Stripe payments.
+_Fq is a brainwave frequency analysis training platform built as a full-stack web application. It provides an interactive terminal-based learning environment where users can access frequency training across Alpha (8-12 Hz), Beta (12-30 Hz), Theta (4-8 Hz), and Gamma (30-100+ Hz) frequencies through open access. The platform features a dark, terminal-inspired UI with red color theme variants, custom frequency logo, and revolutionary sacred geometry auto-wheel visualization. The sacred geometry wheel features 13 alternating circles in elliptical patterns with complex triangular shapes in varying directions, broader complex shapes between cross sections, and high-speed rotation synchronized with brainwave frequencies for neural synchronization.
 
 # User Preferences
 
@@ -8,6 +8,7 @@ Preferred communication style: Simple, everyday language.
 Navigation preferences: Removed courses tab from navigation system per user request.
 System architecture: Completely removed course system - platform now uses pure tier-based access only with brainwave frequency training (Alpha, Beta, Theta, Gamma).
 Authentication system: REMOVED - User requested "repair auth section - no auth or logins needed" - Platform now operates as open access system without user authentication or login requirements.
+Sacred geometry visualization: ADDED - User requested red-based sacred geometry auto-wheel with high-speed elliptical patterns, 13 alternating circles with complex triangles and varying directional shapes, broader complex shapes between cross sections for future self-programming goals integration.
 
 # System Architecture
 
@@ -54,11 +55,21 @@ Authentication system: REMOVED - User requested "repair auth section - no auth o
 
 ## Terminal Emulator
 - **Implementation**: React-based terminal simulator with command processing and async buffer switches
-- **Features**: Command history, boot sequences, brainwave frequency training simulation, database access terminals, frequency analysis display
+- **Features**: Command history, boot sequences, brainwave frequency training simulation, database access terminals, frequency analysis display, sacred geometry wheel activation commands
 - **Theming**: Pure red color theme with traditional red shades (primary, secondary, dark, bright, muted, scarlet, crimson, burgundy)
 - **Accessibility**: SVG symbol rendering system with shape vectors for color blind accessibility
 - **Interactivity**: Real-time command processing with educational scenarios and database terminal integration
+- **Sacred Geometry Commands**: Terminal commands include 'sacred', 'geomatry', 'wheel [freq]', and 'elliptic' for activating the sacred geometry auto-wheel with frequency synchronization
 - **Responsive Design**: Fully responsive terminal interfaces with mobile-optimized layouts, touch-friendly controls, and adaptive text sizing
+
+## Sacred Geometry Auto-Wheel
+- **Design**: Red-based sacred geometry visualization with 13 alternating circles in elliptical patterns
+- **Animation**: High-speed rotation with elliptical warning mode (1.2x horizontal, 0.8x vertical distortion)
+- **Patterns**: Complex triangular shapes in varying directions, alternating between polygons and concentric circles
+- **Cross-Sectional Elements**: Broader complex shapes drawn between circle intersections using curved paths and mathematical patterns
+- **Brainwave Synchronization**: Wheel speed and intensity synchronized to current brainwave frequency (Alpha, Beta, Theta, Gamma)
+- **Interactive Commands**: Terminal-activated visualization with frequency-specific parameters and warning overlays
+- **Future Integration**: Designed for self-programming goals computation and advanced neural feedback
 
 # External Dependencies
 

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "wouter";
 import { Terminal, Home, Shield } from "lucide-react";
+import { SacredGeometryWheel } from "@/components/sacred-geometry-wheel";
 
 export default function TerminalPage() {
   const [isTerminalReady, setIsTerminalReady] = useState(false);
@@ -55,9 +56,21 @@ export default function TerminalPage() {
       {/* Main Content */}
       <div className="container mx-auto px-4 sm:px-6 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <Card className="bg-card-bg border-gray-700 mb-6">
+          {/* Sidebar with Sacred Geometry */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Sacred Geometry Wheel */}
+            <Card className="bg-card-bg border-gray-700">
+              <CardContent className="p-4 flex justify-center">
+                <SacredGeometryWheel 
+                  size={200}
+                  speed={1.5}
+                  brainwaveFrequency={10}
+                  intensity={0.8}
+                />
+              </CardContent>
+            </Card>
+
+            <Card className="bg-card-bg border-gray-700">
               <CardContent className="p-4">
                 <h3 className="text-terminal-red-bright font-mono font-bold mb-3 text-sm">
                   FREQUENCY BANDS

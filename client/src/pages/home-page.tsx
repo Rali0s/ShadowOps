@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Terminal, Shield, Code } from "lucide-react";
 import { FrequencyLogo } from "@/components/frequency-logo";
 import { BrainwaveFrequencyDisplay } from "@/components/brainwave-frequency-display";
+import { BrainwaveSynchronizedWheel } from "@/components/brainwave-synchronized-wheel";
 
 export default function HomePage() {
   // Open access system - no user authentication needed
@@ -49,6 +50,11 @@ export default function HomePage() {
                 </Button>
               </Link>
             </div>
+          </div>
+
+          {/* Sacred Geometry Brainwave Wheel */}
+          <div className="mb-12">
+            <BrainwaveSynchronizedWheel size={350} className="mb-8" />
           </div>
 
           {/* Brainwave Frequency Display */}
