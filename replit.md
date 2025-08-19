@@ -1,12 +1,12 @@
 # Overview
 
-BlackRaven OS is a cybersecurity training platform built as a full-stack web application. It provides an interactive terminal-based learning environment where users can access cybersecurity courses through tiered subscriptions. The platform features a dark, terminal-inspired UI with red color theme variants and accessibility features including SVG symbol rendering and shape vectors for color blind users. Includes subscription management through Stripe payments.
+_Fq is a brainwave frequency analysis training platform built as a full-stack web application. It provides an interactive terminal-based learning environment where users can access frequency training across Alpha (8-12 Hz), Beta (12-30 Hz), Theta (4-8 Hz), and Gamma (30-100+ Hz) frequencies through tiered subscriptions. The platform features a dark, terminal-inspired UI with red color theme variants, custom frequency logo, and accessibility features including SVG symbol rendering and shape vectors for color blind users. Includes subscription management through Stripe payments.
 
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
 Navigation preferences: Removed courses tab from navigation system per user request.
-System architecture: Completely removed course system - platform now uses pure tier-based access only.
+System architecture: Completely removed course system - platform now uses pure tier-based access only with brainwave frequency training (Alpha, Beta, Theta, Gamma).
 
 # System Architecture
 
@@ -33,11 +33,11 @@ System architecture: Completely removed course system - platform now uses pure t
 - **Connection**: Connection pooling with @neondatabase/serverless
 
 ## Database Schema
-- **Users**: Authentication, subscription tiers (none, recruit, operative, operator, shadow), Stripe integration
+- **Users**: Authentication, subscription tiers (none, alpha, beta, theta, gamma), Stripe integration
 - **Courses**: Hierarchical content with difficulty levels and tier requirements
 - **Modules**: Course content with JSON-based lesson data
 - **Certificates**: Achievement system for completed courses
-- **Access Control**: Tier-based access without progress tracking
+- **Access Control**: Brainwave frequency tier-based access without progress tracking (Alpha: 8-12 Hz, Beta: 12-30 Hz, Theta: 4-8 Hz, Gamma: 30-100+ Hz)
 
 ## Authentication & Authorization
 - **Strategy**: Session-based authentication with encrypted passwords (scrypt)
@@ -53,7 +53,7 @@ System architecture: Completely removed course system - platform now uses pure t
 
 ## Terminal Emulator
 - **Implementation**: React-based terminal simulator with command processing and async buffer switches
-- **Features**: Command history, boot sequences, course interaction simulation, database access terminals
+- **Features**: Command history, boot sequences, brainwave frequency training simulation, database access terminals, frequency analysis display
 - **Theming**: Pure red color theme with traditional red shades (primary, secondary, dark, bright, muted, scarlet, crimson, burgundy)
 - **Accessibility**: SVG symbol rendering system with shape vectors for color blind accessibility
 - **Interactivity**: Real-time command processing with educational scenarios and database terminal integration

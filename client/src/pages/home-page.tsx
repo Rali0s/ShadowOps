@@ -2,6 +2,8 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { Terminal, Shield, Code } from "lucide-react";
+import { FrequencyLogo } from "@/components/frequency-logo";
+import { BrainwaveFrequencyDisplay } from "@/components/brainwave-frequency-display";
 
 export default function HomePage() {
   const { user } = useAuth();
@@ -15,16 +17,16 @@ export default function HomePage() {
           {/* Hero Section */}
           <div className="mb-16">
             <div className="inline-block p-8 bg-card-bg rounded-2xl glass-effect mb-8 border border-terminal-red-muted">
-              <div className="w-20 h-20 bg-gradient-to-br from-terminal-red-primary to-terminal-red-secondary rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Shield className="text-3xl text-white" />
+              <div className="flex justify-center mb-4">
+                <FrequencyLogo size={80} className="bg-terminal-bg rounded-xl p-2 border border-terminal-red-primary" />
               </div>
-              <h2 className="text-2xl sm:text-4xl md:text-6xl font-bold text-terminal-red-bright mb-2 font-mono tracking-tight">BlackRaven OS</h2>
-              <p className="text-terminal-red-secondary font-mono text-sm sm:text-base font-medium">Elite Cybersecurity Training</p>
+              <h2 className="text-2xl sm:text-4xl md:text-6xl font-bold text-terminal-red-bright mb-2 font-mono tracking-tight">_Fq</h2>
+              <p className="text-terminal-red-secondary font-mono text-sm sm:text-base font-medium">Brainwave Frequency Training</p>
             </div>
             
             <p className="text-base sm:text-lg lg:text-xl text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
-              Master cybersecurity through hands-on terminal training. Learn penetration testing, 
-              digital forensics, and advanced security techniques.
+              Master brainwave frequency analysis and neural optimization. Train across Alpha, Beta, 
+              Theta, and Gamma frequencies for peak cognitive performance.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
@@ -33,13 +35,13 @@ export default function HomePage() {
                   <Link href="/terminal" data-testid="button-access-terminal">
                     <Button className="px-8 py-4 bg-terminal-red-primary text-white font-semibold rounded-xl hover:bg-terminal-red-secondary transition-all transform hover:scale-105">
                       <Terminal className="mr-2" />
-                      Basic Terminal
+                      Alpha Training
                     </Button>
                   </Link>
                   <Link href="/advanced-terminal" data-testid="button-access-advanced-terminal">
                     <Button className="px-8 py-4 bg-terminal-red-secondary text-white font-semibold rounded-xl hover:bg-terminal-red-primary transition-all transform hover:scale-105">
                       <Shield className="mr-2" />
-                      Advanced Terminal
+                      Beta Analysis
                     </Button>
                   </Link>
                 </>
@@ -47,11 +49,16 @@ export default function HomePage() {
                 <Link href="/auth" data-testid="button-get-started">
                   <Button className="px-8 py-4 bg-terminal-red-primary text-white font-semibold rounded-xl hover:bg-terminal-red-secondary transition-all transform hover:scale-105">
                     <Terminal className="mr-2" />
-                    Get Started
+                    Begin Training
                   </Button>
                 </Link>
               )}
             </div>
+          </div>
+
+          {/* Brainwave Frequency Display */}
+          <div className="mb-16">
+            <BrainwaveFrequencyDisplay className="mx-auto max-w-6xl" />
           </div>
 
           {/* Terminal Preview */}
@@ -62,17 +69,18 @@ export default function HomePage() {
                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                 <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="ml-4 text-gray-400 text-sm font-mono">BlackRaven OS Terminal</span>
+                <span className="ml-4 text-gray-400 text-sm font-mono">_Fq Frequency Terminal</span>
               </div>
               
               {/* Terminal Content */}
               <div className="p-6 font-mono text-sm h-96 overflow-y-auto">
                 <div className="terminal-text text-terminal-green">
-                  <p>[SYSTEM] BlackRaven OS v2.0.1 - CLASSIFIED</p>
-                  <p>[BOOT] Initializing cybersecurity training environment...</p>
-                  <p>[AUTH] User authenticated: {user ? `${user.username.toUpperCase()}` : 'GUEST_USER'}</p>
-                  <p>[INFO] Welcome to advanced cybersecurity training</p>
-                  <p className="mt-4 text-terminal-amber">Available Commands:</p>
+                  <p>[SYSTEM] _Fq Frequency Analysis v3.1.4 - NEURAL_SYNC</p>
+                  <p>[BOOT] Initializing brainwave frequency monitoring...</p>
+                  <p>[AUTH] Neural profile: {user ? `${user.username.toUpperCase()}` : 'GUEST_PROFILE'}</p>
+                  <p>[FREQ] Current tier: {user?.subscriptionTier?.toUpperCase() || 'NONE'}</p>
+                  <p>[INFO] Welcome to advanced frequency training</p>
+                  <p className="mt-4 text-terminal-amber">Available Frequency Commands:</p>
                   <p>  help          - Display available commands</p>
                   <p>  modules       - List training modules</p>
                   <p>  progress      - Show completion status</p>
