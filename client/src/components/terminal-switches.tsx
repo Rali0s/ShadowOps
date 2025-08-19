@@ -45,7 +45,7 @@ export function TerminalSwitches({ onBufferChange, isConnected }: TerminalSwitch
     // Variable buffers
     currentUser: "operative",
     sessionId: "",
-    targetSystem: "psychproject",
+    targetSystem: "fq_system",
     
     // Integer buffers
     connectionTimeout: 5000,

@@ -1,12 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import type { User } from "@shared/schema";
 import { StatusIndicator, AccessibilitySymbol } from "./terminal-symbols";
 
-interface EnhancedTerminalProps {
-  user: User;
-}
+interface EnhancedTerminalProps {}
 
-export function EnhancedTerminal({ user }: EnhancedTerminalProps) {
+export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
   const [output, setOutput] = useState<string[]>([]);
   const [currentInput, setCurrentInput] = useState("");
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -17,17 +14,17 @@ export function EnhancedTerminal({ user }: EnhancedTerminalProps) {
   // Boot sequence
   useEffect(() => {
     const bootSequence = [
-      "[SYSTEM] BlackRaven OS v2.0.1 - CLASSIFIED",
-      "[BOOT] Initializing PsychProject training environment...",
-      `[AUTH] User authenticated: ${user.username.toUpperCase()}_${user.id.slice(-4)}`,
-      `[INFO] Access level: ${user.subscriptionTier?.toUpperCase() || 'NONE'}`,
-      "[INFO] Welcome to advanced cybersecurity training",
+      "[SYSTEM] _Fq Brainwave System v3.0.0 - OPEN ACCESS",
+      "[BOOT] Initializing frequency training environment...",
+      "[ACCESS] Open Access Mode - All frequencies available",
+      "[INFO] Welcome to brainwave frequency training",
+      "[FREQ] Alpha (8-12Hz) | Beta (12-30Hz) | Theta (4-8Hz) | Gamma (30-100+Hz)",
       "",
       "Type 'help' to see available commands.",
       ""
     ];
     setOutput(bootSequence);
-  }, [user]);
+  }, []);
 
   // Auto scroll to bottom
   useEffect(() => {
@@ -46,42 +43,112 @@ export function EnhancedTerminal({ user }: EnhancedTerminalProps) {
     const cmd = args[0].toLowerCase();
 
     // Add command to output
-    addToOutput([`${user.username}@psychproject:~$ ${command}`]);
+    addToOutput([`operative@fq_system:~$ ${command}`]);
 
     switch (cmd) {
       case 'help':
         addToOutput([
           "Available Commands:",
           "  help          - Display this help message",
-          "  training      - Access training environment",
-          "  tier          - Show subscription tier information",
-          "  whoami        - Display user information",
+          "  frequencies   - Show brainwave frequency bands",
+          "  alpha         - Access Alpha wave training (8-12 Hz)",
+          "  beta          - Access Beta wave training (12-30 Hz)", 
+          "  theta         - Access Theta wave training (4-8 Hz)",
+          "  gamma         - Access Gamma wave training (30-100+ Hz)",
+          "  status        - Show system status",
           "  clear         - Clear terminal screen",
           "  exit          - Terminate session"
         ]);
         break;
 
-      case 'whoami':
+      case 'status':
         addToOutput([
-          `Username: ${user.username}`,
-          `Access Level: ${user.subscriptionTier?.toUpperCase() || 'NONE'}`,
-          `User ID: ${user.id}`,
-          `Status: ACTIVE`
+          "System Status:",
+          "Access Level: OPEN ACCESS",
+          "Available Frequencies: ALL",
+          "Session: ACTIVE",
+          "Mode: TRAINING READY"
         ]);
         break;
 
-      case 'training':
-        const userTier = user.subscriptionTier || "none";
+      case 'frequencies':
         addToOutput([
-          "Training Environment Access:",
-          `Current tier: ${userTier.toUpperCase()}`,
+          "Brainwave Frequency Bands - All Available:",
           "",
-          "Available environments based on your tier:",
-          ...(userTier === "shadow" ? ["• All training environments unlocked"] :
-          userTier === "operator" ? ["• Advanced penetration testing"] :
-          userTier === "operative" ? ["• Intermediate security scenarios"] :
-          userTier === "recruit" ? ["• Basic cybersecurity training"] :
-          ["• No training access - please upgrade subscription"])
+          "Alpha (8-12 Hz)  - Relaxed wakefulness, creative flow",
+          "Beta (12-30 Hz)  - Alert thinking, problem solving", 
+          "Theta (4-8 Hz)   - Deep processing, creative insights",
+          "Gamma (30-100+Hz)- Peak performance, consciousness",
+          "",
+          "Use: alpha, beta, theta, or gamma commands to access training"
+        ]);
+        break;
+
+      case 'alpha':
+        addToOutput([
+          "═══ ALPHA WAVE TRAINING (8-12 Hz) ═══",
+          "",
+          "Alpha waves promote relaxed wakefulness and creative flow states.",
+          "Perfect for meditation, creative work, and stress reduction.",
+          "",
+          "Training modules:",
+          "• Mindfulness meditation protocols",
+          "• Creative visualization exercises", 
+          "• Stress reduction techniques",
+          "• Flow state induction",
+          "",
+          "Status: AVAILABLE - Open Access"
+        ]);
+        break;
+
+      case 'beta':
+        addToOutput([
+          "═══ BETA WAVE TRAINING (12-30 Hz) ═══",
+          "",
+          "Beta waves enhance alert thinking and analytical processing.",
+          "Ideal for focus, concentration, and problem-solving tasks.",
+          "",
+          "Training modules:",
+          "• Concentration enhancement protocols",
+          "• Problem-solving methodologies",
+          "• Analytical thinking exercises",
+          "• Cognitive performance optimization",
+          "",
+          "Status: AVAILABLE - Open Access"
+        ]);
+        break;
+
+      case 'theta':
+        addToOutput([
+          "═══ THETA WAVE TRAINING (4-8 Hz) ═══",
+          "",
+          "Theta waves facilitate deep processing and creative insights.",
+          "Associated with deep meditation and subconscious access.",
+          "",
+          "Training modules:",
+          "• Deep meditation techniques",
+          "• Memory consolidation protocols",
+          "• Creative breakthrough exercises",
+          "• Subconscious programming methods",
+          "",
+          "Status: AVAILABLE - Open Access"
+        ]);
+        break;
+
+      case 'gamma':
+        addToOutput([
+          "═══ GAMMA WAVE TRAINING (30-100+ Hz) ═══",
+          "",
+          "Gamma waves represent peak cognitive performance and consciousness.",
+          "Associated with heightened awareness and cognitive binding.",
+          "",
+          "Training modules:",
+          "• Peak performance protocols",
+          "• Consciousness expansion exercises",
+          "• Cognitive enhancement techniques",
+          "• Advanced awareness training",
+          "",
+          "Status: AVAILABLE - Open Access"
         ]);
         break;
 

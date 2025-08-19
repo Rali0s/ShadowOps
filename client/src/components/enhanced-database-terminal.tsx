@@ -1,16 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import type { User, DbDocument } from "@shared/schema";
+import type { DbDocument } from "@shared/schema";
 import type { TerminalBuffers } from "./terminal-switches";
 import { StatusIndicator, AccessibilitySymbol } from "./terminal-symbols";
 
 interface EnhancedDatabaseTerminalProps {
-  user: User;
   buffers: TerminalBuffers;
 }
 
-export function EnhancedDatabaseTerminal({ user, buffers }: EnhancedDatabaseTerminalProps) {
+export function EnhancedDatabaseTerminal({ buffers }: EnhancedDatabaseTerminalProps) {
   const [output, setOutput] = useState<string[]>([]);
   const [currentInput, setCurrentInput] = useState("");
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -69,7 +68,7 @@ export function EnhancedDatabaseTerminal({ user, buffers }: EnhancedDatabaseTerm
         ...document.content.split('\n'),
         "────────────────────────────────────",
         `[INFO] Document accessed at ${new Date().toLocaleString()}`,
-        buffers.logEnabled ? `[LOG] Access logged for user: ${user.username}` : ""
+        buffers.logEnabled ? `[LOG] Access logged for open session` : ""
       ].filter(Boolean));
     },
     onError: (error: any) => {
