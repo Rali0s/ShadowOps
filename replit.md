@@ -1,6 +1,6 @@
 # Overview
 
-_Fq is a brainwave frequency analysis training platform built as a full-stack web application integrating psychological programming elements from "Knot-So-lution Programming" study. It provides an interactive terminal-based learning environment where users can access frequency training across Alpha (8-12 Hz), Beta (12-30 Hz), Theta (4-8 Hz), and Gamma (30-100+ Hz) frequencies through open access. The platform features psychological programming capabilities including Education of Ops Manuals, Anchor/Knot/TieDown Triggers, and visual recall operations. The platform features a dark, terminal-inspired UI with red color theme variants, custom frequency logo, and revolutionary sacred geometry auto-wheel visualization synchronized with psychological programming operations.
+_Fq is a brainwave frequency analysis training platform built as a full-stack web application integrating psychological programming elements from "Knot-So-lution Programming" study with a thematic backstory of infiltrating Blackbriar through age falsification to acquire classified manuals before public release. The platform provides an interactive terminal-based learning environment where users can access frequency training across Alpha (8-12 Hz), Beta (12-30 Hz), Theta (4-8 Hz), and Gamma (30-100+ Hz) frequencies through open access. The platform features psychological programming capabilities including Education of Ops Manuals, Anchor/Knot/TieDown Triggers, visual recall operations, and Blackbriar infiltration archives showcasing the evolution from classified military techniques to beneficial civilian cognitive enhancement.
 
 # User Preferences
 
@@ -10,6 +10,7 @@ System architecture: Completely removed course system - platform now uses pure t
 Authentication system: REMOVED - User requested "repair auth section - no auth or logins needed" - Platform now operates as open access system without user authentication or login requirements.
 Sacred geometry visualization: ADDED - User requested red-based sacred geometry auto-wheel with high-speed elliptical patterns, 13 alternating circles with complex triangles and varying directional shapes, broader complex shapes between cross sections for future self-programming goals integration.
 Psychological programming integration: ADDED - Full integration of "Knot-So-lution Programming" study with Education of Ops Manuals, Trigger-Anchor-Knot system, psychological schema operations (A, B, C types), and visual recall operations with "PRODUCT OF A MAD MAN" disclaimer warnings.
+Blackbriar backstory integration: ADDED - Thematic narrative of infiltrating Blackbriar through age falsification, acquiring classified psychological programming manuals before public release, with full declassified document archives showing evolution from military psychological warfare to civilian cognitive enhancement platform.
 
 # System Architecture
 
@@ -62,6 +63,7 @@ Psychological programming integration: ADDED - Full integration of "Knot-So-luti
 - **Interactivity**: Real-time command processing with educational scenarios and database terminal integration
 - **Sacred Geometry Commands**: Terminal commands include 'sacred', 'geomatry', 'wheel [freq]', and 'elliptic' for activating the sacred geometry auto-wheel with frequency synchronization
 - **Psychological Programming Commands**: New commands include 'anchor', 'trigger', 'tiedown', 'schema [A|B|C]', and 'knot' for Jason Bourne-like trigger system activation and MK-Ultra methodology implementation
+- **Blackbriar Infiltration Commands**: Commands include 'blackbriar', 'treadstone', and 'infiltrate' for accessing classified document archives and backstory narrative
 - **Responsive Design**: Fully responsive terminal interfaces with mobile-optimized layouts, touch-friendly controls, and adaptive text sizing
 
 ## Sacred Geometry Auto-Wheel
@@ -80,6 +82,13 @@ Psychological programming integration: ADDED - Full integration of "Knot-So-luti
 - **Tiedown Protocols**: Cognitive dissonance prevention system with reality grounding and sanity check procedures
 - **Visual Recall Operations**: Integration of sacred geometry wheel with psychological anchoring mechanisms
 - **Warning Systems**: "PRODUCT OF A MAD MAN" disclaimers with cognitive dissonance warnings and magical thinking issue alerts
+
+## Blackbriar Infiltration Narrative
+- **Backstory Integration**: Thematic story of infiltrating Blackbriar facility through age falsification to acquire classified psychological programming manuals
+- **Document Archives**: Full declassified document system showcasing formerly TOP SECRET materials from Blackbriar, Treadstone, and Outcome programs  
+- **Evolution Narrative**: Military psychological warfare techniques evolved into beneficial civilian cognitive enhancement and brainwave frequency training
+- **Clearance System**: Progressive document unlock system with theta state memory recall synchronization using sacred geometry wheel
+- **Mission Phases**: Three-phase infiltration story (False Documentation → Deep Learning → Evolution) integrated throughout platform experience
 
 # External Dependencies
 

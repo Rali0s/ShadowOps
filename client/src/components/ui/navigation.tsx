@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Code, Terminal, Settings, Shield } from "lucide-react";
+import { Code, Terminal, Settings, Shield, Eye } from "lucide-react";
 
 export function Navigation() {
   const [location] = useLocation();
@@ -72,6 +72,23 @@ export function Navigation() {
               >
                 <Shield className="w-4 h-4 mr-2" />
                 Ops Manual
+              </Button>
+            </Link>
+
+            <Link href="/blackbriar">
+              <Button 
+                variant={isActive("/blackbriar") ? "default" : "ghost"}
+                size="sm"
+                className={`
+                  ${isActive("/blackbriar") 
+                    ? "bg-terminal-red-primary text-white" 
+                    : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
+                  }
+                  font-medium transition-colors
+                `}
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                Blackbriar
               </Button>
             </Link>
 
