@@ -12,6 +12,8 @@ Sacred geometry visualization: ADDED - User requested red-based sacred geometry 
 Psychological programming integration: ADDED - Full integration of "Knot-So-lution Programming" study with Education of Ops Manuals, Trigger-Anchor-Knot system, psychological schema operations (A, B, C types), and visual recall operations with "PRODUCT OF A MAD MAN" disclaimer warnings.
 Blackbriar backstory integration: ADDED - Thematic narrative of infiltrating Blackbriar through age falsification, acquiring classified psychological programming manuals before public release, with full declassified document archives showing evolution from military psychological warfare to civilian cognitive enhancement platform.
 KSP Dossier integration: ADDED - Complete Knot Solution Programming dossier with full technical specifications, 10-section classified documentation, agency seal with sacred geometry, brainwave state definitions, schema design protocols, operational frameworks, risk assessments, and publishing pathways with "Product of A Mad Man" disclaimer system.
+Anchor Words System: ADDED - Custom input fields for anchor word programming over visual matrix with categories (trigger, anchor, codeoff, pleasure), frequency/duration controls, and real-time overlay integration with sacred geometry wheel.
+Code-Off and Pleasure Sequences: ADDED - Interactive sequences with music integration, reality grounding mechanisms, flow state optimization, and visual matrix overlay functionality for enhanced psychological programming operations.
 
 # System Architecture
 

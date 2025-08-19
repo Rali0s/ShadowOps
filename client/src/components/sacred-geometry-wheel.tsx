@@ -6,6 +6,9 @@ interface SacredGeometryWheelProps {
   brainwaveFrequency?: number; // Hz for synchronization
   intensity?: number; // 0-1 for brightness/opacity
   className?: string;
+  overlayWords?: string[];
+  showMusicIndicator?: boolean;
+  currentTrack?: string;
 }
 
 export function SacredGeometryWheel({
@@ -13,7 +16,10 @@ export function SacredGeometryWheel({
   speed = 1,
   brainwaveFrequency = 10,
   intensity = 0.8,
-  className = ""
+  className = "",
+  overlayWords = [],
+  showMusicIndicator = false,
+  currentTrack = ""
 }: SacredGeometryWheelProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const animationRef = useRef<number>();
