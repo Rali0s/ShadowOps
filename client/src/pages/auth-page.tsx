@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { insertUserSchema } from "@shared/schema";
 import { z } from "zod";
 import { Code, Lock, Shield, Terminal } from "lucide-react";
+import { FrequencyLogo } from "@/components/frequency-logo";
 
 const loginSchema = insertUserSchema.pick({ username: true, password: true });
 const registerSchema = insertUserSchema.extend({
@@ -69,17 +70,15 @@ export default function AuthPage() {
   return (
     <div className="min-h-screen bg-terminal-bg flex">
       {/* Left Column - Auth Forms */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8">
         <div className="w-full max-w-md space-y-8">
           {/* Header */}
           <div className="text-center">
             <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-terminal-green rounded-xl flex items-center justify-center">
-                <Code className="text-terminal-bg text-2xl" />
-              </div>
+              <FrequencyLogo size={64} className="bg-terminal-bg rounded-xl p-2 border border-terminal-red-primary" />
             </div>
-            <h1 className="text-3xl font-bold text-terminal-green font-mono">BlackRaven OS</h1>
-            <p className="text-gray-400 mt-2">Access the PsychProject Training Platform</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-terminal-red-bright font-mono">_Fq</h1>
+            <p className="text-gray-400 mt-2 text-sm sm:text-base">Frequency-Based Cybersecurity Training</p>
           </div>
 
           {/* Auth Tabs */}
@@ -253,41 +252,41 @@ export default function AuthPage() {
       </div>
 
       {/* Right Column - Hero Section */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-gray-900 to-terminal-bg items-center justify-center p-8 relative">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-gray-900 to-terminal-bg items-center justify-center p-4 sm:p-8 relative">
         <div className="absolute inset-0 overflow-hidden">
           <div className="terminal-scanline"></div>
         </div>
         <div className="text-center relative z-10">
           <div className="mb-8">
-            <div className="w-24 h-24 bg-gradient-to-br from-terminal-green to-cyber-blue rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <Lock className="text-4xl text-terminal-bg" />
+            <div className="mx-auto mb-6">
+              <FrequencyLogo size={96} className="bg-terminal-bg rounded-2xl p-4 border border-terminal-red-primary" />
             </div>
-            <h2 className="text-4xl font-bold text-terminal-green mb-4 font-mono">PSYCHPROJECT</h2>
-            <p className="text-terminal-amber font-mono">CLASSIFIED TRAINING SYSTEM</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-terminal-red-bright mb-4 font-mono">_Fq</h2>
+            <p className="text-terminal-red-secondary font-mono">FREQUENCY ANALYSIS SYSTEM</p>
           </div>
 
           <div className="space-y-6 text-left max-w-sm">
             <div className="flex items-start space-x-3">
               <Shield className="text-terminal-green mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-white font-semibold">Advanced Security Training</h3>
-                <p className="text-gray-400 text-sm">Master penetration testing and digital forensics</p>
+                <h3 className="text-white font-semibold">Frequency Analysis Training</h3>
+                <p className="text-gray-400 text-sm">Master signal processing and frequency domain security</p>
               </div>
             </div>
 
             <div className="flex items-start space-x-3">
               <Terminal className="text-cyber-blue mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-white font-semibold">Terminal-Based Learning</h3>
-                <p className="text-gray-400 text-sm">Real-world command-line training environment</p>
+                <h3 className="text-white font-semibold">Digital Signal Processing</h3>
+                <p className="text-gray-400 text-sm">Real-time frequency analysis and pattern recognition</p>
               </div>
             </div>
 
             <div className="flex items-start space-x-3">
               <Code className="text-terminal-amber mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-white font-semibold">Elite Certification</h3>
-                <p className="text-gray-400 text-sm">Industry-recognized cybersecurity credentials</p>
+                <h3 className="text-white font-semibold">Advanced Analytics</h3>
+                <p className="text-gray-400 text-sm">AI-powered frequency signature analysis</p>
               </div>
             </div>
           </div>
