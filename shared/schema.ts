@@ -17,11 +17,27 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-// Course and progress tracking removed - platform now uses tier-based access only
+// Database documents for terminal file system simulation
+export const dbDocuments = pgTable("db_documents", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  documentId: text("document_id").notNull().unique(),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  classification: text("classification").notNull(),
+  accessLevel: text("access_level").notNull(), // none, recruit, operative, operator, shadow
+  fileType: text("file_type").default("txt"),
+  fileSize: integer("file_size").notNull(),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
 
 // Relations - simplified for tier-based access only
 export const usersRelations = relations(users, ({ many }) => ({
   // Relations removed with course system
+}));
+
+export const dbDocumentsRelations = relations(dbDocuments, ({ one }) => ({
+  // No direct user relation - access controlled by tier level
 }));
 
 // Insert schemas
@@ -34,8 +50,14 @@ export const insertUserSchema = createInsertSchema(users).omit({
   isAdmin: true,
 });
 
-// Insert schemas for courses removed
+export const insertDbDocumentSchema = createInsertSchema(dbDocuments).omit({
+  id: true,
+  createdAt: true,
+  isActive: true,
+});
 
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
+export type InsertDbDocument = z.infer<typeof insertDbDocumentSchema>;
+export type DbDocument = typeof dbDocuments.$inferSelect;

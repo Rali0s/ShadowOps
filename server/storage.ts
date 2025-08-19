@@ -1,6 +1,6 @@
-import { users, type User, type InsertUser } from "@shared/schema";
+import { users, dbDocuments, type User, type InsertUser, type DbDocument, type InsertDbDocument } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, like, or } from "drizzle-orm";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
 import { pool } from "./db";
@@ -16,17 +16,24 @@ export interface IStorage {
   updateUserStripeInfo(id: string, stripeCustomerId: string, stripeSubscriptionId?: string): Promise<User>;
   updateUserSubscriptionTier(id: string, tier: string): Promise<User>;
   
+  // Database documents for terminal file system
+  getDbDocuments(accessLevel?: string): Promise<DbDocument[]>;
+  getDbDocumentById(documentId: string): Promise<DbDocument | undefined>;
+  createDbDocument(document: InsertDbDocument): Promise<DbDocument>;
+  searchDbDocuments(searchTerm: string, accessLevel?: string): Promise<DbDocument[]>;
+  getDbDocumentsByAccessLevel(accessLevel: string): Promise<DbDocument[]>;
+  
   // Admin functionality - simplified without courses
   getSystemStats(): Promise<{
     activeUsers: number;
     revenue: number;
   }>;
   
-  sessionStore: session.SessionStore;
+  sessionStore: any;
 }
 
 export class DatabaseStorage implements IStorage {
-  public sessionStore: session.SessionStore;
+  public sessionStore: any;
 
   constructor() {
     this.sessionStore = new PostgresSessionStore({ 
@@ -94,6 +101,78 @@ export class DatabaseStorage implements IStorage {
       activeUsers: activeUsers.length,
       revenue
     };
+  }
+
+  // Database document methods for terminal file system
+  async getDbDocuments(accessLevel?: string): Promise<DbDocument[]> {
+    let query = db.select().from(dbDocuments).where(eq(dbDocuments.isActive, true));
+    
+    if (accessLevel) {
+      // Return documents at or below the user's access level
+      const tierHierarchy = ["none", "recruit", "operative", "operator", "shadow"];
+      const userTierIndex = tierHierarchy.indexOf(accessLevel);
+      const allowedTiers = tierHierarchy.slice(0, userTierIndex + 1);
+      
+      return await query.then(docs => 
+        docs.filter(doc => allowedTiers.includes(doc.accessLevel))
+      );
+    }
+    
+    return await query;
+  }
+
+  async getDbDocumentById(documentId: string): Promise<DbDocument | undefined> {
+    const [document] = await db
+      .select()
+      .from(dbDocuments)
+      .where(and(
+        eq(dbDocuments.documentId, documentId),
+        eq(dbDocuments.isActive, true)
+      ));
+    return document || undefined;
+  }
+
+  async createDbDocument(insertDocument: InsertDbDocument): Promise<DbDocument> {
+    const [document] = await db
+      .insert(dbDocuments)
+      .values(insertDocument)
+      .returning();
+    return document;
+  }
+
+  async searchDbDocuments(searchTerm: string, accessLevel?: string): Promise<DbDocument[]> {
+    let query = db
+      .select()
+      .from(dbDocuments)
+      .where(and(
+        eq(dbDocuments.isActive, true),
+        or(
+          like(dbDocuments.title, `%${searchTerm}%`),
+          like(dbDocuments.content, `%${searchTerm}%`)
+        )
+      ));
+
+    const results = await query;
+    
+    if (accessLevel) {
+      const tierHierarchy = ["none", "recruit", "operative", "operator", "shadow"];
+      const userTierIndex = tierHierarchy.indexOf(accessLevel);
+      const allowedTiers = tierHierarchy.slice(0, userTierIndex + 1);
+      
+      return results.filter(doc => allowedTiers.includes(doc.accessLevel));
+    }
+    
+    return results;
+  }
+
+  async getDbDocumentsByAccessLevel(accessLevel: string): Promise<DbDocument[]> {
+    return await db
+      .select()
+      .from(dbDocuments)
+      .where(and(
+        eq(dbDocuments.accessLevel, accessLevel),
+        eq(dbDocuments.isActive, true)
+      ));
   }
 }
 
