@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Code, Terminal, Settings } from "lucide-react";
+import { Code, Terminal, Settings, Shield } from "lucide-react";
 
 export function Navigation() {
   const [location] = useLocation();
@@ -55,6 +55,23 @@ export function Navigation() {
               >
                 <Code className="w-4 h-4 mr-2" />
                 Advanced
+              </Button>
+            </Link>
+
+            <Link href="/ops-manual">
+              <Button 
+                variant={isActive("/ops-manual") ? "default" : "ghost"}
+                size="sm"
+                className={`
+                  ${isActive("/ops-manual") 
+                    ? "bg-terminal-red-primary text-white" 
+                    : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
+                  }
+                  font-medium transition-colors
+                `}
+              >
+                <Shield className="w-4 h-4 mr-2" />
+                Ops Manual
               </Button>
             </Link>
 
