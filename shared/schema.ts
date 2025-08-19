@@ -9,7 +9,7 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
-  subscriptionTier: text("subscription_tier").default("none"), // none, recruit, operative, operator, shadow
+  subscriptionTier: text("subscription_tier").default("none"), // none, alpha, beta, theta, gamma
   stripeCustomerId: text("stripe_customer_id"),
   stripeSubscriptionId: text("stripe_subscription_id"),
   isActive: boolean("is_active").default(true),
@@ -24,7 +24,7 @@ export const dbDocuments = pgTable("db_documents", {
   title: text("title").notNull(),
   content: text("content").notNull(),
   classification: text("classification").notNull(),
-  accessLevel: text("access_level").notNull(), // none, recruit, operative, operator, shadow
+  accessLevel: text("access_level").notNull(), // none, alpha, beta, theta, gamma
   fileType: text("file_type").default("txt"),
   fileSize: integer("file_size").notNull(),
   isActive: boolean("is_active").default(true),

@@ -78,7 +78,7 @@ export default function AuthPage() {
               <FrequencyLogo size={64} className="bg-terminal-bg rounded-xl p-2 border border-terminal-red-primary" />
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-terminal-red-bright font-mono">_Fq</h1>
-            <p className="text-gray-400 mt-2 text-sm sm:text-base">Frequency-Based Cybersecurity Training</p>
+            <p className="text-gray-400 mt-2 text-sm sm:text-base">Brainwave Frequency Analysis Training</p>
           </div>
 
           {/* Auth Tabs */}
@@ -262,31 +262,31 @@ export default function AuthPage() {
               <FrequencyLogo size={96} className="bg-terminal-bg rounded-2xl p-4 border border-terminal-red-primary" />
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold text-terminal-red-bright mb-4 font-mono">_Fq</h2>
-            <p className="text-terminal-red-secondary font-mono">FREQUENCY ANALYSIS SYSTEM</p>
+            <p className="text-terminal-red-secondary font-mono">BRAINWAVE FREQUENCY SYSTEM</p>
           </div>
 
           <div className="space-y-6 text-left max-w-sm">
             <div className="flex items-start space-x-3">
               <Shield className="text-terminal-green mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-white font-semibold">Frequency Analysis Training</h3>
-                <p className="text-gray-400 text-sm">Master signal processing and frequency domain security</p>
+                <h3 className="text-white font-semibold">Alpha Wave Training (8-12 Hz)</h3>
+                <p className="text-gray-400 text-sm">Relaxed wakefulness and creative flow state mastery</p>
               </div>
             </div>
 
             <div className="flex items-start space-x-3">
               <Terminal className="text-cyber-blue mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-white font-semibold">Digital Signal Processing</h3>
-                <p className="text-gray-400 text-sm">Real-time frequency analysis and pattern recognition</p>
+                <h3 className="text-white font-semibold">Beta Wave Analysis (12-30 Hz)</h3>
+                <p className="text-gray-400 text-sm">Alert analytical thinking and problem-solving focus</p>
               </div>
             </div>
 
             <div className="flex items-start space-x-3">
               <Code className="text-terminal-amber mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-white font-semibold">Advanced Analytics</h3>
-                <p className="text-gray-400 text-sm">AI-powered frequency signature analysis</p>
+                <h3 className="text-white font-semibold">Theta-Gamma Integration (4-100+ Hz)</h3>
+                <p className="text-gray-400 text-sm">Deep processing states and peak cognitive performance</p>
               </div>
             </div>
           </div>
