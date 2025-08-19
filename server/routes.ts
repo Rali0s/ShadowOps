@@ -6,6 +6,20 @@ import { setupAuth } from "./auth";
 
 import { z } from "zod";
 import { insertDbDocumentSchema } from "@shared/schema";
+import { scrypt, randomBytes } from "crypto";
+import { promisify } from "util";
+
+const scryptAsync = promisify(scrypt);
+
+async function hashPassword(password: string) {
+  const salt = randomBytes(16).toString("hex");
+  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
+  return `${buf.toString("hex")}.${salt}`;
+}
+
+function generateResetToken(): string {
+  return randomBytes(32).toString("hex");
+}
 
 // Initialize Stripe only if secret key is provided
 let stripe: Stripe | null = null;
@@ -199,6 +213,87 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: 'Failed to create document' });
     }
   });
+
+  // Password reset endpoints
+  app.post('/api/forgot-password', async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ error: 'Email is required' });
+      }
+
+      const user = await storage.getUserByEmail(email);
+      
+      // Always respond success to prevent email enumeration
+      if (!user) {
+        return res.json({ message: 'If an account with that email exists, a reset link has been sent.' });
+      }
+
+      // Generate reset token
+      const token = generateResetToken();
+      const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
+
+      await storage.createPasswordResetToken({
+        token,
+        userId: user.id,
+        expiresAt
+      });
+
+      // In a real app, you'd send an email here
+      // For now, we'll log the reset link for development
+      console.log(`Password reset token for ${email}: ${token}`);
+      console.log(`Reset link: http://localhost:5000/reset-password?token=${token}`);
+
+      res.json({ message: 'If an account with that email exists, a reset link has been sent.' });
+    } catch (error) {
+      console.error('Error in forgot password:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  app.post('/api/reset-password', async (req, res) => {
+    try {
+      const { token, newPassword } = req.body;
+      
+      if (!token || !newPassword) {
+        return res.status(400).json({ error: 'Token and new password are required' });
+      }
+
+      if (newPassword.length < 6) {
+        return res.status(400).json({ error: 'Password must be at least 6 characters long' });
+      }
+
+      const resetToken = await storage.getPasswordResetToken(token);
+      
+      if (!resetToken) {
+        return res.status(400).json({ error: 'Invalid or expired reset token' });
+      }
+
+      // Hash the new password
+      const hashedPassword = await hashPassword(newPassword);
+
+      // Update user password
+      await storage.updateUserPassword(resetToken.userId, hashedPassword);
+
+      // Mark token as used
+      await storage.markPasswordResetTokenAsUsed(resetToken.id);
+
+      res.json({ message: 'Password has been reset successfully' });
+    } catch (error) {
+      console.error('Error in reset password:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  // Cleanup expired tokens (run periodically)
+  setInterval(async () => {
+    try {
+      await storage.cleanupExpiredTokens();
+    } catch (error) {
+      console.error('Error cleaning up expired tokens:', error);
+    }
+  }, 60 * 60 * 1000); // Run every hour
 
   const httpServer = createServer(app);
   return httpServer;

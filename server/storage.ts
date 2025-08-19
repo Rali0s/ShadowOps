@@ -1,6 +1,16 @@
-import { users, dbDocuments, type User, type InsertUser, type DbDocument, type InsertDbDocument } from "@shared/schema";
+import { 
+  users, 
+  dbDocuments, 
+  passwordResetTokens,
+  type User, 
+  type InsertUser, 
+  type DbDocument, 
+  type InsertDbDocument,
+  type PasswordResetToken,
+  type InsertPasswordResetToken
+} from "@shared/schema";
 import { db } from "./db";
-import { eq, and, desc, like, or } from "drizzle-orm";
+import { eq, and, desc, like, or, lt } from "drizzle-orm";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
 import { pool } from "./db";
@@ -15,6 +25,13 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
   updateUserStripeInfo(id: string, stripeCustomerId: string, stripeSubscriptionId?: string): Promise<User>;
   updateUserSubscriptionTier(id: string, tier: string): Promise<User>;
+  updateUserPassword(id: string, password: string): Promise<User>;
+  
+  // Password reset functionality
+  createPasswordResetToken(token: InsertPasswordResetToken): Promise<PasswordResetToken>;
+  getPasswordResetToken(token: string): Promise<PasswordResetToken | undefined>;
+  markPasswordResetTokenAsUsed(tokenId: string): Promise<void>;
+  cleanupExpiredTokens(): Promise<void>;
   
   // Database documents for terminal file system
   getDbDocuments(accessLevel?: string): Promise<DbDocument[]>;
@@ -84,6 +101,54 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, id))
       .returning();
     return user;
+  }
+
+  async updateUserPassword(id: string, password: string): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ password })
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+
+  // Password reset functionality
+  async createPasswordResetToken(insertToken: InsertPasswordResetToken): Promise<PasswordResetToken> {
+    const [token] = await db
+      .insert(passwordResetTokens)
+      .values(insertToken)
+      .returning();
+    return token;
+  }
+
+  async getPasswordResetToken(token: string): Promise<PasswordResetToken | undefined> {
+    const [resetToken] = await db
+      .select()
+      .from(passwordResetTokens)
+      .where(and(
+        eq(passwordResetTokens.token, token),
+        eq(passwordResetTokens.isUsed, false)
+      ));
+    
+    // Check if token exists and is not expired
+    if (!resetToken || new Date() > resetToken.expiresAt) {
+      return undefined;
+    }
+    
+    return resetToken;
+  }
+
+  async markPasswordResetTokenAsUsed(tokenId: string): Promise<void> {
+    await db
+      .update(passwordResetTokens)
+      .set({ isUsed: true })
+      .where(eq(passwordResetTokens.id, tokenId));
+  }
+
+  async cleanupExpiredTokens(): Promise<void> {
+    await db
+      .delete(passwordResetTokens)
+      .where(lt(passwordResetTokens.expiresAt, new Date()));
   }
 
   // Course system removed - platform now uses tier-based access only
