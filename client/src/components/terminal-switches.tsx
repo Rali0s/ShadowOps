@@ -72,12 +72,13 @@ export function TerminalSwitches({ onBufferChange, isConnected }: TerminalSwitch
   }, [isConnected]);
 
   const updateBuffer = useCallback((key: keyof TerminalBuffers, value: any) => {
-    setBuffers(prev => {
-      const updated = { ...prev, [key]: value };
-      onBufferChange(updated);
-      return updated;
-    });
-  }, [onBufferChange]);
+    setBuffers(prev => ({ ...prev, [key]: value }));
+  }, []);
+
+  // Update parent when buffers change
+  useEffect(() => {
+    onBufferChange(buffers);
+  }, [buffers, onBufferChange]);
 
   const handleAsyncToggle = async (key: keyof TerminalBuffers, value: boolean) => {
     // Simulate async operation for critical switches
@@ -95,25 +96,25 @@ export function TerminalSwitches({ onBufferChange, isConnected }: TerminalSwitch
   };
 
   return (
-    <div className="space-y-4 p-4 bg-terminal-bg/90 rounded-lg border border-terminal-red-muted">
+    <div className="space-y-3 sm:space-y-4 p-3 sm:p-4 bg-terminal-bg/90 rounded-lg border border-terminal-red-muted">
       <div className="text-center">
-        <h3 className="text-terminal-red-primary font-mono text-sm font-bold">
+        <h3 className="text-terminal-red-primary font-mono text-xs sm:text-sm font-bold">
           TERMINAL BUFFER CONTROL SYSTEM
         </h3>
-        <div className="text-xs text-gray-400 mt-1">
+        <div className="text-xs text-gray-400 mt-1 truncate">
           Session: {buffers.sessionId || 'INITIALIZING...'}
         </div>
       </div>
 
       {/* Boolean Switches */}
       <Card className="bg-terminal-burgundy border-terminal-red-muted">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-terminal-red-primary text-sm font-mono">
+        <CardHeader className="pb-2 sm:pb-3">
+          <CardTitle className="text-terminal-red-primary text-xs sm:text-sm font-mono">
             BOOLEAN SWITCHES
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="grid grid-cols-2 gap-4">
+        <CardContent className="space-y-2 sm:space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
             <div className="flex items-center space-x-2">
               <Switch
                 id="debug-mode"

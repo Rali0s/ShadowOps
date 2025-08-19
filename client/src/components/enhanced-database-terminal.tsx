@@ -412,26 +412,28 @@ export function EnhancedDatabaseTerminal({ user, buffers }: EnhancedDatabaseTerm
   };
 
   return (
-    <div className="h-full bg-black rounded-lg border border-gray-700 overflow-hidden font-mono text-sm">
+    <div className="h-full bg-black rounded-lg border border-gray-700 overflow-hidden font-mono text-xs sm:text-sm">
       {/* Terminal Header */}
-      <div className="bg-gray-800 px-4 py-2 flex items-center justify-between border-b border-gray-600">
-        <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-          <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          <span className="ml-4 text-gray-400 text-xs">BlackRaven Enhanced DB Terminal</span>
+      <div className="bg-gray-800 px-2 sm:px-4 py-1 sm:py-2 flex items-center justify-between border-b border-gray-600">
+        <div className="flex items-center space-x-1 sm:space-x-2">
+          <div className="w-2 h-2 sm:w-3 sm:h-3 bg-red-500 rounded-full"></div>
+          <div className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-500 rounded-full"></div>
+          <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full"></div>
+          <span className="ml-2 sm:ml-4 text-gray-400 text-xs hidden sm:inline">BlackRaven Enhanced DB Terminal</span>
+          <span className="ml-2 text-gray-400 text-xs sm:hidden">DB Terminal</span>
         </div>
-        <div className="flex items-center space-x-4 text-xs text-gray-400">
+        <div className="flex items-center space-x-2 sm:space-x-4 text-xs text-gray-400">
           <StatusIndicator status={connectionStatus === 'online' ? 'online' : connectionStatus === 'connecting' ? 'processing' : 'offline'} />
           <AccessibilitySymbol type="Database" />
-          <span className="text-terminal-red-muted">React Query: {documents.length}</span>
+          <span className="text-terminal-red-muted hidden sm:inline">React Query: {documents.length}</span>
+          <span className="text-terminal-red-muted sm:hidden">RQ: {documents.length}</span>
         </div>
       </div>
 
       {/* Terminal Content */}
       <div 
         ref={terminalRef}
-        className="p-4 h-[calc(100%-3rem)] overflow-y-auto bg-black text-terminal-red-primary"
+        className="p-2 sm:p-4 h-[calc(100%-2.5rem)] sm:h-[calc(100%-3rem)] overflow-y-auto bg-black text-terminal-red-primary text-xs sm:text-sm"
       >
         {output.map((line, index) => (
           <div key={index} className="whitespace-pre-wrap">
@@ -440,9 +442,10 @@ export function EnhancedDatabaseTerminal({ user, buffers }: EnhancedDatabaseTerm
         ))}
         
         {/* Input Line */}
-        <form onSubmit={handleSubmit} className="flex items-center mt-2">
-          <span className="text-terminal-red-bright mr-2">
-            {user.username}@blackraven:~$
+        <form onSubmit={handleSubmit} className="flex items-center mt-1 sm:mt-2">
+          <span className="text-terminal-red-bright mr-1 sm:mr-2 text-xs sm:text-sm">
+            <span className="hidden sm:inline">{user.username}@blackraven:~$</span>
+            <span className="sm:hidden">$</span>
           </span>
           <input
             ref={inputRef}
@@ -450,9 +453,10 @@ export function EnhancedDatabaseTerminal({ user, buffers }: EnhancedDatabaseTerm
             value={currentInput}
             onChange={(e) => setCurrentInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 bg-transparent border-none outline-none text-terminal-red-primary"
+            className="flex-1 bg-transparent border-none outline-none text-terminal-red-primary text-xs sm:text-sm"
             data-testid="input-terminal-command"
             autoComplete="off"
+            placeholder="Enter command..."
           />
         </form>
       </div>

@@ -10,7 +10,7 @@ export default function HomePage() {
     <div className="bg-terminal-bg text-gray-100">
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-20">
+      <main className="container mx-auto px-4 sm:px-6 py-12 sm:py-20">
         <div className="max-w-4xl mx-auto text-center">
           {/* Hero Section */}
           <div className="mb-16">
@@ -18,11 +18,11 @@ export default function HomePage() {
               <div className="w-20 h-20 bg-gradient-to-br from-terminal-red-primary to-terminal-red-secondary rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Shield className="text-3xl text-white" />
               </div>
-              <h2 className="text-4xl md:text-6xl font-bold text-terminal-red-bright mb-2 font-mono tracking-tight">BlackRaven OS</h2>
-              <p className="text-terminal-red-secondary font-mono text-base font-medium">Elite Cybersecurity Training</p>
+              <h2 className="text-2xl sm:text-4xl md:text-6xl font-bold text-terminal-red-bright mb-2 font-mono tracking-tight">BlackRaven OS</h2>
+              <p className="text-terminal-red-secondary font-mono text-sm sm:text-base font-medium">Elite Cybersecurity Training</p>
             </div>
             
-            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
               Master cybersecurity through hands-on terminal training. Learn penetration testing, 
               digital forensics, and advanced security techniques.
             </p>
