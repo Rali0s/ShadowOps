@@ -70,6 +70,9 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
           "  blackbriar    - Access infiltration archives",
           "  treadstone    - View acquired classified documents",
           "  infiltrate    - Display backstory and mission details",
+          "  ksp           - Access Knot Solution Programming dossier",
+          "  dossier       - View complete KSP documentation",
+          "  classify      - Display classification and risk levels",
           "  status        - Show system status",
           "  clear         - Clear terminal screen",
           "  exit          - Terminate session"
@@ -274,7 +277,7 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
         if (!['A', 'B', 'C'].includes(schemaType)) {
           addToOutput(["Error: Invalid schema type. Use: schema [A|B|C]"]);
         } else {
-          const schemas = {
+          const schemas: Record<string, string> = {
             'A': 'Theta Level Schema Induction - 1hr duration',
             'B': 'Flow State Operations - 24hr duration', 
             'C': 'Advanced Schema Operations - 1week duration'
@@ -409,6 +412,84 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
           "",
           "Mission status: SUCCESS - Full evolution complete",
           "Current platform: _Fq Brainwave Frequency Training"
+        ]);
+        break;
+
+      case 'ksp':
+        addToOutput([
+          "🌀 KNOT SOLUTION PROGRAMMING DOSSIER",
+          "",
+          "⚠ CLASSIFICATION: Internal / Restricted ⚠",
+          "⚠ DISCLAIMER: Product of A Mad Man ⚠",
+          "",
+          "Psychological Conditioning & Brainwave Schema Programming",
+          "",
+          "SYSTEM OVERVIEW:",
+          "• Brainwave entrainment (Alpha, Beta, Theta, Gamma)",
+          "• Operational schema design with triggers/anchors",
+          "• Ops-style training with flow states and protocols",
+          "",
+          "SCHEMA TYPES:",
+          "• Type A: 1 hour duration - Theta level induction",
+          "• Type B: 24 hour duration - Flow state operations", 
+          "• Type C: 1 week duration - Advanced programming",
+          "",
+          "⚠ EXTREME RISK: Cognitive dissonance, magical thinking",
+          "⚠ MK-Ultra parallels - Ethics review required",
+          "",
+          "Navigate to /ksp-dossier for complete documentation."
+        ]);
+        break;
+
+      case 'dossier':
+        addToOutput([
+          "═══ KSP COMPLETE DOCUMENTATION ═══",
+          "",
+          "Knot Solution Programming Technical Specifications:",
+          "",
+          "BRAINWAVE STATES:",
+          "• Alpha (8–12 Hz): Relaxed alertness; creative visualization",
+          "• Beta (12–30 Hz): Analytical focus; high beta risks anxiety",  
+          "• Theta (4–8 Hz): Subconscious access; schema programming",
+          "• Gamma (30–100+ Hz): Cognitive binding; multi-schema integration",
+          "",
+          "OPERATIONAL FRAMEWORK:",
+          "• Flow durations: 1 week, 3 days, 24 hours, 1 hour",
+          "• Task processing with embedded missions",
+          "• Exit protocols: FlashLight, DropGate, Tie-Down",
+          "",
+          "PUBLISHING PATHWAYS:",
+          "• Peer review: PsychINFO, PsychDB",
+          "• Popular outlets: Psychology Today",
+          "• Confidential: Restricted circulation only",
+          "",
+          "Access full dossier at /ksp-dossier"
+        ]);
+        break;
+
+      case 'classify':
+        addToOutput([
+          "═══ CLASSIFICATION & RISK ASSESSMENT ═══",
+          "",
+          "CLASSIFICATION LEVEL: Internal / Restricted",
+          "CLEARANCE REQUIRED: Academic/Research Personnel",
+          "",
+          "RISK LEVELS:",
+          "🟢 LOW: Overview, Agency Seal, Publishing pathways",
+          "🟡 MEDIUM: Materials, Tools, Operational framework",
+          "🟠 HIGH: Foundation theory, Applications, Publishing",
+          "🔴 EXTREME: Schema design, Risk assessment, Conclusion",
+          "",
+          "SAFETY PROTOCOLS:",
+          "• Second party monitoring required",
+          "• Dead battery backup systems",
+          "• Exit sequence coordination",
+          "• Cognitive dissonance prevention",
+          "",
+          "⚠ WARNING: Operational deployment prohibited",
+          "Academic review and narrative construction only.",
+          "",
+          "Psychology Degree Minus Math Prerequisites"
         ]);
         break;
 

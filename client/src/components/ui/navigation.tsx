@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Code, Terminal, Settings, Shield, Eye } from "lucide-react";
+import { Code, Terminal, Settings, Shield, Eye, FileText } from "lucide-react";
 
 export function Navigation() {
   const [location] = useLocation();
@@ -89,6 +89,23 @@ export function Navigation() {
               >
                 <Eye className="w-4 h-4 mr-2" />
                 Blackbriar
+              </Button>
+            </Link>
+
+            <Link href="/ksp-dossier">
+              <Button 
+                variant={isActive("/ksp-dossier") ? "default" : "ghost"}
+                size="sm"
+                className={`
+                  ${isActive("/ksp-dossier") 
+                    ? "bg-terminal-red-primary text-white" 
+                    : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
+                  }
+                  font-medium transition-colors
+                `}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                KSP Dossier
               </Button>
             </Link>
 

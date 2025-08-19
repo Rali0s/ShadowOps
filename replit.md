@@ -11,6 +11,7 @@ Authentication system: REMOVED - User requested "repair auth section - no auth o
 Sacred geometry visualization: ADDED - User requested red-based sacred geometry auto-wheel with high-speed elliptical patterns, 13 alternating circles with complex triangles and varying directional shapes, broader complex shapes between cross sections for future self-programming goals integration.
 Psychological programming integration: ADDED - Full integration of "Knot-So-lution Programming" study with Education of Ops Manuals, Trigger-Anchor-Knot system, psychological schema operations (A, B, C types), and visual recall operations with "PRODUCT OF A MAD MAN" disclaimer warnings.
 Blackbriar backstory integration: ADDED - Thematic narrative of infiltrating Blackbriar through age falsification, acquiring classified psychological programming manuals before public release, with full declassified document archives showing evolution from military psychological warfare to civilian cognitive enhancement platform.
+KSP Dossier integration: ADDED - Complete Knot Solution Programming dossier with full technical specifications, 10-section classified documentation, agency seal with sacred geometry, brainwave state definitions, schema design protocols, operational frameworks, risk assessments, and publishing pathways with "Product of A Mad Man" disclaimer system.
 
 # System Architecture
 
@@ -64,6 +65,7 @@ Blackbriar backstory integration: ADDED - Thematic narrative of infiltrating Bla
 - **Sacred Geometry Commands**: Terminal commands include 'sacred', 'geomatry', 'wheel [freq]', and 'elliptic' for activating the sacred geometry auto-wheel with frequency synchronization
 - **Psychological Programming Commands**: New commands include 'anchor', 'trigger', 'tiedown', 'schema [A|B|C]', and 'knot' for Jason Bourne-like trigger system activation and MK-Ultra methodology implementation
 - **Blackbriar Infiltration Commands**: Commands include 'blackbriar', 'treadstone', and 'infiltrate' for accessing classified document archives and backstory narrative
+- **KSP Dossier Commands**: Commands include 'ksp', 'dossier', and 'classify' for accessing Knot Solution Programming documentation with complete technical specifications and risk assessments
 - **Responsive Design**: Fully responsive terminal interfaces with mobile-optimized layouts, touch-friendly controls, and adaptive text sizing
 
 ## Sacred Geometry Auto-Wheel
@@ -89,6 +91,15 @@ Blackbriar backstory integration: ADDED - Thematic narrative of infiltrating Bla
 - **Evolution Narrative**: Military psychological warfare techniques evolved into beneficial civilian cognitive enhancement and brainwave frequency training
 - **Clearance System**: Progressive document unlock system with theta state memory recall synchronization using sacred geometry wheel
 - **Mission Phases**: Three-phase infiltration story (False Documentation → Deep Learning → Evolution) integrated throughout platform experience
+
+## KSP Dossier System
+- **Complete Documentation**: 10-section classified dossier with full Knot Solution Programming technical specifications
+- **Agency Seal Integration**: KSP agency seal with central knot symbol, sacred geometry wheel, and circular flow enclosure
+- **Classification System**: Internal/Restricted classification with security clearance verification and risk level indicators (Low, Medium, High, Extreme)
+- **Technical Specifications**: Comprehensive brainwave state definitions, schema design protocols, operational frameworks, and materials/tools requirements
+- **Risk Assessment Framework**: Extreme risk warnings for cognitive dissonance, magical thinking, anchor dependency, and MK-Ultra ethical parallels
+- **Publishing Pathways**: Academic publication routes through PsychINFO, PsychDB, Psychology Today, with confidential circulation options
+- **Disclaimer System**: "Product of A Mad Man" and "Psychology Degree Minus Math Prerequisites" integrated throughout documentation
 
 # External Dependencies
 
