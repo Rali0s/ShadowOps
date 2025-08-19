@@ -40,31 +40,32 @@ export default function TerminalPage() {
     <div className="min-h-screen bg-terminal-bg text-gray-100">
       {/* Header */}
       <header className="border-b border-gray-800 bg-card-bg/90 backdrop-blur-sm">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-terminal-green rounded-lg flex items-center justify-center">
-                <Terminal className="text-terminal-bg text-lg" />
+        <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center space-x-3 sm:space-x-4">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-terminal-green rounded-lg flex items-center justify-center">
+                <Terminal className="text-terminal-bg text-sm sm:text-lg" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-terminal-green font-mono">BlackRaven OS Terminal</h1>
+                <h1 className="text-lg sm:text-xl font-bold text-terminal-green font-mono">BlackRaven OS Terminal</h1>
                 <p className="text-xs text-gray-400">
-                  User: {user.username} | Tier: {user.subscriptionTier?.toUpperCase() || 'NONE'} | Session: ACTIVE
+                  <span className="hidden sm:inline">User: {user.username} | Tier: {user.subscriptionTier?.toUpperCase() || 'NONE'} | Session: ACTIVE</span>
+                  <span className="sm:hidden">{user.username} | {user.subscriptionTier?.toUpperCase() || 'NONE'}</span>
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <Link href="/" data-testid="button-home">
                 <Button variant="ghost" size="sm" className="text-gray-400 hover:text-terminal-green">
-                  <Home className="h-4 w-4 mr-2" />
-                  Home
+                  <Home className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Home</span>
                 </Button>
               </Link>
-              <Link href="/courses" data-testid="button-courses">
+              <Link href="/advanced-terminal" data-testid="button-advanced">
                 <Button variant="ghost" size="sm" className="text-gray-400 hover:text-terminal-green">
-                  <Shield className="h-4 w-4 mr-2" />
-                  Courses
+                  <Shield className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Advanced</span>
                 </Button>
               </Link>
               <Button 
@@ -74,21 +75,21 @@ export default function TerminalPage() {
                 className="text-gray-400 hover:text-red-400"
                 data-testid="button-logout"
               >
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
+                <LogOut className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Logout</span>
               </Button>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="flex h-[calc(100vh-80px)]">
-        {/* Sidebar */}
-        <div className="w-80 border-r border-gray-800 bg-card-bg/50 p-6 overflow-y-auto">
-          <div className="space-y-6">
+      <div className="flex flex-col lg:flex-row h-[calc(100vh-60px)] sm:h-[calc(100vh-80px)]">
+        {/* Sidebar - Mobile: Top, Desktop: Left */}
+        <div className="w-full lg:w-80 border-b lg:border-r lg:border-b-0 border-gray-800 bg-card-bg/50 p-3 sm:p-6 overflow-y-auto max-h-64 lg:max-h-none">
+          <div className="space-y-3 sm:space-y-6">
             {/* User Info */}
             <Card className="bg-gray-800/50 border-gray-700">
-              <CardContent className="p-4">
+              <CardContent className="p-3 sm:p-4">
                 <div className="flex items-center space-x-3 mb-3">
                   <div className="w-10 h-10 bg-terminal-green rounded-full flex items-center justify-center">
                     <User className="text-terminal-bg" />
@@ -115,9 +116,9 @@ export default function TerminalPage() {
 
             {/* Quick Commands */}
             <Card className="bg-gray-800/50 border-gray-700">
-              <CardContent className="p-4">
-                <h3 className="font-semibold text-terminal-green mb-3">Quick Commands</h3>
-                <div className="space-y-2 font-mono text-sm">
+              <CardContent className="p-3 sm:p-4">
+                <h3 className="font-semibold text-terminal-green mb-2 sm:mb-3 text-sm sm:text-base">Quick Commands</h3>
+                <div className="space-y-1 sm:space-y-2 font-mono text-xs sm:text-sm">
                   <div className="text-terminal-amber cursor-pointer hover:text-white" data-testid="command-help">
                     help - Show available commands
                   </div>
@@ -139,7 +140,7 @@ export default function TerminalPage() {
 
             {/* Progress Overview */}
             <Card className="bg-gray-800/50 border-gray-700">
-              <CardContent className="p-4">
+              <CardContent className="p-3 sm:p-4">
                 <h3 className="font-semibold text-cyber-blue mb-3">Training Progress</h3>
                 {userProgress && userProgress.length > 0 ? (
                   <div className="space-y-3">
@@ -169,7 +170,7 @@ export default function TerminalPage() {
         </div>
 
         {/* Terminal */}
-        <div className="flex-1 relative">
+        <div className="flex-1 relative p-3 sm:p-0">
           <div className="absolute inset-0 overflow-hidden">
             <div className="terminal-scanline"></div>
           </div>

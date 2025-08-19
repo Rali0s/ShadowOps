@@ -174,7 +174,7 @@ export function EnhancedTerminal({ user }: EnhancedTerminalProps) {
       {/* Terminal Content */}
       <div 
         ref={terminalRef}
-        className="p-4 h-[calc(100%-3rem)] overflow-y-auto bg-black text-terminal-red-primary"
+        className="p-2 sm:p-4 h-[calc(100%-2.5rem)] sm:h-[calc(100%-3rem)] overflow-y-auto bg-black text-terminal-red-primary text-xs sm:text-sm"
       >
         {output.map((line, index) => (
           <div key={index} className="whitespace-pre-wrap">
@@ -183,9 +183,10 @@ export function EnhancedTerminal({ user }: EnhancedTerminalProps) {
         ))}
         
         {/* Input Line */}
-        <form onSubmit={handleSubmit} className="flex items-center mt-2">
-          <span className="text-terminal-red-bright mr-2">
-            {user.username}@psychproject:~$
+        <form onSubmit={handleSubmit} className="flex items-center mt-1 sm:mt-2">
+          <span className="text-terminal-red-bright mr-1 sm:mr-2 text-xs sm:text-sm">
+            <span className="hidden sm:inline">{user.username}@psychproject:~$</span>
+            <span className="sm:hidden">$</span>
           </span>
           <input
             ref={inputRef}
@@ -193,8 +194,9 @@ export function EnhancedTerminal({ user }: EnhancedTerminalProps) {
             value={currentInput}
             onChange={(e) => setCurrentInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 bg-transparent border-none outline-none text-terminal-red-primary caret-terminal-red-bright"
+            className="flex-1 bg-transparent border-none outline-none text-terminal-red-primary caret-terminal-red-bright text-xs sm:text-sm"
             autoFocus
+            placeholder="Enter command..."
           />
         </form>
       </div>
