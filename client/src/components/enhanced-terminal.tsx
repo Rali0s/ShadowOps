@@ -62,6 +62,11 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
           "  geomatry      - Alternative sacred geometry command",
           "  wheel [freq]  - Show frequency wheel at specific Hz",
           "  elliptic      - High-speed elliptical pattern warning mode",
+          "  anchor        - Set psychological anchor points",
+          "  trigger       - Arm psychological trigger systems", 
+          "  tiedown       - Initiate tiedown protocol",
+          "  schema [type] - Load psychological schema (A, B, C)",
+          "  knot          - Knot-So-lution programming interface",
           "  status        - Show system status",
           "  clear         - Clear terminal screen",
           "  exit          - Terminate session"
@@ -206,6 +211,112 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
         ]);
         setCurrentFrequency(75);
         setShowFrequencyViz(true);
+        break;
+
+      case 'anchor':
+        addToOutput([
+          "═══ PSYCHOLOGICAL ANCHOR SYSTEM ═══",
+          "",
+          "Anchor points available:",
+          "• Visual dial recall - Internal visualization anchor",
+          "• Cisco phone sound - External audio trigger",
+          "• Flashlight indicator - Flow state marker",
+          "",
+          "Setting anchors for schema recall...",
+          "Jason Bourne-like trigger system ready.",
+          "",
+          "Use: anchor [type] to set specific anchor"
+        ]);
+        break;
+
+      case 'trigger':
+        addToOutput([
+          "═══ TRIGGER ACTIVATION SYSTEM ═══",
+          "",
+          "Available triggers:",
+          "• DropGate Processing - External schema entrance",
+          "• FlowGate Processing - Flow state maintenance",
+          "• Exit Protocol - Coo-coo clock timer",
+          "• Internal OFF - Prudent state exit",
+          "",
+          "WARNING: 1-3 external/internal stimuli anchors",
+          "Inception point for latent mental schema operation",
+          "",
+          "Triggers armed and ready for activation."
+        ]);
+        break;
+
+      case 'tiedown':
+        addToOutput([
+          "⚠ INITIATING TIEDOWN PROTOCOL ⚠",
+          "",
+          "Purpose: Prevent cognitive dissonance fully",
+          "Process: Debrief and normalize subject back to reality",
+          "",
+          "Protocol steps:",
+          "1. Task completion verification",
+          "2. Exit DROP schema activation",
+          "3. Grounding in present time and day",
+          "4. Time-check and sanity check",
+          "",
+          "WARNING: Longer flow states = increased dissonance risk",
+          "Second person monitoring required for safety.",
+          "",
+          "Tiedown protocol active - Operation completed."
+        ]);
+        break;
+
+      case 'schema':
+        const schemaType = args[1]?.toUpperCase() || 'A';
+        if (!['A', 'B', 'C'].includes(schemaType)) {
+          addToOutput(["Error: Invalid schema type. Use: schema [A|B|C]"]);
+        } else {
+          const schemas = {
+            'A': 'Theta Level Schema Induction - 1hr duration',
+            'B': 'Flow State Operations - 24hr duration', 
+            'C': 'Advanced Schema Operations - 1week duration'
+          };
+          addToOutput([
+            `═══ LOADING SCHEMA ${schemaType} ═══`,
+            "",
+            `${schemas[schemaType]}`,
+            "",
+            "Schema components:",
+            "• Prefabricated mindset patterns",
+            "• THETA level induction protocols",
+            "• Anchor/trigger integration points",
+            "• Exit and tiedown procedures",
+            "",
+            `Schema ${schemaType} loaded successfully.`,
+            "Ready for MK-Ultra methodology implementation."
+          ]);
+        }
+        break;
+
+      case 'knot':
+        addToOutput([
+          "═══ KNOT-SO-LUTION PROGRAMMING ═══",
+          "",
+          "⚠ PRODUCT OF A MAD MAN ⚠",
+          "",
+          "Psychological programming framework active:",
+          "",
+          "Theory: Ultrasonic sub-conscious suggestion",
+          "Method: Pen & paper processing integration",
+          "Goal: Jason Bourne-like trigger activation",
+          "",
+          "Prerequisites validated:",
+          "✓ Knowledge of MK-Ultra Project",
+          "✓ ECG baseline established",
+          "✓ ENDEL sound app configured",
+          "✓ Track book and log ready",
+          "",
+          "WARNING: Magical thinking issues possible",
+          "Cognitive dissonance abnormalities may occur",
+          "Danger level increases with extended use",
+          "",
+          "Knot-So-lution framework operational."
+        ]);
         break;
 
       case 'tier':

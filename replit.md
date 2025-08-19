@@ -1,6 +1,6 @@
 # Overview
 
-_Fq is a brainwave frequency analysis training platform built as a full-stack web application. It provides an interactive terminal-based learning environment where users can access frequency training across Alpha (8-12 Hz), Beta (12-30 Hz), Theta (4-8 Hz), and Gamma (30-100+ Hz) frequencies through open access. The platform features a dark, terminal-inspired UI with red color theme variants, custom frequency logo, and revolutionary sacred geometry auto-wheel visualization. The sacred geometry wheel features 13 alternating circles in elliptical patterns with complex triangular shapes in varying directions, broader complex shapes between cross sections, and high-speed rotation synchronized with brainwave frequencies for neural synchronization.
+_Fq is a brainwave frequency analysis training platform built as a full-stack web application integrating psychological programming elements from "Knot-So-lution Programming" study. It provides an interactive terminal-based learning environment where users can access frequency training across Alpha (8-12 Hz), Beta (12-30 Hz), Theta (4-8 Hz), and Gamma (30-100+ Hz) frequencies through open access. The platform features psychological programming capabilities including Education of Ops Manuals, Anchor/Knot/TieDown Triggers, and visual recall operations. The platform features a dark, terminal-inspired UI with red color theme variants, custom frequency logo, and revolutionary sacred geometry auto-wheel visualization synchronized with psychological programming operations.
 
 # User Preferences
 
@@ -9,6 +9,7 @@ Navigation preferences: Removed courses tab from navigation system per user requ
 System architecture: Completely removed course system - platform now uses pure tier-based access only with brainwave frequency training (Alpha, Beta, Theta, Gamma).
 Authentication system: REMOVED - User requested "repair auth section - no auth or logins needed" - Platform now operates as open access system without user authentication or login requirements.
 Sacred geometry visualization: ADDED - User requested red-based sacred geometry auto-wheel with high-speed elliptical patterns, 13 alternating circles with complex triangles and varying directional shapes, broader complex shapes between cross sections for future self-programming goals integration.
+Psychological programming integration: ADDED - Full integration of "Knot-So-lution Programming" study with Education of Ops Manuals, Trigger-Anchor-Knot system, psychological schema operations (A, B, C types), and visual recall operations with "PRODUCT OF A MAD MAN" disclaimer warnings.
 
 # System Architecture
 
@@ -55,11 +56,12 @@ Sacred geometry visualization: ADDED - User requested red-based sacred geometry 
 
 ## Terminal Emulator
 - **Implementation**: React-based terminal simulator with command processing and async buffer switches
-- **Features**: Command history, boot sequences, brainwave frequency training simulation, database access terminals, frequency analysis display, sacred geometry wheel activation commands
+- **Features**: Command history, boot sequences, brainwave frequency training simulation, database access terminals, frequency analysis display, sacred geometry wheel activation commands, psychological programming commands
 - **Theming**: Pure red color theme with traditional red shades (primary, secondary, dark, bright, muted, scarlet, crimson, burgundy)
 - **Accessibility**: SVG symbol rendering system with shape vectors for color blind accessibility
 - **Interactivity**: Real-time command processing with educational scenarios and database terminal integration
 - **Sacred Geometry Commands**: Terminal commands include 'sacred', 'geomatry', 'wheel [freq]', and 'elliptic' for activating the sacred geometry auto-wheel with frequency synchronization
+- **Psychological Programming Commands**: New commands include 'anchor', 'trigger', 'tiedown', 'schema [A|B|C]', and 'knot' for Jason Bourne-like trigger system activation and MK-Ultra methodology implementation
 - **Responsive Design**: Fully responsive terminal interfaces with mobile-optimized layouts, touch-friendly controls, and adaptive text sizing
 
 ## Sacred Geometry Auto-Wheel
@@ -69,7 +71,15 @@ Sacred geometry visualization: ADDED - User requested red-based sacred geometry 
 - **Cross-Sectional Elements**: Broader complex shapes drawn between circle intersections using curved paths and mathematical patterns
 - **Brainwave Synchronization**: Wheel speed and intensity synchronized to current brainwave frequency (Alpha, Beta, Theta, Gamma)
 - **Interactive Commands**: Terminal-activated visualization with frequency-specific parameters and warning overlays
-- **Future Integration**: Designed for self-programming goals computation and advanced neural feedback
+- **Psychological Programming Integration**: Sacred geometry wheel serves as visual anchor for psychological programming operations, synchronized with trigger-anchor-knot system
+
+## Psychological Programming System
+- **Ops Manual System**: Comprehensive education of psychological operations with schema types A (1hr), B (24hr), C (1week)
+- **Trigger-Anchor-Knot System**: Interactive Jason Bourne-like trigger system with visual, audio, and tactile anchors
+- **Schema Operations**: Theta level induction, flow state operations, and advanced psychological programming with MK-Ultra methodology
+- **Tiedown Protocols**: Cognitive dissonance prevention system with reality grounding and sanity check procedures
+- **Visual Recall Operations**: Integration of sacred geometry wheel with psychological anchoring mechanisms
+- **Warning Systems**: "PRODUCT OF A MAD MAN" disclaimers with cognitive dissonance warnings and magical thinking issue alerts
 
 # External Dependencies
 
