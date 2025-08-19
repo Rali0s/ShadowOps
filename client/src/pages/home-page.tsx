@@ -1,12 +1,12 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/use-auth";
+// Removed useAuth - now open access system
 import { Terminal, Shield, Code } from "lucide-react";
 import { FrequencyLogo } from "@/components/frequency-logo";
 import { BrainwaveFrequencyDisplay } from "@/components/brainwave-frequency-display";
 
 export default function HomePage() {
-  const { user } = useAuth();
+  // Open access system - no user authentication needed
 
   return (
     <div className="bg-terminal-bg text-gray-100">
@@ -30,29 +30,24 @@ export default function HomePage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              {user ? (
-                <>
-                  <Link href="/terminal" data-testid="button-access-terminal">
-                    <Button className="px-8 py-4 bg-terminal-red-primary text-white font-semibold rounded-xl hover:bg-terminal-red-secondary transition-all transform hover:scale-105">
-                      <Terminal className="mr-2" />
-                      Alpha Training
-                    </Button>
-                  </Link>
-                  <Link href="/advanced-terminal" data-testid="button-access-advanced-terminal">
-                    <Button className="px-8 py-4 bg-terminal-red-secondary text-white font-semibold rounded-xl hover:bg-terminal-red-primary transition-all transform hover:scale-105">
-                      <Shield className="mr-2" />
-                      Beta Analysis
-                    </Button>
-                  </Link>
-                </>
-              ) : (
-                <Link href="/auth" data-testid="button-get-started">
-                  <Button className="px-8 py-4 bg-terminal-red-primary text-white font-semibold rounded-xl hover:bg-terminal-red-secondary transition-all transform hover:scale-105">
-                    <Terminal className="mr-2" />
-                    Begin Training
-                  </Button>
-                </Link>
-              )}
+              <Link href="/terminal" data-testid="button-access-terminal">
+                <Button className="px-8 py-4 bg-terminal-red-primary text-white font-semibold rounded-xl hover:bg-terminal-red-secondary transition-all transform hover:scale-105">
+                  <Terminal className="mr-2" />
+                  Basic Terminal
+                </Button>
+              </Link>
+              <Link href="/advanced-terminal" data-testid="button-access-advanced-terminal">
+                <Button className="px-8 py-4 bg-terminal-red-secondary text-white font-semibold rounded-xl hover:bg-terminal-red-primary transition-all transform hover:scale-105">
+                  <Shield className="mr-2" />
+                  Advanced Terminal
+                </Button>
+              </Link>
+              <Link href="/admin" data-testid="button-access-admin">
+                <Button className="px-8 py-4 bg-terminal-red-dark text-white font-semibold rounded-xl hover:bg-terminal-red-muted transition-all transform hover:scale-105">
+                  <Code className="mr-2" />
+                  System Admin
+                </Button>
+              </Link>
             </div>
           </div>
 
@@ -77,8 +72,8 @@ export default function HomePage() {
                 <div className="terminal-text text-terminal-green">
                   <p>[SYSTEM] _Fq Frequency Analysis v3.1.4 - NEURAL_SYNC</p>
                   <p>[BOOT] Initializing brainwave frequency monitoring...</p>
-                  <p>[AUTH] Neural profile: {user ? `${user.username.toUpperCase()}` : 'GUEST_PROFILE'}</p>
-                  <p>[FREQ] Current tier: {user?.subscriptionTier?.toUpperCase() || 'NONE'}</p>
+                  <p>[ACCESS] Neural profile: OPEN_ACCESS</p>
+                  <p>[FREQ] Current mode: ALL_FREQUENCIES_AVAILABLE</p>
                   <p>[INFO] Welcome to advanced frequency training</p>
                   <p className="mt-4 text-terminal-amber">Available Frequency Commands:</p>
                   <p>  help          - Display available commands</p>
@@ -86,23 +81,14 @@ export default function HomePage() {
                   <p>  progress      - Show completion status</p>
                   <p>  scenario      - Start training scenario</p>
                   <p>  cert          - Generate certificate</p>
-                  <p className="mt-4 text-white">blackraven@psychproject:~$ <span className="animate-pulse">_</span></p>
+                  <p className="mt-4 text-white">operative@fq_system:~$ <span className="animate-pulse">_</span></p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Quick Info */}
-          {!user && (
-            <div className="mt-16 text-center">
-              <p className="text-gray-400 mb-4">Ready to start your cybersecurity journey?</p>
-              <Link href="/auth" data-testid="button-signup">
-                <Button variant="outline" className="px-6 py-3 border-2 border-terminal-red-primary text-terminal-red-primary font-semibold rounded-xl hover:bg-terminal-red-primary hover:text-white transition-all">
-                  Create Account
-                </Button>
-              </Link>
-            </div>
-          )}
+
         </div>
       </main>
     </div>

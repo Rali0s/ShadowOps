@@ -7,6 +7,7 @@ _Fq is a brainwave frequency analysis training platform built as a full-stack we
 Preferred communication style: Simple, everyday language.
 Navigation preferences: Removed courses tab from navigation system per user request.
 System architecture: Completely removed course system - platform now uses pure tier-based access only with brainwave frequency training (Alpha, Beta, Theta, Gamma).
+Authentication system: REMOVED - User requested "repair auth section - no auth or logins needed" - Platform now operates as open access system without user authentication or login requirements.
 
 # System Architecture
 
@@ -37,13 +38,13 @@ System architecture: Completely removed course system - platform now uses pure t
 - **Courses**: Hierarchical content with difficulty levels and tier requirements
 - **Modules**: Course content with JSON-based lesson data
 - **Certificates**: Achievement system for completed courses
-- **Access Control**: Brainwave frequency tier-based access without progress tracking (Alpha: 8-12 Hz, Beta: 12-30 Hz, Theta: 4-8 Hz, Gamma: 30-100+ Hz)
+- **Access Control**: Open access to all brainwave frequency bands without restrictions (Alpha: 8-12 Hz, Beta: 12-30 Hz, Theta: 4-8 Hz, Gamma: 30-100+ Hz)
 
 ## Authentication & Authorization
-- **Strategy**: Session-based authentication with encrypted passwords (scrypt)
-- **Authorization**: Role-based access (admin flag) and subscription tier validation
-- **Session Management**: PostgreSQL-backed sessions with configurable expiration
-- **Password Security**: Salt-based hashing with timing-safe comparisons
+- **Status**: REMOVED - Open access platform
+- **Access Control**: All functionality available without authentication
+- **Previous System**: Session-based authentication was removed per user request
+- **Current Model**: No login, registration, or user management required
 
 ## Payment Integration
 - **Provider**: Stripe for subscription management

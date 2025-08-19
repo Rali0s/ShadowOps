@@ -1,299 +1,74 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import Stripe from "stripe";
 import { storage } from "./storage";
-import { setupAuth } from "./auth";
-
-import { z } from "zod";
-import { insertDbDocumentSchema } from "@shared/schema";
-import { scrypt, randomBytes } from "crypto";
-import { promisify } from "util";
-
-const scryptAsync = promisify(scrypt);
-
-async function hashPassword(password: string) {
-  const salt = randomBytes(16).toString("hex");
-  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
-  return `${buf.toString("hex")}.${salt}`;
-}
-
-function generateResetToken(): string {
-  return randomBytes(32).toString("hex");
-}
-
-// Initialize Stripe only if secret key is provided
-let stripe: Stripe | null = null;
-if (process.env.STRIPE_SECRET_KEY) {
-  stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: "2025-07-30.basil",
-  });
-}
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  setupAuth(app);
-
-  // Stripe subscription endpoint
-  app.post('/api/get-or-create-subscription', async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.sendStatus(401);
-    }
-
-    if (!stripe) {
-      return res.status(503).json({ 
-        error: { message: 'Payment processing is not configured. Please contact administrator.' } 
-      });
-    }
-
-    let user = req.user!;
-    const { tier = 'operator' } = req.body;
-
-    if (user.stripeSubscriptionId) {
-      const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId);
-      
-      if (subscription.latest_invoice && typeof subscription.latest_invoice === 'object') {
-        const invoice = subscription.latest_invoice as any;
-        const paymentIntent = invoice.payment_intent;
-        
-        res.send({
-          subscriptionId: subscription.id,
-          clientSecret: paymentIntent?.client_secret,
-        });
-        return;
-      }
-    }
-    
-    if (!user.email) {
-      return res.status(400).json({ error: { message: 'No user email on file' } });
-    }
-
-    try {
-      let customer;
-      if (user.stripeCustomerId) {
-        customer = await stripe.customers.retrieve(user.stripeCustomerId);
-      } else {
-        customer = await stripe.customers.create({
-          email: user.email,
-          name: user.username,
-        });
-        
-        user = await storage.updateUserStripeInfo(user.id, customer.id);
-      }
-
-      // Price mapping for different tiers
-      const priceMapping = {
-        recruit: process.env.STRIPE_RECRUIT_PRICE_ID || 'price_recruit',
-        operative: process.env.STRIPE_OPERATIVE_PRICE_ID || 'price_operative',
-        operator: process.env.STRIPE_OPERATOR_PRICE_ID || 'price_operator', 
-        shadow: process.env.STRIPE_SHADOW_PRICE_ID || 'price_shadow'
-      };
-
-      const subscription = await stripe.subscriptions.create({
-        customer: customer.id,
-        items: [{
-          price: priceMapping[tier as keyof typeof priceMapping] || priceMapping.operator,
-        }],
-        payment_behavior: 'default_incomplete',
-        expand: ['latest_invoice.payment_intent'],
-      });
-
-      await storage.updateUserStripeInfo(user.id, customer.id, subscription.id);
-      await storage.updateUserSubscriptionTier(user.id, tier);
   
-      const invoice = subscription.latest_invoice as any;
-      const paymentIntent = invoice?.payment_intent;
-
-      res.send({
-        subscriptionId: subscription.id,
-        clientSecret: paymentIntent?.client_secret,
-      });
-    } catch (error: any) {
-      return res.status(400).send({ error: { message: error.message } });
-    }
+  // Simple health check endpoint
+  app.get("/api/health", (req, res) => {
+    res.json({ 
+      status: "operational",
+      mode: "open_access",
+      timestamp: new Date().toISOString(),
+      brainwaveSystem: "active",
+      frequencyBands: ["alpha", "beta", "theta", "gamma"]
+    });
   });
 
-
-
-  // Admin endpoints
-  app.get('/api/admin/stats', async (req, res) => {
-    if (!req.isAuthenticated() || !req.user?.isAdmin) {
-      return res.sendStatus(403);
-    }
-
-    try {
-      const stats = await storage.getSystemStats();
-      res.json(stats);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
+  // Mock admin stats for dashboard
+  app.get("/api/admin/stats", (req, res) => {
+    res.json({
+      totalSessions: 1247,
+      activeUsers: 89,
+      totalFrequencyAnalyses: 5634,
+      systemUptime: "99.9%",
+      averageSessionLength: "45 minutes",
+      popularFrequencies: {
+        alpha: 34,
+        beta: 28,
+        theta: 25,
+        gamma: 13
+      }
+    });
   });
 
-  // Database document endpoints for terminal system
-  app.get('/api/db-documents', async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.sendStatus(401);
-    }
-
-    try {
-      const user = req.user!;
-      const documents = await storage.getDbDocuments(user.subscriptionTier || "none");
-      res.json(documents);
-    } catch (error) {
-      console.error('Error fetching db documents:', error);
-      res.status(500).json({ error: 'Failed to fetch documents' });
-    }
+  // Brainwave frequency data endpoint
+  app.get("/api/frequencies", (req, res) => {
+    res.json([
+      {
+        id: 1,
+        name: "Alpha",
+        range: "8-12 Hz",
+        description: "Relaxed wakefulness and creative flow state",
+        color: "#ff6b6b",
+        available: true
+      },
+      {
+        id: 2,
+        name: "Beta", 
+        range: "12-30 Hz",
+        description: "Alert analytical thinking and problem-solving",
+        color: "#4ecdc4",
+        available: true
+      },
+      {
+        id: 3,
+        name: "Theta",
+        range: "4-8 Hz", 
+        description: "Deep processing and creative insights",
+        color: "#45b7d1",
+        available: true
+      },
+      {
+        id: 4,
+        name: "Gamma",
+        range: "30-100+ Hz",
+        description: "Peak cognitive performance and consciousness",
+        color: "#96ceb4",
+        available: true
+      }
+    ]);
   });
-
-  app.get('/api/db-documents/:documentId', async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.sendStatus(401);
-    }
-
-    try {
-      const user = req.user!;
-      const { documentId } = req.params;
-      const document = await storage.getDbDocumentById(documentId);
-      
-      if (!document) {
-        return res.status(404).json({ error: 'Document not found' });
-      }
-
-      // Check access level
-      const tierHierarchy = ["none", "recruit", "operative", "operator", "shadow"];
-      const userTierIndex = tierHierarchy.indexOf(user.subscriptionTier || "none");
-      const docTierIndex = tierHierarchy.indexOf(document.accessLevel);
-      
-      if (docTierIndex > userTierIndex) {
-        return res.status(403).json({ 
-          error: 'Access denied',
-          requiredTier: document.accessLevel,
-          userTier: user.subscriptionTier || "none"
-        });
-      }
-
-      res.json(document);
-    } catch (error) {
-      console.error('Error fetching document:', error);
-      res.status(500).json({ error: 'Failed to fetch document' });
-    }
-  });
-
-  app.post('/api/db-documents/search', async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.sendStatus(401);
-    }
-
-    try {
-      const user = req.user!;
-      const { searchTerm } = req.body;
-      
-      if (!searchTerm) {
-        return res.status(400).json({ error: 'Search term is required' });
-      }
-
-      const documents = await storage.searchDbDocuments(searchTerm, user.subscriptionTier || "none");
-      res.json(documents);
-    } catch (error) {
-      console.error('Error searching documents:', error);
-      res.status(500).json({ error: 'Failed to search documents' });
-    }
-  });
-
-  // Admin endpoint to create documents (for seeding)
-  app.post('/api/db-documents', async (req, res) => {
-    if (!req.isAuthenticated() || !req.user?.isAdmin) {
-      return res.sendStatus(403);
-    }
-
-    try {
-      const documentData = insertDbDocumentSchema.parse(req.body);
-      const document = await storage.createDbDocument(documentData);
-      res.status(201).json(document);
-    } catch (error) {
-      console.error('Error creating document:', error);
-      res.status(500).json({ error: 'Failed to create document' });
-    }
-  });
-
-  // Password reset endpoints
-  app.post('/api/forgot-password', async (req, res) => {
-    try {
-      const { email } = req.body;
-      
-      if (!email) {
-        return res.status(400).json({ error: 'Email is required' });
-      }
-
-      const user = await storage.getUserByEmail(email);
-      
-      // Always respond success to prevent email enumeration
-      if (!user) {
-        return res.json({ message: 'If an account with that email exists, a reset link has been sent.' });
-      }
-
-      // Generate reset token
-      const token = generateResetToken();
-      const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
-
-      await storage.createPasswordResetToken({
-        token,
-        userId: user.id,
-        expiresAt
-      });
-
-      // In a real app, you'd send an email here
-      // For now, we'll log the reset link for development
-      console.log(`Password reset token for ${email}: ${token}`);
-      console.log(`Reset link: http://localhost:5000/reset-password?token=${token}`);
-
-      res.json({ message: 'If an account with that email exists, a reset link has been sent.' });
-    } catch (error) {
-      console.error('Error in forgot password:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  });
-
-  app.post('/api/reset-password', async (req, res) => {
-    try {
-      const { token, newPassword } = req.body;
-      
-      if (!token || !newPassword) {
-        return res.status(400).json({ error: 'Token and new password are required' });
-      }
-
-      if (newPassword.length < 6) {
-        return res.status(400).json({ error: 'Password must be at least 6 characters long' });
-      }
-
-      const resetToken = await storage.getPasswordResetToken(token);
-      
-      if (!resetToken) {
-        return res.status(400).json({ error: 'Invalid or expired reset token' });
-      }
-
-      // Hash the new password
-      const hashedPassword = await hashPassword(newPassword);
-
-      // Update user password
-      await storage.updateUserPassword(resetToken.userId, hashedPassword);
-
-      // Mark token as used
-      await storage.markPasswordResetTokenAsUsed(resetToken.id);
-
-      res.json({ message: 'Password has been reset successfully' });
-    } catch (error) {
-      console.error('Error in reset password:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  });
-
-  // Cleanup expired tokens (run periodically)
-  setInterval(async () => {
-    try {
-      await storage.cleanupExpiredTokens();
-    } catch (error) {
-      console.error('Error cleaning up expired tokens:', error);
-    }
-  }, 60 * 60 * 1000); // Run every hour
 
   const httpServer = createServer(app);
   return httpServer;
