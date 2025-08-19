@@ -745,21 +745,28 @@ export function TriggerAnchorSystem({ onTriggerActivated, onAnchorSet }: Trigger
             </p>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* Music Selection */}
+            {/* Music Track List */}
             <div>
-              <Label className="text-terminal-red-secondary text-sm">Music Track</Label>
-              <Select value={currentMusicTrack} onValueChange={setCurrentMusicTrack}>
-                <SelectTrigger className="bg-transparent border-terminal-red-muted/30 text-terminal-red-primary">
-                  <SelectValue placeholder="Select music track" />
-                </SelectTrigger>
-                <SelectContent className="bg-black border-terminal-red-muted/30">
-                  {musicTracks.map(track => (
-                    <SelectItem key={track} value={track}>
-                      {track}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label className="text-terminal-red-secondary text-sm mb-2 block">Music Tracks List</Label>
+              <div className="space-y-1 p-3 bg-black/20 border border-terminal-red-muted/30 rounded max-h-32 overflow-y-auto">
+                {musicTracks.map((track, index) => (
+                  <div 
+                    key={track} 
+                    className={`text-xs p-2 rounded cursor-pointer transition-colors ${
+                      currentMusicTrack === track 
+                        ? 'bg-terminal-red-dark text-terminal-red-bright' 
+                        : 'text-terminal-red-muted hover:bg-terminal-red-dark/50'
+                    }`}
+                    onClick={() => setCurrentMusicTrack(track)}
+                    data-testid={`music-track-${index}`}
+                  >
+                    {index + 1}. {track}
+                  </div>
+                ))}
+              </div>
+              <div className="text-xs text-terminal-red-muted mt-1">
+                Click to select track for pleasure sequence
+              </div>
             </div>
 
             {currentSequence === 'pleasure' && (
@@ -785,7 +792,7 @@ export function TriggerAnchorSystem({ onTriggerActivated, onAnchorSet }: Trigger
             <div className="text-xs text-terminal-red-muted space-y-1">
               <div>• Pleasure protocol activation</div>
               <div>• Sacred geometry enhancement</div>
-              <div>• Music synchronization</div>
+              <div>• Music track selection (manual)</div>
               <div>• Flow state optimization</div>
             </div>
           </CardContent>
