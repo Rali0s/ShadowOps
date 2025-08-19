@@ -5,12 +5,13 @@ import { storage } from "./storage";
 import { setupAuth } from "./auth";
 
 import { z } from "zod";
+import { insertDbDocumentSchema } from "@shared/schema";
 
 // Initialize Stripe only if secret key is provided
 let stripe: Stripe | null = null;
 if (process.env.STRIPE_SECRET_KEY) {
   stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: "2023-10-16",
+    apiVersion: "2025-07-30.basil",
   });
 }
 
@@ -36,8 +37,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId);
       
       if (subscription.latest_invoice && typeof subscription.latest_invoice === 'object') {
-        const invoice = subscription.latest_invoice as Stripe.Invoice;
-        const paymentIntent = invoice.payment_intent as Stripe.PaymentIntent;
+        const invoice = subscription.latest_invoice as any;
+        const paymentIntent = invoice.payment_intent;
         
         res.send({
           subscriptionId: subscription.id,
@@ -84,8 +85,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       await storage.updateUserStripeInfo(user.id, customer.id, subscription.id);
       await storage.updateUserSubscriptionTier(user.id, tier);
   
-      const invoice = subscription.latest_invoice as Stripe.Invoice;
-      const paymentIntent = invoice?.payment_intent as Stripe.PaymentIntent;
+      const invoice = subscription.latest_invoice as any;
+      const paymentIntent = invoice?.payment_intent;
 
       res.send({
         subscriptionId: subscription.id,
@@ -109,6 +110,93 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(stats);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Database document endpoints for terminal system
+  app.get('/api/db-documents', async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.sendStatus(401);
+    }
+
+    try {
+      const user = req.user!;
+      const documents = await storage.getDbDocuments(user.subscriptionTier || "none");
+      res.json(documents);
+    } catch (error) {
+      console.error('Error fetching db documents:', error);
+      res.status(500).json({ error: 'Failed to fetch documents' });
+    }
+  });
+
+  app.get('/api/db-documents/:documentId', async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.sendStatus(401);
+    }
+
+    try {
+      const user = req.user!;
+      const { documentId } = req.params;
+      const document = await storage.getDbDocumentById(documentId);
+      
+      if (!document) {
+        return res.status(404).json({ error: 'Document not found' });
+      }
+
+      // Check access level
+      const tierHierarchy = ["none", "recruit", "operative", "operator", "shadow"];
+      const userTierIndex = tierHierarchy.indexOf(user.subscriptionTier || "none");
+      const docTierIndex = tierHierarchy.indexOf(document.accessLevel);
+      
+      if (docTierIndex > userTierIndex) {
+        return res.status(403).json({ 
+          error: 'Access denied',
+          requiredTier: document.accessLevel,
+          userTier: user.subscriptionTier || "none"
+        });
+      }
+
+      res.json(document);
+    } catch (error) {
+      console.error('Error fetching document:', error);
+      res.status(500).json({ error: 'Failed to fetch document' });
+    }
+  });
+
+  app.post('/api/db-documents/search', async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.sendStatus(401);
+    }
+
+    try {
+      const user = req.user!;
+      const { searchTerm } = req.body;
+      
+      if (!searchTerm) {
+        return res.status(400).json({ error: 'Search term is required' });
+      }
+
+      const documents = await storage.searchDbDocuments(searchTerm, user.subscriptionTier || "none");
+      res.json(documents);
+    } catch (error) {
+      console.error('Error searching documents:', error);
+      res.status(500).json({ error: 'Failed to search documents' });
+    }
+  });
+
+  // Admin endpoint to create documents (for seeding)
+  app.post('/api/db-documents', async (req, res) => {
+    if (!req.isAuthenticated() || !req.user?.isAdmin) {
+      return res.sendStatus(403);
+    }
+
+    try {
+      const documentData = insertDbDocumentSchema.parse(req.body);
+      const document = await storage.createDbDocument(documentData);
+      res.status(201).json(document);
+    } catch (error) {
+      console.error('Error creating document:', error);
+      res.status(500).json({ error: 'Failed to create document' });
     }
   });
 

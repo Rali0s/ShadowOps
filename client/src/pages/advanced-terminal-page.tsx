@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { DatabaseTerminal } from "@/components/database-terminal";
+import { EnhancedDatabaseTerminal } from "@/components/enhanced-database-terminal";
 import { TerminalSwitches, type TerminalBuffers } from "@/components/terminal-switches";
 import { EnhancedTerminal } from "@/components/enhanced-terminal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -113,7 +113,7 @@ export default function AdvancedTerminalPage() {
 
                 <TabsContent value="database" className="h-full mt-4">
                   <div className="h-[500px]">
-                    <DatabaseTerminal 
+                    <EnhancedDatabaseTerminal 
                       user={user} 
                       buffers={terminalBuffers}
                     />
