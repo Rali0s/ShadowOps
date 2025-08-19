@@ -7,6 +7,7 @@ import Navigation from "@/components/ui/navigation";
 import HomePage from "@/pages/home-page";
 import TerminalPage from "@/pages/terminal-page";
 import AdvancedTerminalPage from "@/pages/advanced-terminal-page";
+import FaradayStudyPage from "@/pages/faraday-study-page";
 import AdminPage from "@/pages/admin-page";
 import SubscribePage from "@/pages/subscribe-page";
 import OpsManualPage from "@/pages/ops-manual-page";
@@ -25,6 +26,7 @@ function Router() {
       <Route path="/ops-manual" component={OpsManualPage} />
       <Route path="/blackbriar" component={BlackbriarBackstory} />
       <Route path="/ksp-dossier" component={KSPDossier} />
+      <Route path="/faraday-study" component={FaradayStudyPage} />
       <Route component={NotFound} />
     </Switch>
   );
