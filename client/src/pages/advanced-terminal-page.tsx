@@ -4,6 +4,7 @@ import { TerminalSwitches, type TerminalBuffers } from "@/components/terminal-sw
 import { EnhancedTerminal } from "@/components/enhanced-terminal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+import { SacredGeometryWheel } from "@/components/sacred-geometry-wheel";
 
 export default function AdvancedTerminalPage() {
   const [terminalBuffers, setTerminalBuffers] = useState<TerminalBuffers>({
@@ -47,6 +48,18 @@ export default function AdvancedTerminalPage() {
                 <div className="text-terminal-green">All Frequencies Available</div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Sacred Geometry Visualization */}
+        <div className="mb-4 sm:mb-6 flex justify-center">
+          <div className="bg-card-bg/50 border border-terminal-red-muted/30 rounded-lg p-4">
+            <SacredGeometryWheel 
+              size={180}
+              speed={2}
+              brainwaveFrequency={25}
+              intensity={1}
+            />
           </div>
         </div>
 

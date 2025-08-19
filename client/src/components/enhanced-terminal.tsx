@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { StatusIndicator, AccessibilitySymbol } from "./terminal-symbols";
+import { FrequencyCommandVisualizer } from "./frequency-command-visualizer";
 
 interface EnhancedTerminalProps {}
 
@@ -8,6 +9,8 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
   const [currentInput, setCurrentInput] = useState("");
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [showFrequencyViz, setShowFrequencyViz] = useState(false);
+  const [currentFrequency, setCurrentFrequency] = useState(10);
   const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -55,6 +58,10 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
           "  beta          - Access Beta wave training (12-30 Hz)", 
           "  theta         - Access Theta wave training (4-8 Hz)",
           "  gamma         - Access Gamma wave training (30-100+ Hz)",
+          "  sacred        - Activate sacred geometry wheel visualization",
+          "  geomatry      - Alternative sacred geometry command",
+          "  wheel [freq]  - Show frequency wheel at specific Hz",
+          "  elliptic      - High-speed elliptical pattern warning mode",
           "  status        - Show system status",
           "  clear         - Clear terminal screen",
           "  exit          - Terminate session"
@@ -144,26 +151,75 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
           "",
           "Training modules:",
           "• Peak performance protocols",
-          "• Consciousness expansion exercises",
+          "• Consciousness expansion exercises", 
           "• Cognitive enhancement techniques",
           "• Advanced awareness training",
           "",
           "Status: AVAILABLE - Open Access"
         ]);
+        setCurrentFrequency(50);
+        setShowFrequencyViz(true);
+        break;
+
+      case 'sacred':
+      case 'geomatry':
+        addToOutput([
+          "⚠ ACTIVATING SACRED GEOMETRY WHEEL ⚠",
+          "",
+          "Initializing 13-circle elliptical pattern...",
+          "Complex triangular formations loading...",
+          "Cross-sectional shape vectors active...",
+          "",
+          "WARNING: High-speed rotation with elliptical warning mode enabled",
+          "Sacred geometry synchronization with brainwave frequencies active."
+        ]);
+        setCurrentFrequency(25);
+        setShowFrequencyViz(true);
+        break;
+
+      case 'wheel':
+        const freq = args[1] ? parseFloat(args[1]) : 15;
+        if (isNaN(freq) || freq < 1 || freq > 100) {
+          addToOutput(["Error: Invalid frequency. Use: wheel [1-100]"]);
+        } else {
+          addToOutput([
+            `Activating frequency wheel at ${freq.toFixed(1)} Hz`,
+            "Sacred geometry patterns synchronized to brainwave frequency",
+            "13 alternating circles with complex triangular shapes active"
+          ]);
+          setCurrentFrequency(freq);
+          setShowFrequencyViz(true);
+        }
+        break;
+
+      case 'elliptic':
+        addToOutput([
+          "🔴 HIGH-SPEED ELLIPTICAL WARNING MODE ACTIVATED 🔴",
+          "",
+          "Elliptical distortion: 1.2x horizontal, 0.8x vertical",
+          "13 circles alternating with complex directional triangles",
+          "Cross-sectional broader shapes between intersections",
+          "Rotation speed: MAXIMUM",
+          "",
+          "⚠ WARNING: Intense visual stimulation active ⚠",
+          "Self-programming geometry goals will be computed..."
+        ]);
+        setCurrentFrequency(75);
+        setShowFrequencyViz(true);
         break;
 
       case 'tier':
-        const tier = user.subscriptionTier || "none";
         addToOutput([
-          "Subscription Tier Information:",
-          `Current tier: ${tier.toUpperCase()}`,
+          "Access Level Information:",
+          "Current access: OPEN ACCESS",
           "",
-          "Available tiers:",
-          "• NONE - Basic access only",
-          "• RECRUIT - Basic cybersecurity training",
-          "• OPERATIVE - Intermediate security scenarios", 
-          "• OPERATOR - Advanced penetration testing",
-          "• SHADOW - Complete access to all environments"
+          "All brainwave frequency training available:",
+          "• Alpha (8-12 Hz) - Relaxed awareness",
+          "• Beta (12-30 Hz) - Alert thinking",
+          "• Theta (4-8 Hz) - Deep processing", 
+          "• Gamma (30-100+ Hz) - Peak performance",
+          "",
+          "Sacred geometry visualization: ENABLED"
         ]);
         break;
 
@@ -230,7 +286,7 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
           <div className="w-3 h-3 bg-red-500 rounded-full"></div>
           <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
           <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          <span className="ml-4 text-gray-400 text-xs">BlackRaven Terminal - Enhanced Mode</span>
+          <span className="ml-4 text-gray-400 text-xs">_Fq Brainwave Terminal - Enhanced Mode</span>
         </div>
         <div className="flex items-center space-x-4 text-xs text-gray-400">
           <StatusIndicator status="online" />
@@ -252,7 +308,7 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
         {/* Input Line */}
         <form onSubmit={handleSubmit} className="flex items-center mt-1 sm:mt-2">
           <span className="text-terminal-red-bright mr-1 sm:mr-2 text-xs sm:text-sm">
-            <span className="hidden sm:inline">{user.username}@psychproject:~$</span>
+            <span className="hidden sm:inline">operative@fq_system:~$</span>
             <span className="sm:hidden">$</span>
           </span>
           <input
@@ -267,6 +323,14 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
           />
         </form>
       </div>
+
+      {/* Sacred Geometry Frequency Visualizer */}
+      <FrequencyCommandVisualizer
+        isVisible={showFrequencyViz}
+        frequency={currentFrequency}
+        duration={5000}
+        onComplete={() => setShowFrequencyViz(false)}
+      />
     </div>
   );
 }
