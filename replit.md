@@ -18,6 +18,7 @@ Faraday Black Box Study: ADDED - Complete turnkey psychological research methodo
 Platform Tagline: UPDATED - Changed tagline from "Brainwave Frequency Training" to "Is This A Simulation" per user request.
 Scientific Method Training: ADDED - Comprehensive self-study and self-report methodology system for teaching scientific method through theory disproof, bias detection, metacognition monitoring, and research-grade data collection with real-time feedback loops.
 Music Recommendations: ADDED - Pre-Work and Post-Work music listing system with brainwave-synchronized recommendations including ASOT, Tiesto, Armin Van Buuren, Deadmau5, DJ_Dave, Switch Angel, NERO, Skrillex, AfroJack, DubStep, Hardstyle, TechnoHouse, 90 Classic House, and TropicalHouse with no streaming connections - manual track selection only.
+Education Materials: ADDED - Comprehensive mentalist training guide featuring Mind Palace (Method of Loci), Rubber Duck Debugging techniques, and combined systems for memory enhancement. Includes interactive palace walkthrough, debugging processes, and advanced tips with "Think for yourself. Question everything. DYOR." philosophy integration.
 
 # System Architecture
 

@@ -688,6 +688,121 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
         ]);
         break;
 
+      case 'education':
+      case 'study':
+      case 'palace':
+      case 'duck':
+      case 'mentalist':
+        addToOutput([
+          `${trimmed}`,
+          ``,
+          `[EDUCATION MATERIALS] Mentalist Training Guide`,
+          ``,
+          `🧠 Mind Palace + Rubber Duck Debugging for Memory & Mentalism`,
+          `📚 Advanced study techniques for cognitive enhancement`,
+          ``,
+          `CORE TECHNIQUES:`,
+          `• Mind Palace (Method of Loci) - Spatial memory encoding`,
+          `• Rubber Duck Debugging - Verbal explanation for gap detection`,
+          `• Mentalist Debugging Palace - Combined advanced system`,
+          ``,
+          `MIND PALACE CONSTRUCTION:`,
+          `1. Choose familiar location (home, school, street)`,
+          `2. Map key stations (rooms, hallways, objects)`,
+          `3. Convert info into vivid, exaggerated imagery`,
+          `4. Walk through palace placing images sequentially`,
+          `5. Expand and layer multiple palaces for topics`,
+          ``,
+          `DEBUGGING PROCESS:`,
+          `1. Choose your 'duck' (object, mirror, or palace character)`,
+          `2. Walk through palace explaining each station aloud`,
+          `3. Debug weak spots by strengthening unclear images`,
+          `4. Repeat until explanation flows without hesitation`,
+          ``,
+          `EXAMPLE PSYCHOLOGY PALACE:`,
+          `• Front Door → Freud with cigar (Psychology Intro)`,
+          `• Living Room → Brain-shaped sofa (Cognitive Theory)`,
+          `• Kitchen Sink → Colored wave water (Brainwave States)`,
+          `• Bedroom Desk → Knotted textbooks (Schema Programming)`,
+          `• Garage → Martial artist with quotes (Philosophy)`,
+          ``,
+          `🎯 CLOSING ETHOS: Think for yourself. Question everything. DYOR.`,
+          ``,
+          `📖 Access full training guide: 'navigate /education'`
+        ]);
+        break;
+
+      case 'mind-palace':
+      case 'loci':
+        addToOutput([
+          `${trimmed}`,
+          ``,
+          `[MIND PALACE] Method of Loci - Advanced Memory Technique`,
+          ``,
+          `🏛️ Ancient technique used by orators, mentalists, memory athletes`,
+          `🧠 Leverages spatial memory - brain's natural location recall ability`,
+          ``,
+          `CONSTRUCTION STEPS:`,
+          `1. Choose Familiar Location - Home, school, street (distinct stations)`,
+          `2. Map Key Loci - Kitchen table, front door, bookshelf, etc.`,
+          `3. Visual Encoding - Convert info to vivid, exaggerated imagery`,
+          `4. Sequential Walkthrough - Place images, then recall by walking`,
+          `5. Expand & Layer - Multiple palaces for different topics`,
+          ``,
+          `EXAMPLE ENCODING:`,
+          `Need to remember "Einstein + violin"?`,
+          `→ Imagine Einstein playing violin in your bathroom sink, splashing water`,
+          `→ Absurd + vivid = memorable`,
+          ``,
+          `BENEFITS:`,
+          `• Unlimited storage capacity`,
+          `• Perfect for sequential information`,
+          `• Integrates with psychological programming`,
+          `• Used by world memory champions`,
+          ``,
+          `⚡ Difficulty: Intermediate | Duration: 30-60 min to build`,
+          ``,
+          `🎓 Full interactive example: 'navigate /education'`
+        ]);
+        break;
+
+      case 'rubber-duck':
+      case 'debugging':
+        addToOutput([
+          `${trimmed}`,
+          ``,
+          `[RUBBER DUCK DEBUGGING] Verbal Explanation Technique`,
+          ``,
+          `🦆 Adapted from programming: explain code to rubber duck`,
+          `🧠 Forces clarity, exposes gaps, improves retention`,
+          ``,
+          `MENTALISM ADAPTATION:`,
+          `1. Choose Your Duck - Object, stuffed toy, mirror, or palace character`,
+          `2. Explain What You Stored - Walk palace verbally narrating stations`,
+          `3. Debug the Logic - Identify where explanation falters`,
+          `4. Anchor by Repetition - Repeat 2-3 times until fluent`,
+          ``,
+          `WHY IT WORKS:`,
+          `• Verbal Rehearsal - Locks knowledge in multiple modalities`,
+          `• Gap Detection - Forces confrontation with weak associations`,
+          `• Teaching Effect - By teaching duck, you teach yourself`,
+          ``,
+          `DEBUGGING EXAMPLE:`,
+          `"In my kitchen, Einstein is playing violin..."`,
+          `→ If you stumble: image is weak, needs strengthening`,
+          `→ Refine until absurdly memorable`,
+          ``,
+          `ADVANCED TIPS:`,
+          `• Use multiple ducks (logic, creativity, skepticism)`,
+          `• Record sessions for audio reinforcement`,
+          `• Cross-train with martial arts drills`,
+          ``,
+          `⚡ Difficulty: Beginner | Duration: 10-20 min per session`,
+          ``,
+          `📚 Complete debugging guide: 'navigate /education'`
+        ]);
+        break;
+
       default:
         if (trimmed) {
           addToOutput([
