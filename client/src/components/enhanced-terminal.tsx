@@ -493,6 +493,111 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
         ]);
         break;
 
+      case 'method':
+      case 'scientific':
+      case 'disprove':
+      case 'theory':
+        addToOutput([
+          `${input}`,
+          ``,
+          `[SCIENTIFIC METHOD] Theory Disproof Training Protocol`,
+          ``,
+          `🔬 System: Self-Study & Self-Report Methodology`,
+          `🎯 Goal: Learn to actively disprove theories and detect biases`,
+          `📊 Features: Real-time bias detection, metacognition monitoring`,
+          ``,
+          `Scientific Method Steps:`,
+          `1. Question - What do you want to test or disprove?`,
+          `2. Research - Gather knowledge and identify assumptions`,
+          `3. Hypothesis - Form testable predictions that could be wrong`,
+          `4. Experiment - Design tests to specifically disprove your theory`,
+          `5. Analysis - Look objectively for disconfirming evidence`,
+          `6. Conclusion - Accept when your theory has been disproven`,
+          ``,
+          `Available Commands:`,
+          `• 'navigate /scientific-method' - Access full training system`,
+          `• 'bias-check' - Run cognitive bias detection`,
+          `• 'self-report' - Log current mental state and observations`,
+          `• 'theory-test' - Start new theory testing session`,
+          ``,
+          `🧠 Remember: The goal is not to prove yourself right, but to find evidence that proves you wrong.`
+        ]);
+        break;
+
+      case 'bias-check':
+      case 'bias':
+        addToOutput([
+          `${input}`,
+          ``,
+          `[BIAS DETECTION] Running Cognitive Bias Scan...`,
+          ``,
+          `⚠️  Potential Biases Detected:`,
+          `• Confirmation Bias - Seeking information that confirms existing beliefs`,
+          `• Anchoring Bias - Over-relying on first information received`, 
+          `• Overconfidence Effect - Overestimating accuracy of beliefs`,
+          `• Cherry Picking - Selecting only favorable evidence`,
+          ``,
+          `🧠 Mitigation Strategies:`,
+          `• Actively seek disconfirming evidence`,
+          `• Question your initial assumptions`,
+          `• Consider alternative explanations`,
+          `• Lower confidence levels (healthy skepticism)`,
+          ``,
+          `📊 Use 'navigate /scientific-method' for comprehensive bias training`
+        ]);
+        break;
+
+      case 'self-report':
+      case 'report':
+        addToOutput([
+          `${input}`,
+          ``,
+          `[SELF-REPORT] Metacognition Monitoring System`,
+          ``,
+          `Current State Assessment:`,
+          `• Emotional State: [Requires manual input]`,
+          `• Cognitive Load: [1-10 scale]`,
+          `• Expectations: [What do you hope to find?]`,
+          `• Confidence Level: [0-100%]`,
+          `• Bias Awareness: [Which biases might be affecting you?]`,
+          ``,
+          `🧠 Self-Report Benefits:`,
+          `• Increases metacognitive awareness`,
+          `• Helps identify emotional influences on reasoning`,
+          `• Tracks confidence calibration over time`,
+          `• Reveals pattern of biased thinking`,
+          ``,
+          `📊 Access full self-report system: 'navigate /scientific-method'`
+        ]);
+        break;
+
+      case 'theory-test':
+      case 'test-theory':
+        addToOutput([
+          `${input}`,
+          ``,
+          `[THEORY TESTING] Disproof-Focused Research Protocol`,
+          ``,
+          `🎯 Theory Testing Framework:`,
+          `1. State your theory clearly`,
+          `2. Create falsifiable hypothesis`,
+          `3. Design disproof methodology`,
+          `4. Collect objective data`,
+          `5. Analyze for disconfirming evidence`,
+          `6. Draw honest conclusions`,
+          ``,
+          `⚠️  Key Principle: Seek evidence that proves your theory WRONG`,
+          ``,
+          `Scoring Criteria:`,
+          `• +30 pts: Attempting to disprove vs prove`,
+          `• +10 pts: Each bias identified`,
+          `• +30 pts: Low confidence (healthy skepticism)`,  
+          `• +40 pts: Actually being disproven`,
+          ``,
+          `🔬 Launch full theory testing: 'navigate /scientific-method'`
+        ]);
+        break;
+
       default:
         if (trimmed) {
           addToOutput([
