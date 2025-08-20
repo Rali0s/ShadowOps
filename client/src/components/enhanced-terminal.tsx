@@ -498,7 +498,7 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
       case 'disprove':
       case 'theory':
         addToOutput([
-          `${input}`,
+          `${trimmed}`,
           ``,
           `[SCIENTIFIC METHOD] Theory Disproof Training Protocol`,
           ``,
@@ -527,7 +527,7 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
       case 'bias-check':
       case 'bias':
         addToOutput([
-          `${input}`,
+          `${trimmed}`,
           ``,
           `[BIAS DETECTION] Running Cognitive Bias Scan...`,
           ``,
@@ -550,7 +550,7 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
       case 'self-report':
       case 'report':
         addToOutput([
-          `${input}`,
+          `${trimmed}`,
           ``,
           `[SELF-REPORT] Metacognition Monitoring System`,
           ``,
@@ -574,7 +574,7 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
       case 'theory-test':
       case 'test-theory':
         addToOutput([
-          `${input}`,
+          `${trimmed}`,
           ``,
           `[THEORY TESTING] Disproof-Focused Research Protocol`,
           ``,
@@ -595,6 +595,96 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
           `• +40 pts: Actually being disproven`,
           ``,
           `🔬 Launch full theory testing: 'navigate /scientific-method'`
+        ]);
+        break;
+
+      case 'music':
+      case 'tracks':
+      case 'playlist':
+      case 'recommendations':
+        addToOutput([
+          `${trimmed}`,
+          ``,
+          `[MUSIC RECOMMENDATIONS] Pre-Work & Post-Work Protocol`,
+          ``,
+          `🎵 No Connections Required - Manual Track Selection Only`,
+          `🧠 Brainwave-Synchronized Recommendations for Cognitive Enhancement`,
+          ``,
+          `TRANCE LEGENDS:`,
+          `• ASOT - A State of Trance (Alpha/Beta 10-20 Hz)`,
+          `• Tiesto - Classic focus tracks (Beta/Gamma 15-40 Hz)`,
+          `• Armin Van Buuren - Uplifting trance (Alpha/Beta 12-25 Hz)`,
+          `• Deadmau5 - Progressive house (Beta 12-30 Hz)`,
+          ``,
+          `ELECTRONIC FUSION:`,
+          `• DJ_Dave - Custom psychological programming sets`,
+          `• Switch Angel - Theta state induction (4-12 Hz)`,
+          `• NERO - Cinematic dubstep (Beta/Gamma 20-45 Hz)`,
+          `• Skrillex - High-intensity dubstep (Gamma 30-100 Hz)`,
+          `• AfroJack - Big room house (Beta 15-30 Hz)`,
+          ``,
+          `GENRE MASTERY:`,
+          `• DubStep - Extreme gamma activation (40-100+ Hz)`,
+          `• Hardstyle - Sustained high-intensity (25-60 Hz)`,
+          `• TechnoHouse - Rhythmic concentration (15-25 Hz)`,
+          `• 90 Classic House - Nostalgic alpha states (10-20 Hz)`,
+          `• TropicalHouse - Relaxed creativity (6-12 Hz)`,
+          ``,
+          `🎯 PRE-WORK: High energy, Beta/Gamma frequencies for activation`,
+          `🌊 POST-WORK: Relaxed tempo, Alpha/Theta for integration`,
+          ``,
+          `📱 Access full recommendations: 'navigate /music'`
+        ]);
+        break;
+
+      case 'pre-work':
+      case 'prework':
+        addToOutput([
+          `${trimmed}`,
+          ``,
+          `[PRE-WORK MUSIC PROTOCOL] Cognitive Activation`,
+          ``,
+          `🎯 Goal: Prepare mind for intensive cognitive work`,
+          `🧠 Target Frequencies: Beta (15-30 Hz) + Gamma (30-100+ Hz)`,
+          `⚡ Intensity: Medium to Extreme`,
+          ``,
+          `RECOMMENDED TRACKS:`,
+          `• ASOT - Trance selection (High intensity, 60-180 min)`,
+          `• Tiesto - Focus building (High intensity, 45-120 min)`,
+          `• NERO - Cinematic dubstep (Extreme intensity, 30-75 min)`,
+          `• Skrillex - Maximum alertness (Extreme intensity, 15-45 min)`,
+          `• Hardstyle - Sustained focus (Extreme intensity, 30-90 min)`,
+          `• DubStep - Gamma activation (Extreme intensity, 15-60 min)`,
+          ``,
+          `⚡ Effect: Alert focus, analytical thinking, peak performance`,
+          `🕒 Use Before: Psychological programming sessions, study work`,
+          ``,
+          `🎵 Full pre-work catalog: 'navigate /music' → Pre-Work Protocol`
+        ]);
+        break;
+
+      case 'post-work':
+      case 'postwork':
+        addToOutput([
+          `${trimmed}`,
+          ``,
+          `[POST-WORK MUSIC PROTOCOL] Integration & Recovery`,
+          ``,
+          `🌊 Goal: Consolidate learning and transition to relaxed states`,
+          `🧠 Target Frequencies: Alpha (8-12 Hz) + Theta (4-8 Hz)`,
+          `📉 Intensity: Low to Medium`,
+          ``,
+          `RECOMMENDED TRACKS:`,
+          `• Switch Angel - Theta induction (Low intensity, 20-60 min)`,
+          `• TropicalHouse - Relaxed creativity (Low intensity, 30-90 min)`,
+          `• 90 Classic House - Nostalgic alpha (Medium intensity, 45-120 min)`,
+          `• DJ_Dave - Integration sets (Medium intensity, 30-90 min)`,
+          `• Deadmau5 - Flow states (Medium intensity, 45-90 min)`,
+          ``,
+          `🧘 Effect: Relaxed awareness, memory consolidation, deep processing`,
+          `🕒 Use After: Intensive sessions, learning consolidation`,
+          ``,
+          `🎵 Full post-work catalog: 'navigate /music' → Post-Work Protocol`
         ]);
         break;
 

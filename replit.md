@@ -17,6 +17,7 @@ Code-Off and Pleasure Sequences: ADDED - Interactive sequences with music integr
 Faraday Black Box Study: ADDED - Complete turnkey psychological research methodology featuring interactive inference game with deterministic, probabilistic, adversarial, and null box conditions for studying black-box reasoning, noise tolerance, query strategy efficiency, and metacognitive calibration.
 Platform Tagline: UPDATED - Changed tagline from "Brainwave Frequency Training" to "Is This A Simulation" per user request.
 Scientific Method Training: ADDED - Comprehensive self-study and self-report methodology system for teaching scientific method through theory disproof, bias detection, metacognition monitoring, and research-grade data collection with real-time feedback loops.
+Music Recommendations: ADDED - Pre-Work and Post-Work music listing system with brainwave-synchronized recommendations including ASOT, Tiesto, Armin Van Buuren, Deadmau5, DJ_Dave, Switch Angel, NERO, Skrillex, AfroJack, DubStep, Hardstyle, TechnoHouse, 90 Classic House, and TropicalHouse with no streaming connections - manual track selection only.
 
 # System Architecture
 

@@ -14,6 +14,7 @@ import OpsManualPage from "@/pages/ops-manual-page";
 import BlackbriarBackstory from "@/pages/blackbriar-backstory";
 import KSPDossier from "@/pages/ksp-dossier";
 import ScientificMethodPage from "@/pages/scientific-method-page";
+import MusicRecommendationsPage from "@/pages/music-recommendations-page";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -29,6 +30,7 @@ function Router() {
       <Route path="/ksp-dossier" component={KSPDossier} />
       <Route path="/faraday-study" component={FaradayStudyPage} />
       <Route path="/scientific-method" component={ScientificMethodPage} />
+      <Route path="/music" component={MusicRecommendationsPage} />
       <Route component={NotFound} />
     </Switch>
   );
