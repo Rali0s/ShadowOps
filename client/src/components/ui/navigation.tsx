@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Code, Terminal, Settings, Shield, Eye, FileText, Box, FlaskConical } from "lucide-react";
+import { Code, Terminal, Settings, Shield, Eye, FileText, Box, FlaskConical, Music } from "lucide-react";
 
 export function Navigation() {
   const [location] = useLocation();
@@ -140,6 +140,23 @@ export function Navigation() {
               >
                 <FlaskConical className="w-4 h-4 mr-2" />
                 Scientific Method
+              </Button>
+            </Link>
+
+            <Link href="/music">
+              <Button 
+                variant={isActive("/music") ? "default" : "ghost"}
+                size="sm"
+                className={`
+                  ${isActive("/music") 
+                    ? "bg-terminal-red-primary text-white" 
+                    : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
+                  }
+                  font-medium transition-colors
+                `}
+              >
+                <Music className="w-4 h-4 mr-2" />
+                Music
               </Button>
             </Link>
 
