@@ -8,6 +8,21 @@ import { SacredGeometryWheel } from "@/components/sacred-geometry-wheel";
 
 export default function TerminalPage() {
   const [isTerminalReady, setIsTerminalReady] = useState(false);
+  const [wheelSize, setWheelSize] = useState(200);
+
+  useEffect(() => {
+    const updateSize = () => {
+      if (window.innerWidth < 640) {
+        setWheelSize(150);
+      } else {
+        setWheelSize(200);
+      }
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   useEffect(() => {
     // Simulate boot sequence
@@ -54,15 +69,15 @@ export default function TerminalPage() {
       </header>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 sm:px-6 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="container-responsive py-4 sm:py-6 mobile-safe-padding">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
           {/* Sidebar with Sacred Geometry */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-1 space-y-4 sm:space-y-6">
             {/* Sacred Geometry Wheel */}
             <Card className="bg-card-bg border-gray-700">
-              <CardContent className="p-4 flex justify-center">
+              <CardContent className="p-3 sm:p-4 flex justify-center">
                 <SacredGeometryWheel 
-                  size={200}
+                  size={wheelSize}
                   speed={1.5}
                   brainwaveFrequency={10}
                   intensity={0.8}

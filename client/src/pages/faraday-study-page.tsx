@@ -213,13 +213,13 @@ export default function FaradayStudyPage() {
 
   if (showInstructions) {
     return (
-      <div className="min-h-screen bg-terminal-bg text-terminal-red-primary p-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-terminal-red-bright mb-4">
+      <div className="min-h-screen bg-terminal-bg text-terminal-red-primary mobile-safe-padding">
+        <div className="max-w-4xl mx-auto container-responsive py-4 sm:py-6">
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-terminal-red-bright mb-3 sm:mb-4">
               Faraday Black Box Study
             </h1>
-            <p className="text-lg text-terminal-red-secondary">
+            <p className="text-sm sm:text-lg text-terminal-red-secondary px-4 sm:px-0">
               No-shock inference game based on Michael Faraday's black-box methodology
             </p>
           </div>

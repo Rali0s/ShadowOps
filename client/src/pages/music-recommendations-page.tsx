@@ -264,13 +264,13 @@ export default function MusicRecommendationsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-terminal-bg text-gray-100 p-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-terminal-bg text-gray-100 mobile-safe-padding">
+      <div className="max-w-7xl mx-auto container-responsive py-4 sm:py-6">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 bg-terminal-red-primary rounded-lg">
-              <Music className="w-8 h-8 text-white" />
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <div className="p-2 sm:p-3 bg-terminal-red-primary rounded-lg">
+              <Music className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-terminal-red-bright font-mono">Pre-Work & Post-Work Music</h1>
