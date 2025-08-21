@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 // Removed useAuth - now open access system
-import { Terminal, Shield, Code, Zap } from "lucide-react";
+import { Shield, Code, Zap } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { FrequencyLogo } from "@/components/frequency-logo";
 import { BrainwaveFrequencyDisplay } from "@/components/brainwave-frequency-display";
@@ -94,7 +94,7 @@ export default function HomePage() {
             <BrainwaveFrequencyDisplay className="mx-auto max-w-6xl" />
           </div>
 
-          {/* Interactive Terminal */}
+          {/* Interactive Terminal - Primary Interface */}
           <div className="mb-16 max-w-4xl mx-auto px-4">
             <h3 className="text-xl sm:text-2xl font-bold text-terminal-red-bright mb-6 text-center font-mono">
               Interactive Frequency Terminal
