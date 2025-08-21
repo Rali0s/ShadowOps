@@ -206,22 +206,7 @@ export function Navigation() {
                       </Button>
                     </Link>
 
-                    <Link href="/self-report">
-                      <Button 
-                        variant={isActive("/self-report") ? "default" : "ghost"}
-                        className={`
-                          w-full justify-start
-                          ${isActive("/self-report") 
-                            ? "bg-terminal-red-primary text-white" 
-                            : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
-                          }
-                        `}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <FileText className="w-4 h-4 mr-3" />
-                        Self-Report
-                      </Button>
-                    </Link>
+
 
                     <Link href="/admin">
                       <Button 
@@ -409,22 +394,7 @@ export function Navigation() {
               </Button>
             </Link>
 
-            <Link href="/self-report">
-              <Button 
-                variant={isActive("/self-report") ? "default" : "ghost"}
-                size="sm"
-                className={`
-                  ${isActive("/self-report") 
-                    ? "bg-terminal-red-primary text-white" 
-                    : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
-                  }
-                  font-medium transition-colors
-                `}
-              >
-                <FileText className="w-4 h-4 mr-2" />
-                Self-Report
-              </Button>
-            </Link>
+
 
             <Link href="/admin">
               <Button 
