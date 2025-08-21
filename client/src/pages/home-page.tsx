@@ -1,7 +1,8 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 // Removed useAuth - now open access system
-import { Terminal, Shield, Code } from "lucide-react";
+import { Terminal, Shield, Code, Zap } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { FrequencyLogo } from "@/components/frequency-logo";
 import { BrainwaveFrequencyDisplay } from "@/components/brainwave-frequency-display";
 import { BrainwaveSynchronizedWheel } from "@/components/brainwave-synchronized-wheel";
@@ -29,6 +30,19 @@ export default function HomePage() {
               Master brainwave frequency analysis and neural optimization. Train across Alpha, Beta, 
               Theta, and Gamma frequencies for peak cognitive performance.
             </p>
+
+            {/* Philosophical Declassification Question */}
+            <div className="mb-8 max-w-3xl mx-auto px-4">
+              <Alert className="border-yellow-500/30 bg-yellow-500/5">
+                <Shield className="h-4 w-4 text-yellow-400" />
+                <AlertTitle className="text-yellow-400 text-left">Declassification Paradox</AlertTitle>
+                <AlertDescription className="text-yellow-200/90 text-sm text-left">
+                  <em>"Is it truly accidental when one inadvertently declassifies what was once Blackbriar - perhaps never officially real, yet potentially meaningful for those few who sought genuine advancement?"</em>
+                  <br />
+                  <span className="text-yellow-400/70 font-mono text-xs mt-2 block">— A question of intent vs. consequence in the evolution from classified operations to civilian cognitive enhancement</span>
+                </AlertDescription>
+              </Alert>
+            </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
               <Link href="/terminal" data-testid="button-access-terminal">
