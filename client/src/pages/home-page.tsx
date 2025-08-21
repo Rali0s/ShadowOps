@@ -99,12 +99,31 @@ export default function HomePage() {
             <h3 className="text-xl sm:text-2xl font-bold text-terminal-red-bright mb-6 text-center font-mono">
               Interactive Frequency Terminal
             </h3>
-            <div className="bg-black rounded-lg border border-gray-700 overflow-hidden shadow-2xl">
-              <div className="bg-gray-800 px-3 sm:px-4 py-2 flex items-center space-x-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="ml-2 sm:ml-4 text-gray-400 text-xs sm:text-sm font-mono">_Fq Neural Frequency Terminal</span>
+            <div className="bg-black rounded-lg border border-gray-600 overflow-hidden shadow-2xl">
+              <div className="bg-gray-900 px-3 sm:px-4 py-2 flex items-center justify-between border-b border-gray-700">
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-1">
+                    <div className="w-2 h-2 bg-gray-500 rounded-sm"></div>
+                    <div className="w-2 h-2 bg-gray-500 rounded-sm"></div>
+                    <div className="w-2 h-2 bg-gray-500 rounded-sm"></div>
+                  </div>
+                  <span className="text-gray-300 text-xs sm:text-sm font-mono">operative@fq_neural_matrix: ~</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="text-green-400 text-xs font-mono">●</div>
+                  <span className="text-gray-400 text-xs font-mono">_Fq Neural Terminal</span>
+                  <div className="flex space-x-1">
+                    <div className="w-3 h-3 bg-gray-600 hover:bg-gray-500 rounded-sm flex items-center justify-center cursor-pointer">
+                      <span className="text-gray-300 text-xs font-bold">−</span>
+                    </div>
+                    <div className="w-3 h-3 bg-gray-600 hover:bg-gray-500 rounded-sm flex items-center justify-center cursor-pointer">
+                      <span className="text-gray-300 text-xs font-bold">□</span>
+                    </div>
+                    <div className="w-3 h-3 bg-red-600 hover:bg-red-500 rounded-sm flex items-center justify-center cursor-pointer">
+                      <span className="text-white text-xs font-bold">×</span>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="h-96 sm:h-[500px]">
                 <EnhancedTerminal />
