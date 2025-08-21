@@ -11,7 +11,7 @@ import OpsManualPage from "@/pages/ops-manual-page";
 import NeuralMatrixPage from "@/pages/neural-matrix-page";
 import KSPDossier from "@/pages/ksp-dossier";
 import ScientificMethodPage from "@/pages/scientific-method-page";
-import MusicRecommendationsPage from "@/pages/music-recommendations-page";
+
 import EducationMaterialsPage from "@/pages/education-materials-page";
 import SelfReportMethodologyPage from "@/pages/self-report-methodology";
 import NotFound from "@/pages/not-found";
@@ -25,7 +25,7 @@ function Router() {
       <Route path="/neural-matrix" component={NeuralMatrixPage} />
       <Route path="/ksp-dossier" component={KSPDossier} />
       <Route path="/scientific-method" component={ScientificMethodPage} />
-      <Route path="/music" component={MusicRecommendationsPage} />
+
       <Route path="/education" component={EducationMaterialsPage} />
       <Route path="/methodology" component={SelfReportMethodologyPage} />
       <Route component={NotFound} />
