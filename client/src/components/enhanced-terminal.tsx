@@ -848,58 +848,61 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
   };
 
   return (
-    <div className="h-full bg-black rounded-lg border border-gray-700 overflow-hidden font-mono text-sm">
-      {/* Terminal Header */}
-      <div className="bg-gray-800 px-4 py-2 flex items-center justify-between border-b border-gray-600">
-        <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-          <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          <span className="ml-4 text-gray-400 text-xs">_Fq Brainwave Terminal - Enhanced Mode</span>
+    <div className="h-full bg-black overflow-hidden font-mono text-sm">
+      {/* Frequency Visualizer */}
+      {showFrequencyViz && (
+        <div className="border-b border-terminal-red-primary bg-terminal-bg p-2">
+          <FrequencyCommandVisualizer frequency={currentFrequency} />
         </div>
-        <div className="flex items-center space-x-4 text-xs text-gray-400">
-          <StatusIndicator status="online" />
-          <AccessibilitySymbol type="Classified" />
-        </div>
-      </div>
+      )}
 
       {/* Terminal Content */}
       <div 
         ref={terminalRef}
-        className="p-2 sm:p-4 h-[calc(100%-2.5rem)] sm:h-[calc(100%-3rem)] overflow-y-auto bg-black text-terminal-red-primary text-xs sm:text-sm"
+        className="p-3 h-full overflow-y-auto bg-black text-terminal-green text-sm leading-relaxed"
+        style={{ fontFamily: '"Ubuntu Mono", "DejaVu Sans Mono", Monaco, Menlo, monospace' }}
       >
         {output.map((line, index) => (
           <div key={index} className="whitespace-pre-wrap">
-            {line}
+            {line.startsWith('[') ? (
+              <span className="text-terminal-red-secondary">{line}</span>
+            ) : line.startsWith('operative@fq_system:~$') || line.startsWith('operative@fq_neural_matrix:~$') ? (
+              <span className="text-terminal-red-bright">{line}</span>
+            ) : line.startsWith('Error:') ? (
+              <span className="text-red-400">{line}</span>
+            ) : line.startsWith('WARNING:') || line.startsWith('⚠') ? (
+              <span className="text-yellow-400">{line}</span>
+            ) : line.startsWith('═══') || line.startsWith('---') ? (
+              <span className="text-terminal-red-primary font-bold">{line}</span>
+            ) : line.includes('✓') ? (
+              <span className="text-green-400">{line}</span>
+            ) : (
+              <span className="text-terminal-green">{line}</span>
+            )}
           </div>
         ))}
         
-        {/* Input Line */}
-        <form onSubmit={handleSubmit} className="flex items-center mt-1 sm:mt-2">
-          <span className="text-terminal-red-bright mr-1 sm:mr-2 text-xs sm:text-sm">
-            <span className="hidden sm:inline">operative@fq_system:~$</span>
-            <span className="sm:hidden">$</span>
-          </span>
+        {/* Linux-style Input Line */}
+        <form onSubmit={handleSubmit} className="flex items-center mt-2">
+          <span className="text-green-400 mr-1">operative@fq_neural_matrix</span>
+          <span className="text-white mr-1">:</span>
+          <span className="text-blue-400 mr-1">~</span>
+          <span className="text-white mr-2">$</span>
           <input
             ref={inputRef}
             type="text"
             value={currentInput}
             onChange={(e) => setCurrentInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 bg-transparent border-none outline-none text-terminal-red-primary caret-terminal-red-bright text-xs sm:text-sm"
+            className="flex-1 bg-transparent border-none outline-none text-terminal-green caret-terminal-green"
+            style={{ fontFamily: '"Ubuntu Mono", "DejaVu Sans Mono", Monaco, Menlo, monospace' }}
             autoFocus
-            placeholder="Enter command..."
+            placeholder=""
           />
+          <span className="text-terminal-green animate-pulse ml-1">█</span>
         </form>
       </div>
 
-      {/* Sacred Geometry Frequency Visualizer */}
-      <FrequencyCommandVisualizer
-        isVisible={showFrequencyViz}
-        frequency={currentFrequency}
-        duration={5000}
-        onComplete={() => setShowFrequencyViz(false)}
-      />
     </div>
   );
 }
