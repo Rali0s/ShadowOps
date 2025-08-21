@@ -206,6 +206,23 @@ export function Navigation() {
                       </Button>
                     </Link>
 
+                    <Link href="/methodology">
+                      <Button 
+                        variant={isActive("/methodology") ? "default" : "ghost"}
+                        className={`
+                          w-full justify-start
+                          ${isActive("/methodology") 
+                            ? "bg-terminal-red-primary text-white" 
+                            : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
+                          }
+                        `}
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <FileText className="w-4 h-4 mr-3" />
+                        Methodology
+                      </Button>
+                    </Link>
+
 
 
 
@@ -376,6 +393,23 @@ export function Navigation() {
               >
                 <BookOpen className="w-4 h-4 mr-2" />
                 Education
+              </Button>
+            </Link>
+
+            <Link href="/methodology">
+              <Button 
+                variant={isActive("/methodology") ? "default" : "ghost"}
+                size="sm"
+                className={`
+                  ${isActive("/methodology") 
+                    ? "bg-terminal-red-primary text-white" 
+                    : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
+                  }
+                  font-medium transition-colors
+                `}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                Methodology
               </Button>
             </Link>
 
