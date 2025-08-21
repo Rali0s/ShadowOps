@@ -87,22 +87,7 @@ export function Navigation() {
                       </Button>
                     </Link>
 
-                    <Link href="/ksp-dossier">
-                      <Button 
-                        variant={isActive("/ksp-dossier") ? "default" : "ghost"}
-                        className={`
-                          w-full justify-start
-                          ${isActive("/ksp-dossier") 
-                            ? "bg-terminal-red-primary text-white" 
-                            : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
-                          }
-                        `}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <FileText className="w-4 h-4 mr-3" />
-                        KSP Dossier
-                      </Button>
-                    </Link>
+
 
 
 
@@ -230,22 +215,7 @@ export function Navigation() {
               </Button>
             </Link>
 
-            <Link href="/ksp-dossier">
-              <Button 
-                variant={isActive("/ksp-dossier") ? "default" : "ghost"}
-                size="sm"
-                className={`
-                  ${isActive("/ksp-dossier") 
-                    ? "bg-terminal-red-primary text-white" 
-                    : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
-                  }
-                  font-medium transition-colors
-                `}
-              >
-                <FileText className="w-4 h-4 mr-2" />
-                KSP Dossier
-              </Button>
-            </Link>
+
 
 
 
