@@ -67,7 +67,7 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
           "  tiedown       - Initiate tiedown protocol",
           "  schema [type] - Load psychological schema (A, B, C)",
           "  knot          - Knot-So-lution programming interface",
-          "  blackbriar    - Access infiltration archives",
+          "  neural-matrix - Access infiltration archives",
           "  treadstone    - View acquired classified documents",
           "  infiltrate    - Display backstory and mission details",
           "  ksp           - Access Knot Solution Programming dossier",
@@ -351,9 +351,9 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
         ]);
         break;
 
-      case 'blackbriar':
+      case 'neural-matrix':
         addToOutput([
-          "═══ BLACKBRIAR INFILTRATION ARCHIVES ═══",
+          "═══ NEURAL MATRIX INFILTRATION ARCHIVES ═══",
           "",
           "⚠ ACCESSING CLASSIFIED DOCUMENTS ⚠",
           "",
@@ -361,14 +361,14 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
           "Access gained to pre-public release materials.",
           "",
           "Documents acquired:",
-          "• Blackbriar Psychological Programming Manual",
+          "• Neural Matrix Psychological Programming Manual",
           "• Treadstone Memory Implantation Protocols", 
           "• Outcome Program Enhancement Documentation",
           "",
           "Classification: FORMERLY TOP SECRET - NOW DECLASSIFIED",
           "Current status: Integrated into civilian training platform",
           "",
-          "Navigate to /blackbriar for full archive access."
+          "Navigate to /neural-matrix for full archive access."
         ]);
         break;
 
@@ -389,7 +389,7 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
           "All military techniques adapted for cognitive enhancement.",
           "Sacred geometry wheel serves as civilian-safe replacement.",
           "",
-          "Access full documentation at /blackbriar"
+          "Access full documentation at /neural-matrix"
         ]);
         break;
 
@@ -398,7 +398,7 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
           "═══ INFILTRATION MISSION BRIEFING ═══",
           "",
           "SUBJECT: Age falsification and facility penetration",
-          "TARGET: Blackbriar training facility", 
+          "TARGET: Neural Matrix training facility", 
           "OBJECTIVE: Acquire classified programming manuals",
           "",
           "MISSION PHASES:",

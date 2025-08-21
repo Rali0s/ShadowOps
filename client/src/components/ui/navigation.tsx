@@ -53,40 +53,6 @@ export function Navigation() {
                   </div>
 
                   <div className="space-y-2">
-                    <Link href="/terminal">
-                      <Button 
-                        variant={isActive("/terminal") ? "default" : "ghost"}
-                        className={`
-                          w-full justify-start
-                          ${isActive("/terminal") 
-                            ? "bg-terminal-red-primary text-white" 
-                            : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
-                          }
-                        `}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <Terminal className="w-4 h-4 mr-3" />
-                        Terminal
-                      </Button>
-                    </Link>
-                    
-                    <Link href="/advanced-terminal">
-                      <Button 
-                        variant={isActive("/advanced-terminal") ? "default" : "ghost"}
-                        className={`
-                          w-full justify-start
-                          ${isActive("/advanced-terminal") 
-                            ? "bg-terminal-red-primary text-white" 
-                            : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
-                          }
-                        `}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <Code className="w-4 h-4 mr-3" />
-                        Advanced Terminal
-                      </Button>
-                    </Link>
-
                     <Link href="/ops-manual">
                       <Button 
                         variant={isActive("/ops-manual") ? "default" : "ghost"}
@@ -104,12 +70,12 @@ export function Navigation() {
                       </Button>
                     </Link>
 
-                    <Link href="/blackbriar">
+                    <Link href="/neural-matrix">
                       <Button 
-                        variant={isActive("/blackbriar") ? "default" : "ghost"}
+                        variant={isActive("/neural-matrix") ? "default" : "ghost"}
                         className={`
                           w-full justify-start
-                          ${isActive("/blackbriar") 
+                          ${isActive("/neural-matrix") 
                             ? "bg-terminal-red-primary text-white" 
                             : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
                           }
@@ -117,7 +83,7 @@ export function Navigation() {
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         <Eye className="w-4 h-4 mr-3" />
-                        Blackbriar
+                        Neural Matrix
                       </Button>
                     </Link>
 
@@ -138,22 +104,7 @@ export function Navigation() {
                       </Button>
                     </Link>
 
-                    <Link href="/faraday-study">
-                      <Button 
-                        variant={isActive("/faraday-study") ? "default" : "ghost"}
-                        className={`
-                          w-full justify-start
-                          ${isActive("/faraday-study") 
-                            ? "bg-terminal-red-primary text-white" 
-                            : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
-                          }
-                        `}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <Box className="w-4 h-4 mr-3" />
-                        Faraday Study
-                      </Button>
-                    </Link>
+
 
                     <Link href="/scientific-method">
                       <Button 
@@ -243,39 +194,7 @@ export function Navigation() {
 
           {/* Desktop Navigation - Open Access */}
           <nav className="hidden md:flex items-center space-x-1">
-            <Link href="/terminal">
-              <Button 
-                variant={isActive("/terminal") ? "default" : "ghost"}
-                size="sm"
-                className={`
-                  ${isActive("/terminal") 
-                    ? "bg-terminal-red-primary text-white" 
-                    : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
-                  }
-                  font-medium transition-colors
-                `}
-              >
-                <Terminal className="w-4 h-4 mr-2" />
-                Terminal
-              </Button>
-            </Link>
-            
-            <Link href="/advanced-terminal">
-              <Button 
-                variant={isActive("/advanced-terminal") ? "default" : "ghost"}
-                size="sm"
-                className={`
-                  ${isActive("/advanced-terminal") 
-                    ? "bg-terminal-red-primary text-white" 
-                    : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
-                  }
-                  font-medium transition-colors
-                `}
-              >
-                <Code className="w-4 h-4 mr-2" />
-                Advanced
-              </Button>
-            </Link>
+
 
             <Link href="/ops-manual">
               <Button 
@@ -294,12 +213,12 @@ export function Navigation() {
               </Button>
             </Link>
 
-            <Link href="/blackbriar">
+            <Link href="/neural-matrix">
               <Button 
-                variant={isActive("/blackbriar") ? "default" : "ghost"}
+                variant={isActive("/neural-matrix") ? "default" : "ghost"}
                 size="sm"
                 className={`
-                  ${isActive("/blackbriar") 
+                  ${isActive("/neural-matrix") 
                     ? "bg-terminal-red-primary text-white" 
                     : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
                   }
@@ -307,7 +226,7 @@ export function Navigation() {
                 `}
               >
                 <Eye className="w-4 h-4 mr-2" />
-                Blackbriar
+                Neural Matrix
               </Button>
             </Link>
 
@@ -328,22 +247,7 @@ export function Navigation() {
               </Button>
             </Link>
 
-            <Link href="/faraday-study">
-              <Button 
-                variant={isActive("/faraday-study") ? "default" : "ghost"}
-                size="sm"
-                className={`
-                  ${isActive("/faraday-study") 
-                    ? "bg-terminal-red-primary text-white" 
-                    : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
-                  }
-                  font-medium transition-colors
-                `}
-              >
-                <Box className="w-4 h-4 mr-2" />
-                Faraday Study
-              </Button>
-            </Link>
+
 
             <Link href="/scientific-method">
               <Button 

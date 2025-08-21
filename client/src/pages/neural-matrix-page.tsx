@@ -9,7 +9,7 @@ interface ClassifiedDocument {
   id: string;
   title: string;
   classification: 'TOP SECRET' | 'SECRET' | 'CONFIDENTIAL' | 'DECLASSIFIED';
-  source: 'BLACKBRIAR' | 'TREADSTONE' | 'OUTCOME';
+  source: 'NEURAL-MATRIX' | 'TREADSTONE' | 'OUTCOME';
   dateAcquired: string;
   content: string;
   isUnlocked: boolean;
@@ -18,17 +18,17 @@ interface ClassifiedDocument {
 const classifiedDocs: ClassifiedDocument[] = [
   {
     id: 'bb-001',
-    title: 'Blackbriar Psychological Programming Manual',
+    title: 'Neural Matrix Psychological Programming Manual',
     classification: 'DECLASSIFIED',
-    source: 'BLACKBRIAR',
+    source: 'NEURAL-MATRIX',
     dateAcquired: 'Infiltration Phase Alpha',
-    content: `BLACKBRIAR CLASSIFIED OPERATIONS MANUAL
+    content: `NEURAL MATRIX CLASSIFIED OPERATIONS MANUAL
     
 Subject: Psychological Programming Implementation
 Classification: FORMERLY TOP SECRET - NOW DECLASSIFIED
 
 INFILTRATION REPORT:
-Subject successfully penetrated Blackbriar training facility by falsifying age documentation. Access gained to classified psychological programming manuals during pre-public release phase.
+Subject successfully penetrated Neural Matrix training facility by falsifying age documentation. Access gained to classified psychological programming manuals during pre-public release phase.
 
 TRAINING ACQUIRED:
 - Jason Bourne-style trigger activation protocols
@@ -101,7 +101,7 @@ STATUS: Full integration complete. All former classified techniques now serve be
   }
 ];
 
-export default function BlackbriarBackstory() {
+export default function NeuralMatrixPage() {
   const [documents, setDocuments] = useState(classifiedDocs);
   const [selectedDoc, setSelectedDoc] = useState<ClassifiedDocument | null>(null);
   const [clearanceLevel, setClearanceLevel] = useState(0);

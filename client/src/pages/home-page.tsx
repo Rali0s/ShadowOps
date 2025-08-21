@@ -7,6 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { FrequencyLogo } from "@/components/frequency-logo";
 import { BrainwaveFrequencyDisplay } from "@/components/brainwave-frequency-display";
 import { BrainwaveSynchronizedWheel } from "@/components/brainwave-synchronized-wheel";
+import { EnhancedTerminal } from "@/components/enhanced-terminal";
 
 export default function HomePage() {
   // Open access system - no user authentication needed
@@ -55,32 +56,28 @@ export default function HomePage() {
                 <Shield className="h-4 w-4 text-yellow-400" />
                 <AlertTitle className="text-yellow-400 text-left">Declassification Paradox</AlertTitle>
                 <AlertDescription className="text-yellow-200/90 text-sm text-left">
-                  <em>"Is it truly accidental when one inadvertently declassifies what was once Blackbriar - perhaps never officially real, yet potentially meaningful for those few who sought genuine advancement?"</em>
+                  <em>"Is it truly accidental when one inadvertently declassifies what was once Neural Matrix - perhaps never officially real, yet potentially meaningful for those few who sought genuine advancement?"</em>
                   <br />
                   <span className="text-yellow-400/70 font-mono text-xs mt-2 block">— A question of intent vs. consequence in the evolution from classified operations to civilian cognitive enhancement</span>
                 </AlertDescription>
               </Alert>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-16 px-4">
-              <Link href="/terminal" data-testid="button-access-terminal">
-                <Button className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-terminal-red-primary text-white font-semibold rounded-xl hover:bg-terminal-red-secondary transition-all transform hover:scale-105 text-sm sm:text-base">
-                  <Terminal className="mr-2 w-4 h-4 sm:w-5 sm:h-5" />
-                  Basic Terminal
-                </Button>
-              </Link>
-              <Link href="/advanced-terminal" data-testid="button-access-advanced-terminal">
-                <Button className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-terminal-red-secondary text-white font-semibold rounded-xl hover:bg-terminal-red-primary transition-all transform hover:scale-105 text-sm sm:text-base">
-                  <Shield className="mr-2 w-4 h-4 sm:w-5 sm:h-5" />
-                  Advanced Terminal
-                </Button>
-              </Link>
-              <Link href="/admin" data-testid="button-access-admin">
-                <Button className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-terminal-red-dark text-white font-semibold rounded-xl hover:bg-terminal-red-muted transition-all transform hover:scale-105 text-sm sm:text-base">
-                  <Code className="mr-2 w-4 h-4 sm:w-5 sm:h-5" />
-                  System Admin
-                </Button>
-              </Link>
+            {/* FOIA Search Tips */}
+            <div className="mb-16 max-w-3xl mx-auto px-4">
+              <Alert className="border-blue-500/30 bg-blue-500/5">
+                <Zap className="h-4 w-4 text-blue-400" />
+                <AlertTitle className="text-blue-400 text-left">Self-Study Research Tips</AlertTitle>
+                <AlertDescription className="text-blue-200/90 text-sm text-left">
+                  <strong className="text-blue-300">Search FOIA Yourself!</strong> Access Freedom of Information Act databases for authentic study materials:
+                  <br />• <strong>FBI Records:</strong> vault.fbi.gov - Search classified documents
+                  <br />• <strong>CIA Library:</strong> cia.gov/readingroom - Declassified operations 
+                  <br />• <strong>NSA Archives:</strong> nsa.gov/resources - Technical documents
+                  <br />• <strong>Military Archives:</strong> aad.archives.gov - Historical records
+                  <br />
+                  <span className="text-blue-400/70 font-mono text-xs mt-2 block">Think for yourself. Question everything. DYOR (Do Your Own Research)</span>
+                </AlertDescription>
+              </Alert>
             </div>
           </div>
 
@@ -97,38 +94,23 @@ export default function HomePage() {
             <BrainwaveFrequencyDisplay className="mx-auto max-w-6xl" />
           </div>
 
-          {/* Terminal Preview */}
-          <div className="max-w-4xl mx-auto px-4">
+          {/* Interactive Terminal */}
+          <div className="mb-16 max-w-4xl mx-auto px-4">
+            <h3 className="text-xl sm:text-2xl font-bold text-terminal-red-bright mb-6 text-center font-mono">
+              Interactive Frequency Terminal
+            </h3>
             <div className="bg-black rounded-lg border border-gray-700 overflow-hidden shadow-2xl">
-              {/* Terminal Header */}
               <div className="bg-gray-800 px-3 sm:px-4 py-2 flex items-center space-x-2">
                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                 <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="ml-2 sm:ml-4 text-gray-400 text-xs sm:text-sm font-mono">_Fq Frequency Terminal</span>
+                <span className="ml-2 sm:ml-4 text-gray-400 text-xs sm:text-sm font-mono">_Fq Neural Frequency Terminal</span>
               </div>
-              
-              {/* Terminal Content */}
-              <div className="p-3 sm:p-6 font-mono text-xs sm:text-sm h-64 sm:h-96 overflow-y-auto">
-                <div className="terminal-text text-terminal-green">
-                  <p>[SYSTEM] _Fq Frequency Analysis v3.1.4 - NEURAL_SYNC</p>
-                  <p>[BOOT] Initializing brainwave frequency monitoring...</p>
-                  <p>[ACCESS] Neural profile: OPEN_ACCESS</p>
-                  <p>[FREQ] Current mode: ALL_FREQUENCIES_AVAILABLE</p>
-                  <p>[INFO] Welcome to advanced frequency training</p>
-                  <p className="mt-4 text-terminal-amber">Available Frequency Commands:</p>
-                  <p>  help          - Display available commands</p>
-                  <p>  modules       - List training modules</p>
-                  <p>  progress      - Show completion status</p>
-                  <p>  scenario      - Start training scenario</p>
-                  <p>  cert          - Generate certificate</p>
-                  <p className="mt-4 text-white">operative@fq_system:~$ <span className="animate-pulse">_</span></p>
-                </div>
+              <div className="h-96 sm:h-[500px]">
+                <EnhancedTerminal />
               </div>
             </div>
           </div>
-
-          {/* Quick Info */}
 
         </div>
       </main>
