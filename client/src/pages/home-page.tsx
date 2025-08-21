@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 // Removed useAuth - now open access system
@@ -9,6 +10,23 @@ import { BrainwaveSynchronizedWheel } from "@/components/brainwave-synchronized-
 
 export default function HomePage() {
   // Open access system - no user authentication needed
+  const [wheelSize, setWheelSize] = useState(350);
+
+  useEffect(() => {
+    const updateSize = () => {
+      if (window.innerWidth < 640) {
+        setWheelSize(200);
+      } else if (window.innerWidth < 768) {
+        setWheelSize(280);
+      } else {
+        setWheelSize(350);
+      }
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   return (
     <div className="bg-terminal-bg text-gray-100">
@@ -44,22 +62,22 @@ export default function HomePage() {
               </Alert>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-16 px-4">
               <Link href="/terminal" data-testid="button-access-terminal">
-                <Button className="px-8 py-4 bg-terminal-red-primary text-white font-semibold rounded-xl hover:bg-terminal-red-secondary transition-all transform hover:scale-105">
-                  <Terminal className="mr-2" />
+                <Button className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-terminal-red-primary text-white font-semibold rounded-xl hover:bg-terminal-red-secondary transition-all transform hover:scale-105 text-sm sm:text-base">
+                  <Terminal className="mr-2 w-4 h-4 sm:w-5 sm:h-5" />
                   Basic Terminal
                 </Button>
               </Link>
               <Link href="/advanced-terminal" data-testid="button-access-advanced-terminal">
-                <Button className="px-8 py-4 bg-terminal-red-secondary text-white font-semibold rounded-xl hover:bg-terminal-red-primary transition-all transform hover:scale-105">
-                  <Shield className="mr-2" />
+                <Button className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-terminal-red-secondary text-white font-semibold rounded-xl hover:bg-terminal-red-primary transition-all transform hover:scale-105 text-sm sm:text-base">
+                  <Shield className="mr-2 w-4 h-4 sm:w-5 sm:h-5" />
                   Advanced Terminal
                 </Button>
               </Link>
               <Link href="/admin" data-testid="button-access-admin">
-                <Button className="px-8 py-4 bg-terminal-red-dark text-white font-semibold rounded-xl hover:bg-terminal-red-muted transition-all transform hover:scale-105">
-                  <Code className="mr-2" />
+                <Button className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-terminal-red-dark text-white font-semibold rounded-xl hover:bg-terminal-red-muted transition-all transform hover:scale-105 text-sm sm:text-base">
+                  <Code className="mr-2 w-4 h-4 sm:w-5 sm:h-5" />
                   System Admin
                 </Button>
               </Link>
@@ -68,7 +86,10 @@ export default function HomePage() {
 
           {/* Sacred Geometry Brainwave Wheel */}
           <div className="mb-12">
-            <BrainwaveSynchronizedWheel size={350} className="mb-8" />
+            <BrainwaveSynchronizedWheel 
+              size={wheelSize} 
+              className="mb-8" 
+            />
           </div>
 
           {/* Brainwave Frequency Display */}
@@ -77,18 +98,18 @@ export default function HomePage() {
           </div>
 
           {/* Terminal Preview */}
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-4xl mx-auto px-4">
             <div className="bg-black rounded-lg border border-gray-700 overflow-hidden shadow-2xl">
               {/* Terminal Header */}
-              <div className="bg-gray-800 px-4 py-2 flex items-center space-x-2">
+              <div className="bg-gray-800 px-3 sm:px-4 py-2 flex items-center space-x-2">
                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                 <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="ml-4 text-gray-400 text-sm font-mono">_Fq Frequency Terminal</span>
+                <span className="ml-2 sm:ml-4 text-gray-400 text-xs sm:text-sm font-mono">_Fq Frequency Terminal</span>
               </div>
               
               {/* Terminal Content */}
-              <div className="p-6 font-mono text-sm h-96 overflow-y-auto">
+              <div className="p-3 sm:p-6 font-mono text-xs sm:text-sm h-64 sm:h-96 overflow-y-auto">
                 <div className="terminal-text text-terminal-green">
                   <p>[SYSTEM] _Fq Frequency Analysis v3.1.4 - NEURAL_SYNC</p>
                   <p>[BOOT] Initializing brainwave frequency monitoring...</p>

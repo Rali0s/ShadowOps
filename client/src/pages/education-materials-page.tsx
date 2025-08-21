@@ -172,17 +172,17 @@ export default function EducationMaterialsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-terminal-bg text-gray-100 p-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-terminal-bg text-gray-100 mobile-safe-padding">
+      <div className="max-w-7xl mx-auto container-responsive py-4 sm:py-6">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 bg-terminal-red-primary rounded-lg">
-              <BookOpen className="w-8 h-8 text-white" />
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <div className="p-2 sm:p-3 bg-terminal-red-primary rounded-lg">
+              <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-terminal-red-bright font-mono">Education Materials</h1>
-              <p className="text-terminal-red-secondary">Advanced memory techniques for psychological programming and cognitive enhancement</p>
+              <h1 className="text-2xl sm:text-3xl font-bold text-terminal-red-bright font-mono">Education Materials</h1>
+              <p className="text-sm sm:text-base text-terminal-red-secondary">Advanced memory techniques for psychological programming and cognitive enhancement</p>
             </div>
           </div>
 
@@ -195,19 +195,23 @@ export default function EducationMaterialsPage() {
           </Alert>
         </div>
 
-        <Tabs defaultValue="techniques" className="space-y-6">
-          <TabsList className="grid grid-cols-4 w-full bg-terminal-red-dark">
-            <TabsTrigger value="techniques" className="text-terminal-red-secondary data-[state=active]:text-white">
-              Study Techniques
+        <Tabs defaultValue="techniques" className="space-y-4 sm:space-y-6">
+          <TabsList className="grid grid-cols-2 sm:grid-cols-4 w-full bg-terminal-red-dark">
+            <TabsTrigger value="techniques" className="text-terminal-red-secondary data-[state=active]:text-white text-xs sm:text-sm">
+              <span className="hidden sm:inline">Study Techniques</span>
+              <span className="sm:hidden">Techniques</span>
             </TabsTrigger>
-            <TabsTrigger value="palace-example" className="text-terminal-red-secondary data-[state=active]:text-white">
-              Palace Example
+            <TabsTrigger value="palace-example" className="text-terminal-red-secondary data-[state=active]:text-white text-xs sm:text-sm">
+              <span className="hidden sm:inline">Palace Example</span>
+              <span className="sm:hidden">Palace</span>
             </TabsTrigger>
-            <TabsTrigger value="debugging-guide" className="text-terminal-red-secondary data-[state=active]:text-white">
-              Debugging Guide
+            <TabsTrigger value="debugging-guide" className="text-terminal-red-secondary data-[state=active]:text-white text-xs sm:text-sm">
+              <span className="hidden sm:inline">Debugging Guide</span>
+              <span className="sm:hidden">Debug</span>
             </TabsTrigger>
-            <TabsTrigger value="advanced-tips" className="text-terminal-red-secondary data-[state=active]:text-white">
-              Advanced Tips
+            <TabsTrigger value="advanced-tips" className="text-terminal-red-secondary data-[state=active]:text-white text-xs sm:text-sm">
+              <span className="hidden sm:inline">Advanced Tips</span>
+              <span className="sm:hidden">Tips</span>
             </TabsTrigger>
           </TabsList>
 
