@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Code, Terminal, Shield, Eye, FileText, Box, FlaskConical, Music, BookOpen, Menu, X } from "lucide-react";
+import { Code, Terminal, Shield, Eye, FileText, Box, FlaskConical, BookOpen, Menu, X } from "lucide-react";
 
 export function Navigation() {
   const [location] = useLocation();
@@ -108,22 +108,7 @@ export function Navigation() {
                       </Button>
                     </Link>
 
-                    <Link href="/music">
-                      <Button 
-                        variant={isActive("/music") ? "default" : "ghost"}
-                        className={`
-                          w-full justify-start
-                          ${isActive("/music") 
-                            ? "bg-terminal-red-primary text-white" 
-                            : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
-                          }
-                        `}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <Music className="w-4 h-4 mr-3" />
-                        Music
-                      </Button>
-                    </Link>
+
 
                     <Link href="/education">
                       <Button 
@@ -236,22 +221,7 @@ export function Navigation() {
               </Button>
             </Link>
 
-            <Link href="/music">
-              <Button 
-                variant={isActive("/music") ? "default" : "ghost"}
-                size="sm"
-                className={`
-                  ${isActive("/music") 
-                    ? "bg-terminal-red-primary text-white" 
-                    : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
-                  }
-                  font-medium transition-colors
-                `}
-              >
-                <Music className="w-4 h-4 mr-2" />
-                Music
-              </Button>
-            </Link>
+
 
             <Link href="/education">
               <Button 
