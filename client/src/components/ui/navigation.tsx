@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Code, Terminal, Settings, Shield, Eye, FileText, Box, FlaskConical, Music, BookOpen, Menu, X } from "lucide-react";
+import { Code, Terminal, Shield, Eye, FileText, Box, FlaskConical, Music, BookOpen, Menu, X } from "lucide-react";
 
 export function Navigation() {
   const [location] = useLocation();
@@ -208,22 +208,7 @@ export function Navigation() {
 
 
 
-                    <Link href="/admin">
-                      <Button 
-                        variant={isActive("/admin") ? "default" : "ghost"}
-                        className={`
-                          w-full justify-start
-                          ${isActive("/admin") 
-                            ? "bg-terminal-red-primary text-white" 
-                            : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
-                          }
-                        `}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <Settings className="w-4 h-4 mr-3" />
-                        Admin
-                      </Button>
-                    </Link>
+
                   </div>
 
                   <div className="pt-4 border-t border-terminal-red-muted">
@@ -396,22 +381,7 @@ export function Navigation() {
 
 
 
-            <Link href="/admin">
-              <Button 
-                variant={isActive("/admin") ? "default" : "ghost"}
-                size="sm"
-                className={`
-                  ${isActive("/admin") 
-                    ? "bg-terminal-red-primary text-white" 
-                    : "text-terminal-red-secondary hover:text-terminal-red-bright hover:bg-terminal-red-dark/20"
-                  }
-                  font-medium transition-colors
-                `}
-              >
-                <Settings className="w-4 h-4 mr-2" />
-                Admin
-              </Button>
-            </Link>
+
           </nav>
 
           {/* Desktop Open Access Badge */}
