@@ -16,7 +16,7 @@ import KSPDossier from "@/pages/ksp-dossier";
 import ScientificMethodPage from "@/pages/scientific-method-page";
 import MusicRecommendationsPage from "@/pages/music-recommendations-page";
 import EducationMaterialsPage from "@/pages/education-materials-page";
-
+import SelfReportMethodologyPage from "@/pages/self-report-methodology";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -34,7 +34,7 @@ function Router() {
       <Route path="/scientific-method" component={ScientificMethodPage} />
       <Route path="/music" component={MusicRecommendationsPage} />
       <Route path="/education" component={EducationMaterialsPage} />
-
+      <Route path="/methodology" component={SelfReportMethodologyPage} />
       <Route component={NotFound} />
     </Switch>
   );
