@@ -8,7 +8,7 @@ import HomePage from "@/pages/home-page";
 import TerminalPage from "@/pages/terminal-page";
 import AdvancedTerminalPage from "@/pages/advanced-terminal-page";
 import FaradayStudyPage from "@/pages/faraday-study-page";
-import AdminPage from "@/pages/admin-page";
+
 import SubscribePage from "@/pages/subscribe-page";
 import OpsManualPage from "@/pages/ops-manual-page";
 import BlackbriarBackstory from "@/pages/blackbriar-backstory";
@@ -25,7 +25,7 @@ function Router() {
       <Route path="/" component={HomePage} />
       <Route path="/terminal" component={TerminalPage} />
       <Route path="/advanced-terminal" component={AdvancedTerminalPage} />
-      <Route path="/admin" component={AdminPage} />
+
       <Route path="/subscribe" component={SubscribePage} />
       <Route path="/ops-manual" component={OpsManualPage} />
       <Route path="/blackbriar" component={BlackbriarBackstory} />
