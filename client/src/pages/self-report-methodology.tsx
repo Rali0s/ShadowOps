@@ -70,6 +70,48 @@ const SELF_REPORT_METHODS: MethodologySection[] = [
     tools: ["Body scan meditation", "Heart rate monitor", "Sleep tracking app", "Energy level diary"],
     frequency: "Each session",
     icon: <Brain className="w-5 h-5" />
+  },
+  {
+    title: "Top-Down vs Bottom-Up Processing",
+    description: "Study how you process information from concepts to details or details to concepts",
+    steps: [
+      "Document your natural problem-solving approach (general-to-specific vs specific-to-general)",
+      "Track which method works better for different types of tasks",
+      "Note when you switch between approaches and what triggers the change",
+      "Record effectiveness of each approach for different cognitive states",
+      "Analyze patterns in your preferred processing style over time"
+    ],
+    tools: ["Problem-solving journal", "Task type categorization", "Decision tree mapping", "Process flow diagrams"],
+    frequency: "Weekly analysis",
+    icon: <Target className="w-5 h-5" />
+  },
+  {
+    title: "Inductive vs Deductive Reasoning",
+    description: "Track your reasoning patterns from specific examples to general principles or vice versa",
+    steps: [
+      "Identify instances of pattern recognition leading to general conclusions (inductive)",
+      "Document times when you apply general rules to specific cases (deductive)",
+      "Note which reasoning style feels more natural in different contexts",
+      "Track accuracy and confidence levels for each reasoning approach",
+      "Analyze how brainwave states affect your reasoning preferences"
+    ],
+    tools: ["Logic pattern tracker", "Reasoning confidence scale", "Example-to-rule mapping", "Decision accuracy log"],
+    frequency: "Daily observations",
+    icon: <Lightbulb className="w-5 h-5" />
+  },
+  {
+    title: "Transactional vs Relational Processing",
+    description: "Monitor how you handle task-focused interactions versus relationship-focused processing",
+    steps: [
+      "Track when you focus on completing specific tasks (transactional)",
+      "Note instances of relationship and context consideration (relational)",
+      "Document which approach works better for different types of problems",
+      "Record energy levels and stress during each processing mode",
+      "Analyze how cognitive enhancement affects your processing balance"
+    ],
+    tools: ["Interaction type log", "Context awareness tracker", "Relationship mapping", "Processing mode diary"],
+    frequency: "Daily",
+    icon: <CheckCircle className="w-5 h-5" />
   }
 ];
 
@@ -131,9 +173,12 @@ export default function SelfReportMethodologyPage() {
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="methods" className="space-y-6">
-          <TabsList className="grid grid-cols-1 sm:grid-cols-3 w-full bg-terminal-red-dark">
+          <TabsList className="grid grid-cols-1 sm:grid-cols-4 w-full bg-terminal-red-dark">
             <TabsTrigger value="methods" className="text-terminal-red-secondary data-[state=active]:text-white">
               Core Methods
+            </TabsTrigger>
+            <TabsTrigger value="cognitive" className="text-terminal-red-secondary data-[state=active]:text-white">
+              Cognitive Models
             </TabsTrigger>
             <TabsTrigger value="documentation" className="text-terminal-red-secondary data-[state=active]:text-white">
               Documentation
@@ -146,7 +191,7 @@ export default function SelfReportMethodologyPage() {
           {/* Core Methods Tab */}
           <TabsContent value="methods" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-              {SELF_REPORT_METHODS.map((method, index) => (
+              {SELF_REPORT_METHODS.slice(0, 3).map((method, index) => (
                 <Card key={index} className="bg-card-bg border-terminal-red-muted/30">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-terminal-red-bright flex items-center gap-3 text-lg">
@@ -189,6 +234,127 @@ export default function SelfReportMethodologyPage() {
                 </Card>
               ))}
             </div>
+          </TabsContent>
+
+          {/* Cognitive Models Tab */}
+          <TabsContent value="cognitive" className="space-y-6">
+            <div className="mb-6">
+              <Alert className="border-terminal-red-primary bg-terminal-red-primary/10">
+                <Brain className="h-5 w-5" />
+                <AlertTitle className="text-terminal-red-bright">Advanced Cognitive Research Models</AlertTitle>
+                <AlertDescription className="text-terminal-red-secondary">
+                  These methodologies focus on higher-order cognitive processes and reasoning patterns. 
+                  Future expansion planned for heuristics and behavioral analysis frameworks.
+                </AlertDescription>
+              </Alert>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+              {SELF_REPORT_METHODS.slice(3).map((method, index) => (
+                <Card key={index + 3} className="bg-card-bg border-terminal-red-muted/30">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-terminal-red-bright flex items-center gap-3 text-lg">
+                      <div className="p-2 bg-terminal-red-primary rounded-lg">
+                        {method.icon}
+                      </div>
+                      {method.title}
+                    </CardTitle>
+                    <p className="text-terminal-red-secondary text-sm">
+                      {method.description}
+                    </p>
+                    <div className="flex items-center gap-2 text-xs text-gray-400">
+                      <Clock className="w-3 h-3" />
+                      <span>Frequency: {method.frequency}</span>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <h4 className="text-terminal-red-bright text-sm font-semibold mb-2">Steps:</h4>
+                      <div className="space-y-2">
+                        {method.steps.map((step, sIndex) => (
+                          <div key={sIndex} className="flex items-start gap-2 text-sm text-gray-300">
+                            <span className="text-terminal-red-primary font-bold mt-0.5 flex-shrink-0">{sIndex + 1}.</span>
+                            <span>{step}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-terminal-red-bright text-sm font-semibold mb-2">Suggested Tools:</h4>
+                      <div className="flex flex-wrap gap-1">
+                        {method.tools.map((tool, tIndex) => (
+                          <Badge key={tIndex} variant="secondary" className="text-xs bg-terminal-red-dark text-terminal-red-secondary">
+                            {tool}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Future Research Areas */}
+            <Card className="bg-card-bg border-terminal-red-muted/30">
+              <CardHeader>
+                <CardTitle className="text-terminal-red-bright flex items-center gap-2">
+                  <Zap className="w-5 h-5" />
+                  Future Research Framework Expansion
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="text-terminal-red-bright text-sm font-semibold mb-3">Planned Heuristics Research:</h4>
+                    <div className="space-y-2 text-sm text-gray-300">
+                      <div className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-terminal-red-primary rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Availability Heuristic tracking and bias detection</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-terminal-red-primary rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Representativeness heuristic pattern analysis</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-terminal-red-primary rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Anchoring and adjustment mechanism studies</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-terminal-red-primary rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Cognitive shortcuts effectiveness measurement</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-terminal-red-bright text-sm font-semibold mb-3">Planned Behavioral Analysis:</h4>
+                    <div className="space-y-2 text-sm text-gray-300">
+                      <div className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-terminal-red-primary rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Decision-making behavior pattern tracking</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-terminal-red-primary rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Cognitive load response behavioral changes</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-terminal-red-primary rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Risk assessment and tolerance behavioral analysis</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-terminal-red-primary rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Social and environmental behavioral triggers</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4 p-3 bg-terminal-red-dark/20 rounded-lg">
+                  <p className="text-xs text-terminal-red-secondary italic">
+                    These advanced methodologies will be personally integrated in future updates, 
+                    providing comprehensive cognitive behavioral analysis frameworks.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Documentation Tab */}
