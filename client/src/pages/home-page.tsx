@@ -67,197 +67,126 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="bg-terminal-bg text-gray-100 overflow-x-hidden">
-      {/* Mobile-First Hero Section */}
-      <section className="relative">
-        {/* Social Proof Bar */}
-        <div className="bg-gradient-to-r from-red-900/20 to-red-800/20 border-b border-red-700/30">
-          <div className="container mx-auto px-4 py-2 text-center">
-            <div className="flex items-center justify-center space-x-4 text-xs sm:text-sm">
-              <div className="flex items-center space-x-1">
-                <Users className="w-3 h-3 text-green-400" />
-                <span className="text-green-400 font-mono">{currentUserCount}</span>
-                <span className="text-gray-300">neurohackers online</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <TrendingUp className="w-3 h-3 text-red-400" />
-                <span className="text-red-400">47% growth this week</span>
-              </div>
+    <div className="bg-terminal-bg text-gray-100">
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center">
+        <div className="container mx-auto px-4 text-center">
+          {/* Logo & Brand */}
+          <div className="mb-8">
+            <div className="inline-block p-6 bg-card-bg rounded-2xl border border-terminal-red-muted mb-4">
+              <FrequencyLogo size={80} className="bg-terminal-bg rounded-xl p-2 border border-terminal-red-primary" />
             </div>
+            <h1 className="text-4xl sm:text-6xl font-bold text-terminal-red-bright mb-2 font-mono">_Fq</h1>
+            <p className="text-terminal-red-secondary font-mono text-lg mb-8">Neural Enhancement Platform</p>
+          </div>
+
+          {/* Simple Value Prop */}
+          <h2 className="text-2xl sm:text-4xl font-bold text-white mb-6 max-w-3xl mx-auto">
+            Master Your
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600"> Neural Frequencies</span>
+          </h2>
+          
+          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            Join <strong className="text-red-400">{currentUserCount} neurohackers</strong> optimizing cognitive performance
+          </p>
+
+          {/* Simple CTA */}
+          <div className="mb-8">
+            <div className="text-3xl font-bold text-white mb-2">$5.89/mo</div>
+            <div className="text-gray-400 line-through mb-4">Was $19.99</div>
+            <Link href="/subscribe">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-4 px-8 text-lg"
+                data-testid="button-subscribe-hero"
+              >
+                Start Training
+              </Button>
+            </Link>
+          </div>
+
+          {/* Scroll indicator */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-gray-400">
+            <ChevronRight className="w-6 h-6 rotate-90 animate-bounce" />
           </div>
         </div>
+      </section>
 
-        <main className="container mx-auto px-4 py-8 sm:py-12">
-          {/* Primary Value Proposition */}
-          <div className="text-center mb-8">
-            <Badge className="mb-4 bg-red-600/20 text-red-300 border-red-500/50">
-              <Brain className="w-3 h-3 mr-1" />
-              Neural Enhancement Platform
-            </Badge>
-            
-            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold text-terminal-red-bright mb-4 font-mono tracking-tight leading-tight">
-              Unlock Your
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600">Neural Matrix</span>
-            </h1>
-            
-            <p className="text-lg sm:text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed">
-              Join elite neurohackers mastering brainwave frequency optimization. 
-              <br className="hidden sm:block" />
-              <strong className="text-red-400">Train like the pros</strong> with classified cognitive enhancement protocols.
-            </p>
-
-            {/* Early Access CTA */}
-            <div className="bg-gradient-to-r from-red-600/10 to-red-500/10 border border-red-500/30 rounded-xl p-6 mb-8 mx-auto max-w-md">
-              <div className="flex items-center justify-center space-x-2 mb-3">
-                <Timer className="w-4 h-4 text-red-400" />
-                <span className="text-red-400 font-semibold text-sm">Early Access Pricing Ends In:</span>
-              </div>
-              <div className="font-mono text-2xl text-red-300 mb-4">
-                {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
-              </div>
-              <div className="text-center mb-4">
-                <div className="text-2xl font-bold text-white mb-1">$5.89/mo</div>
-                <div className="text-gray-400 line-through text-sm">Regular: $19.99/mo</div>
-                <div className="text-green-400 text-sm font-semibold">Save 70% - Limited Time</div>
-              </div>
-              <Link href="/subscribe">
-                <Button 
-                  size="lg" 
-                  className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-4 text-lg shadow-lg transform hover:scale-105 transition-all duration-200"
-                  data-testid="button-subscribe-hero"
-                >
-                  <Lock className="w-5 h-5 mr-2" />
-                  Unlock Neural Matrix Access
-                  <ChevronRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-              <p className="text-xs text-gray-400 mt-2">Cancel anytime • 30-day guarantee</p>
-            </div>
-          </div>
-
-          {/* Logo Section */}
+        {/* Features Section */}
+      <section className="py-20 bg-gray-900/30">
+        <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <div className="inline-block p-6 bg-card-bg rounded-2xl glass-effect border border-terminal-red-muted">
-              <div className="flex justify-center mb-3">
-                <FrequencyLogo size={60} className="bg-terminal-bg rounded-xl p-2 border border-terminal-red-primary" />
-              </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-terminal-red-bright mb-1 font-mono">_Fq</h2>
-              <p className="text-terminal-red-secondary font-mono text-sm">Is This A Simulation</p>
-            </div>
+            <h3 className="text-3xl font-bold text-white mb-4">Neural Frequencies</h3>
+            <p className="text-gray-400 max-w-2xl mx-auto">Master the four core brainwave states for optimal cognitive performance</p>
           </div>
-
-            {/* Social Proof & Benefits */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12 max-w-4xl mx-auto">
-            <Card className="bg-gray-900/50 border-gray-700 text-center">
-              <CardContent className="p-4">
-                <div className="text-2xl font-bold text-red-400 mb-1">2,847</div>
-                <div className="text-sm text-gray-300">Active Neurohackers</div>
-              </CardContent>
-            </Card>
-            <Card className="bg-gray-900/50 border-gray-700 text-center">
-              <CardContent className="p-4">
-                <div className="flex justify-center mb-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
+          
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            <Card className="bg-black/50 border-red-700/50 text-center">
+              <CardContent className="p-6">
+                <div className="w-16 h-16 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-red-400 font-bold text-2xl">α</span>
                 </div>
-                <div className="text-sm text-gray-300">4.9/5 Rating</div>
+                <h4 className="text-red-300 font-semibold mb-2">Alpha</h4>
+                <p className="text-sm text-gray-400">8-12 Hz</p>
               </CardContent>
             </Card>
-            <Card className="bg-gray-900/50 border-gray-700 text-center">
-              <CardContent className="p-4">
-                <div className="text-2xl font-bold text-green-400 mb-1">94%</div>
-                <div className="text-sm text-gray-300">Success Rate</div>
+            
+            <Card className="bg-black/50 border-cyan-700/50 text-center">
+              <CardContent className="p-6">
+                <div className="w-16 h-16 bg-cyan-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-cyan-400 font-bold text-2xl">β</span>
+                </div>
+                <h4 className="text-cyan-300 font-semibold mb-2">Beta</h4>
+                <p className="text-sm text-gray-400">12-30 Hz</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-black/50 border-blue-700/50 text-center">
+              <CardContent className="p-6">
+                <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-blue-400 font-bold text-2xl">θ</span>
+                </div>
+                <h4 className="text-blue-300 font-semibold mb-2">Theta</h4>
+                <p className="text-sm text-gray-400">4-8 Hz</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-black/50 border-green-700/50 text-center">
+              <CardContent className="p-6">
+                <div className="w-16 h-16 bg-green-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-green-400 font-bold text-2xl">γ</span>
+                </div>
+                <h4 className="text-green-300 font-semibold mb-2">Gamma</h4>
+                <p className="text-sm text-gray-400">30-100+ Hz</p>
               </CardContent>
             </Card>
           </div>
+        </div>
+      </section>
 
-          {/* What You Get */}
-          <div className="mb-12">
-            <h3 className="text-2xl font-bold text-center mb-8">What You'll Master</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-              <Card className="bg-gradient-to-br from-red-900/20 to-red-800/20 border-red-700/50">
-                <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-red-400 font-bold">α</span>
-                  </div>
-                  <h4 className="font-bold text-red-300 mb-2">Alpha Waves</h4>
-                  <p className="text-sm text-gray-300">8-12 Hz • Creative flow states</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-gradient-to-br from-cyan-900/20 to-cyan-800/20 border-cyan-700/50">
-                <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-cyan-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-cyan-400 font-bold">β</span>
-                  </div>
-                  <h4 className="font-bold text-cyan-300 mb-2">Beta Waves</h4>
-                  <p className="text-sm text-gray-300">12-30 Hz • Analytical thinking</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-gradient-to-br from-blue-900/20 to-blue-800/20 border-blue-700/50">
-                <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-blue-400 font-bold">θ</span>
-                  </div>
-                  <h4 className="font-bold text-blue-300 mb-2">Theta Waves</h4>
-                  <p className="text-sm text-gray-300">4-8 Hz • Deep insights</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-gradient-to-br from-green-900/20 to-green-800/20 border-green-700/50">
-                <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-green-400 font-bold">γ</span>
-                  </div>
-                  <h4 className="font-bold text-green-300 mb-2">Gamma Waves</h4>
-                  <p className="text-sm text-gray-300">30-100+ Hz • Peak performance</p>
-                </CardContent>
-              </Card>
-            </div>
+      {/* Neural Matrix Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4 text-center">
+          <h3 className="text-3xl font-bold text-white mb-8">Neural Synchronization Matrix</h3>
+          <BrainwaveSynchronizedWheel 
+            size={wheelSize} 
+            className="mb-8" 
+          />
+          <p className="text-gray-400 max-w-md mx-auto">
+            Real-time visualization • Sacred geometry patterns
+          </p>
+        </div>
+      </section>
+
+      {/* Command Interface Section */}
+      <section className="py-20 bg-gray-900/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-8">
+            <h3 className="text-3xl font-bold text-white mb-4">Command Interface</h3>
+            <p className="text-gray-400">Access neural training modules</p>
           </div>
-
-          {/* FOIA Section - Positioned as bonus content */}
-          <div className="mb-12 max-w-3xl mx-auto">
-            <Alert className="border-blue-500/30 bg-blue-500/5">
-              <Zap className="h-4 w-4 text-blue-400" />
-              <AlertTitle className="text-blue-400 text-left">Bonus: Research Intelligence</AlertTitle>
-              <AlertDescription className="text-blue-200/90 text-sm text-left">
-                <strong className="text-blue-300">Advanced FOIA Research Training Included!</strong>
-                <br />• FBI vault.fbi.gov - Classified documents
-                <br />• CIA cia.gov/readingroom - Declassified operations 
-                <br />• NSA nsa.gov/resources - Technical documents
-                <br />• Military aad.archives.gov - Historical records
-                <br />
-                <span className="text-blue-400/70 font-mono text-xs mt-2 block">Think for yourself. Question everything. DYOR</span>
-              </AlertDescription>
-            </Alert>
-          </div>
-
-          {/* Sacred Geometry Brainwave Wheel */}
-          <div className="mb-12">
-            <h3 className="text-xl font-bold text-center mb-6">Neural Synchronization Matrix</h3>
-            <BrainwaveSynchronizedWheel 
-              size={wheelSize} 
-              className="mb-4" 
-            />
-            <p className="text-center text-sm text-gray-400 max-w-md mx-auto">
-              Real-time brainwave visualization • Sacred geometry patterns enhance neural synchronization
-            </p>
-          </div>
-
-          {/* Brainwave Frequency Display */}
-          <div className="mb-16">
-            <BrainwaveFrequencyDisplay className="mx-auto max-w-6xl" />
-          </div>
-
-          {/* Mock Termux Interface - Button Based */}
-          <div className="mb-16 max-w-4xl mx-auto px-4">
-            <div className="text-center mb-6">
-              <h3 className="text-xl sm:text-2xl font-bold text-terminal-red-bright mb-2 font-mono">
-                Neural Command Interface
-              </h3>
-              <p className="text-sm text-gray-400">Tap commands • Full access requires subscription</p>
-            </div>
+          
+          <div className="max-w-4xl mx-auto">
             
             {/* Termux-style interface */}
             <div className="bg-black rounded-lg border border-gray-600 overflow-hidden shadow-2xl">
@@ -396,47 +325,36 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Final CTA */}
-          <div className="text-center mb-16">
-            <div className="bg-gradient-to-r from-red-600/20 to-red-500/20 border border-red-500/50 rounded-2xl p-8 max-w-lg mx-auto">
-              <h3 className="text-2xl font-bold text-white mb-4">
-                Ready to Upgrade Your Mind?
-              </h3>
-              <p className="text-gray-300 mb-6">
-                Join thousands of neurohackers optimizing their cognitive performance
-              </p>
+      {/* CTA Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4 text-center">
+          <div className="max-w-lg mx-auto">
+            <h3 className="text-3xl font-bold text-white mb-6">
+              Ready to Begin?
+            </h3>
+            <p className="text-xl text-gray-300 mb-8">
+              Join the neural enhancement revolution
+            </p>
+            
+            <div className="bg-gradient-to-r from-red-600/20 to-red-500/20 border border-red-500/50 rounded-xl p-6 mb-8">
+              <div className="text-3xl font-bold text-white mb-2">$5.89/mo</div>
+              <div className="text-gray-400 line-through mb-4">Regular: $19.99/mo</div>
               <Link href="/subscribe">
                 <Button 
                   size="lg" 
-                  className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-4 text-lg mb-4"
+                  className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-4 text-lg"
                   data-testid="button-subscribe-final"
                 >
-                  Start Your Neural Journey - $5.89/mo
+                  Start Neural Training
                 </Button>
               </Link>
-              <div className="flex items-center justify-center space-x-4 text-xs text-gray-400">
-                <span>✓ Cancel anytime</span>
-                <span>✓ 30-day guarantee</span>
-                <span>✓ Full access</span>
-              </div>
+              <p className="text-sm text-gray-400 mt-4">Cancel anytime • 30-day guarantee</p>
             </div>
           </div>
-
-          {/* Philosophical note moved to footer */}
-          <div className="max-w-3xl mx-auto text-center">
-            <Alert className="border-yellow-500/30 bg-yellow-500/5">
-              <Shield className="h-4 w-4 text-yellow-400" />
-              <AlertTitle className="text-yellow-400 text-left">The Question</AlertTitle>
-              <AlertDescription className="text-yellow-200/90 text-sm text-left">
-                <em>"Is it truly accidental when one inadvertently declassifies what was once Neural Matrix?"</em>
-                <br />
-                <span className="text-yellow-400/70 font-mono text-xs mt-2 block">— Evolution from classified to civilian enhancement</span>
-              </AlertDescription>
-            </Alert>
-          </div>
-
-        </main>
+        </div>
       </section>
     </div>
   );
