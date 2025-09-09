@@ -1,0 +1,508 @@
+import { useState, useEffect, useRef } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { 
+  Play, 
+  Pause, 
+  RotateCcw, 
+  Settings, 
+  Eye, 
+  Volume2, 
+  Brain,
+  Target,
+  Flashlight,
+  RadioIcon,
+  Zap,
+  Timer
+} from 'lucide-react';
+import { BinauralBeatGenerator } from './BinauralBeatGenerator';
+import { SacredGeometryWheel } from './sacred-geometry-wheel';
+
+// HUMINT Training Sections from Classified Manuals
+const HUMINT_SECTIONS = [
+  {
+    id: 'core-traits',
+    title: 'Core Traits',
+    keywords: ['Alertness', 'Patience', 'Credibility', 'Objectivity', 'Adaptability', 'Perseverance', 'Appearance', 'Initiative'],
+    mnemonic: 'All People Can Operate And Persevere In Adversity',
+    anchor: 'Visualize agent gearing up - each trait becomes a piece of equipment',
+    narration: 'Stay alert to every cue. Be patient but in control. Project credibility. Remain objective. Adapt quickly. Persevere under pressure. Maintain professional appearance. Act with initiative.',
+    frequency: '10 Hz Alpha',
+    duration: 20,
+    glyph: '◉',
+    timing: [
+      { time: 0, text: 'ALERTNESS', cue: 'flashlight', type: 'keyword' },
+      { time: 5, text: 'Stay alert to every cue. Notice micro-expressions.', type: 'narration' },
+      { time: 10, text: 'PATIENCE', cue: 'breath', type: 'keyword' },
+      { time: 15, text: 'Be patient but in control. Build rapport slowly.', type: 'narration' }
+    ]
+  },
+  {
+    id: 'five-phases',
+    title: 'Five Phases of HUMINT',
+    keywords: ['Planning', 'Approach', 'Questioning', 'Termination', 'Reporting'],
+    mnemonic: 'Plan Ahead Quickly To Report',
+    anchor: 'Flashlight blink = restart at Phase 1',
+    narration: 'Plan before action. Approach with rapport. Question with intent. Terminate cleanly. Report completely.',
+    frequency: '14 Hz Low-Beta',
+    duration: 15,
+    glyph: '⬟',
+    timing: [
+      { time: 0, text: 'PLANNING', cue: 'flashlight_blink', type: 'keyword' },
+      { time: 3, text: 'Research mission. Know your target.', type: 'narration' },
+      { time: 6, text: 'APPROACH', cue: 'wrist_tap', type: 'keyword' },
+      { time: 9, text: 'Establish rapport. Build trust.', type: 'narration' },
+      { time: 12, text: 'QUESTIONING', cue: 'pen_tap', type: 'keyword' }
+    ]
+  },
+  {
+    id: 'humint-activities',
+    title: 'HUMINT Activities',
+    keywords: ['Immediate', 'Cooperative', 'Long-Term', 'Material'],
+    mnemonic: 'Tactical/Screening → Debrief/Liaison → SCO → DOCEX/CEE',
+    anchor: 'Wrist tap → recall pyramid: base (Immediate), middle (Cooperative), top (Long-Term), capstone (Material)',
+    narration: 'Immediate questioning brings fast answers. Cooperative sources offer depth. Long-term contacts build networks. Material exploitation reveals hidden truth.',
+    frequency: '10 Hz Alpha',
+    duration: 15,
+    glyph: '△',
+    timing: [
+      { time: 0, text: 'IMMEDIATE', cue: 'wrist_tap', type: 'keyword' },
+      { time: 4, text: 'Tactical questioning. Fast intel.', type: 'narration' },
+      { time: 8, text: 'COOPERATIVE', cue: 'pen_tap', type: 'keyword' },
+      { time: 12, text: 'Debrief willing sources.', type: 'narration' }
+    ]
+  },
+  {
+    id: 'knowledge-areas',
+    title: 'Knowledge Areas',
+    keywords: ['Culture', 'Threat', 'Law', 'Requirements', 'Language', 'Behavior'],
+    mnemonic: 'CTL-LRB',
+    anchor: 'Whisper phrase "Context First." Visualize six-point web.',
+    narration: 'Culture drives behavior. Threat defines urgency. Law shapes limits. Requirements focus collection. Language enables control. Behavior exposes the truth.',
+    frequency: '10 Hz Alpha → 6 Hz Theta',
+    duration: 20,
+    glyph: '⬢',
+    timing: [
+      { time: 0, text: 'CULTURE', cue: 'whisper', type: 'keyword' },
+      { time: 5, text: 'Context First. Understand cultural drivers.', type: 'narration' },
+      { time: 10, text: 'THREAT', cue: 'visual_web', type: 'keyword' },
+      { time: 15, text: 'Threat defines urgency.', type: 'narration' }
+    ]
+  },
+  {
+    id: 'capabilities-limitations',
+    title: 'Capabilities vs Limitations',
+    keywords: ['Cross-cue', 'Detail', 'Deployability', 'Unique Intel', 'Language', 'Culture', 'Time', 'Law'],
+    mnemonic: 'Strengths vs Constraints',
+    anchor: 'Visualize a balance scale - strengths on the left, constraints on the right',
+    narration: 'HUMINT excels in detail and adaptability. Yet language, culture, time, and law bind its limits.',
+    frequency: '8 Hz Theta',
+    duration: 15,
+    glyph: '⚖',
+    timing: [
+      { time: 0, text: 'CAPABILITIES', cue: 'balance_left', type: 'keyword' },
+      { time: 7, text: 'LIMITATIONS', cue: 'balance_right', type: 'keyword' },
+      { time: 12, text: 'Balance strengths with constraints.', type: 'narration' }
+    ]
+  },
+  {
+    id: 'compression-drill',
+    title: 'Compression Drill (Chalice/Delta)',
+    keywords: ['Process', 'Execution', 'CONTROL'],
+    mnemonic: 'Traits + Phases → Activities + Knowledge → CONTROL',
+    anchor: 'Say CONTROL. Visualize it pulsing in your mind. Let CONTROL expand upward into full schema.',
+    narration: 'Traits and Phases form Process. Activities and Knowledge form Execution. Together, they compress into one anchor: CONTROL.',
+    frequency: '3 Hz Delta',
+    duration: 10,
+    glyph: '◈',
+    timing: [
+      { time: 0, text: 'CONTROL', cue: 'delta_pulse', type: 'anchor' },
+      { time: 3, text: 'Process + Execution = CONTROL', type: 'compression' },
+      { time: 6, text: 'Feel CONTROL expand into full schema.', type: 'visualization' }
+    ]
+  }
+];
+
+// Frequency protocols for different phases
+const FREQUENCY_PROTOCOLS = {
+  'surface': { freq: 10, type: 'Alpha', description: 'Surface learning and keyword memorization' },
+  'study': { freq: 14, type: 'Low-Beta', description: 'Active learning and comprehension' },
+  'encode': { freq: 6, type: 'Theta', description: 'Deep encoding and schema formation' },
+  'anchor': { freq: 3, type: 'Delta', description: 'Anchor compression and long-term storage' }
+};
+
+interface TrainingSession {
+  currentSection: number;
+  isRunning: boolean;
+  sessionTime: number;
+  sectionTime: number;
+  currentPhase: string;
+  frequency: number;
+  showVisuals: boolean;
+  showTeleprompter: boolean;
+}
+
+export function HumintTrainingTool() {
+  const [session, setSession] = useState<TrainingSession>({
+    currentSection: 0,
+    isRunning: false,
+    sessionTime: 0,
+    sectionTime: 0,
+    currentPhase: 'surface',
+    frequency: 10,
+    showVisuals: true,
+    showTeleprompter: true
+  });
+
+  const [currentTiming, setCurrentTiming] = useState(0);
+  const sessionTimer = useRef<NodeJS.Timeout>();
+  const sectionTimer = useRef<NodeJS.Timeout>();
+
+  const currentSection = HUMINT_SECTIONS[session.currentSection];
+  const totalDuration = HUMINT_SECTIONS.reduce((sum, section) => sum + section.duration, 0);
+
+  // Session control functions
+  const startSession = () => {
+    setSession(prev => ({ ...prev, isRunning: true }));
+    
+    sessionTimer.current = setInterval(() => {
+      setSession(prev => ({ ...prev, sessionTime: prev.sessionTime + 1 }));
+    }, 1000);
+
+    sectionTimer.current = setInterval(() => {
+      setSession(prev => {
+        const newSectionTime = prev.sectionTime + 1;
+        if (newSectionTime >= currentSection.duration * 60) {
+          // Move to next section
+          const nextSection = prev.currentSection + 1;
+          if (nextSection < HUMINT_SECTIONS.length) {
+            return {
+              ...prev,
+              currentSection: nextSection,
+              sectionTime: 0
+            };
+          } else {
+            // Session complete
+            return { ...prev, isRunning: false };
+          }
+        }
+        return { ...prev, sectionTime: newSectionTime };
+      });
+    }, 1000);
+  };
+
+  const pauseSession = () => {
+    setSession(prev => ({ ...prev, isRunning: false }));
+    if (sessionTimer.current) clearInterval(sessionTimer.current);
+    if (sectionTimer.current) clearInterval(sectionTimer.current);
+  };
+
+  const resetSession = () => {
+    setSession({
+      currentSection: 0,
+      isRunning: false,
+      sessionTime: 0,
+      sectionTime: 0,
+      currentPhase: 'surface',
+      frequency: 10,
+      showVisuals: true,
+      showTeleprompter: true
+    });
+    setCurrentTiming(0);
+    if (sessionTimer.current) clearInterval(sessionTimer.current);
+    if (sectionTimer.current) clearInterval(sectionTimer.current);
+  };
+
+  // Format time display
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Get current timing cue
+  const getCurrentTimingCue = () => {
+    const sectionTimeInSec = session.sectionTime;
+    const timingPoint = currentSection.timing.find((timing, index) => {
+      const nextTiming = currentSection.timing[index + 1];
+      return sectionTimeInSec >= timing.time && (!nextTiming || sectionTimeInSec < nextTiming.time);
+    });
+    return timingPoint;
+  };
+
+  const currentCue = getCurrentTimingCue();
+
+  useEffect(() => {
+    return () => {
+      if (sessionTimer.current) clearInterval(sessionTimer.current);
+      if (sectionTimer.current) clearInterval(sectionTimer.current);
+    };
+  }, []);
+
+  return (
+    <div className="space-y-6">
+      {/* Session Header */}
+      <Card className="bg-black/50 border-red-500/30">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <Brain className="w-8 h-8 text-red-400" />
+              <div>
+                <CardTitle className="text-2xl text-red-400">HUMINT AIO Training Tool</CardTitle>
+                <p className="text-gray-400">Blackbriar Enhanced • Chalice/Cone Adaptive Learning Model™</p>
+              </div>
+            </div>
+            <Badge variant="outline" className="text-yellow-400 border-yellow-500">
+              CLASSIFIED SECTION TRAINING
+            </Badge>
+          </div>
+        </CardHeader>
+      </Card>
+
+      {/* Session Controls */}
+      <Card className="bg-black/50 border-gray-700">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-4">
+              <div className="text-sm">
+                <div className="text-gray-400">Session Time</div>
+                <div className="text-xl font-mono text-green-400">{formatTime(session.sessionTime)}</div>
+              </div>
+              <Separator orientation="vertical" className="h-12" />
+              <div className="text-sm">
+                <div className="text-gray-400">Section Time</div>
+                <div className="text-xl font-mono text-blue-400">{formatTime(session.sectionTime)}</div>
+              </div>
+              <Separator orientation="vertical" className="h-12" />
+              <div className="text-sm">
+                <div className="text-gray-400">Current Phase</div>
+                <div className="text-lg text-purple-400">{session.currentPhase}</div>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              {!session.isRunning ? (
+                <Button onClick={startSession} className="bg-green-600 hover:bg-green-700">
+                  <Play className="w-4 h-4 mr-2" />
+                  Start Session
+                </Button>
+              ) : (
+                <Button onClick={pauseSession} className="bg-yellow-600 hover:bg-yellow-700">
+                  <Pause className="w-4 h-4 mr-2" />
+                  Pause
+                </Button>
+              )}
+              <Button onClick={resetSession} variant="outline">
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Reset
+              </Button>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm text-gray-400">
+              <span>Session Progress</span>
+              <span>{Math.round((session.sessionTime / (totalDuration * 60)) * 100)}%</span>
+            </div>
+            <Progress value={(session.sessionTime / (totalDuration * 60)) * 100} className="h-2" />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Main Training Interface */}
+      <Tabs defaultValue="teleprompter" className="space-y-4">
+        <TabsList className="grid grid-cols-4 w-full">
+          <TabsTrigger value="teleprompter">Teleprompter</TabsTrigger>
+          <TabsTrigger value="visuals">Visual Glyphs</TabsTrigger>
+          <TabsTrigger value="frequency">Frequency</TabsTrigger>
+          <TabsTrigger value="scenario">Scenarios</TabsTrigger>
+        </TabsList>
+
+        {/* Teleprompter Tab */}
+        <TabsContent value="teleprompter" className="space-y-4">
+          <Card className="bg-black/70 border-cyan-500/30">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-cyan-400">
+                  Section {session.currentSection + 1}: {currentSection.title}
+                </CardTitle>
+                <div className="flex items-center space-x-2">
+                  <Badge variant="outline" className="text-purple-400">
+                    {currentSection.frequency}
+                  </Badge>
+                  <Badge variant="outline" className="text-green-400">
+                    {currentSection.duration}min
+                  </Badge>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Current Cue Display */}
+              {currentCue && (
+                <div className="p-4 bg-cyan-600/10 border border-cyan-500/30 rounded-lg">
+                  <div className="flex items-center space-x-3 mb-2">
+                    <Timer className="w-4 h-4 text-cyan-400" />
+                    <span className="text-sm text-cyan-400">
+                      [{formatTime(currentCue.time)}] {currentCue.type.toUpperCase()}
+                    </span>
+                    {currentCue.cue && (
+                      <Badge variant="outline" className="text-yellow-400 text-xs">
+                        {currentCue.cue}
+                      </Badge>
+                    )}
+                  </div>
+                  <div className={`text-lg ${
+                    currentCue.type === 'keyword' ? 'font-bold text-white' :
+                    currentCue.type === 'anchor' ? 'text-red-400 font-bold' :
+                    'text-gray-300 italic'
+                  }`}>
+                    {currentCue.text}
+                  </div>
+                </div>
+              )}
+
+              {/* Keywords */}
+              <div>
+                <h4 className="text-sm font-semibold text-gray-400 mb-2">KEYWORDS:</h4>
+                <div className="flex flex-wrap gap-2">
+                  {currentSection.keywords.map((keyword, index) => (
+                    <Badge key={index} variant="outline" className="text-white">
+                      {keyword}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mnemonic */}
+              <div className="p-3 bg-green-600/10 border border-green-500/30 rounded">
+                <div className="text-sm font-semibold text-green-400 mb-1">MNEMONIC:</div>
+                <div className="text-green-200 font-mono">"{currentSection.mnemonic}"</div>
+              </div>
+
+              {/* Narration Flow */}
+              <div className="p-3 bg-blue-600/10 border border-blue-500/30 rounded">
+                <div className="text-sm font-semibold text-blue-400 mb-1">NARRATION FLOW:</div>
+                <div className="text-blue-200 italic">{currentSection.narration}</div>
+              </div>
+
+              {/* Anchor */}
+              <div className="p-3 bg-red-600/10 border border-red-500/30 rounded">
+                <div className="text-sm font-semibold text-red-400 mb-1">ANCHOR:</div>
+                <div className="text-red-200">{currentSection.anchor}</div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Visual Glyphs Tab */}
+        <TabsContent value="visuals" className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="bg-black/50 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center space-x-2">
+                  <Eye className="w-5 h-5 text-purple-400" />
+                  <span>Sacred Geometry Wheel</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-center">
+                  <SacredGeometryWheel 
+                    brainwaveFrequency={session.frequency}
+                    size={300}
+                    speed={session.isRunning ? 1 : 0}
+                    intensity={session.isRunning ? 0.8 : 0.3}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-black/50 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center space-x-2">
+                  <Target className="w-5 h-5 text-cyan-400" />
+                  <span>HUMINT Glyphs</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="text-center">
+                  <div className="text-6xl text-cyan-400 mb-2">{currentSection.glyph}</div>
+                  <div className="text-sm text-gray-400">{currentSection.title}</div>
+                </div>
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  {HUMINT_SECTIONS.map((section, index) => (
+                    <div 
+                      key={section.id}
+                      className={`p-3 rounded border ${
+                        index === session.currentSection 
+                          ? 'border-cyan-500 bg-cyan-600/10' 
+                          : 'border-gray-600 bg-gray-800/20'
+                      }`}
+                    >
+                      <div className="text-2xl mb-1">{section.glyph}</div>
+                      <div className="text-xs text-gray-400">{section.title}</div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Frequency Tab */}
+        <TabsContent value="frequency" className="space-y-4">
+          <Card className="bg-black/50 border-gray-700">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center space-x-2">
+                <Volume2 className="w-5 h-5 text-green-400" />
+                <span>Frequency Entrainment</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-white mb-2">
+                    Current Frequency: {session.frequency} Hz
+                  </div>
+                  <div className="text-sm text-gray-400">
+                    Phase: {FREQUENCY_PROTOCOLS[session.currentPhase as keyof typeof FREQUENCY_PROTOCOLS]?.description}
+                  </div>
+                </div>
+                <BinauralBeatGenerator />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Scenarios Tab */}
+        <TabsContent value="scenario" className="space-y-4">
+          <Card className="bg-black/50 border-gray-700">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center space-x-2">
+                <Zap className="w-5 h-5 text-yellow-400" />
+                <span>Situational Training Scenarios</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-8">
+                <div className="text-yellow-400 mb-4">
+                  <Flashlight className="w-16 h-16 mx-auto" />
+                </div>
+                <h3 className="text-xl text-white mb-2">Advanced Scenarios</h3>
+                <p className="text-gray-400">
+                  Situational training scenarios will be activated based on section progress and Chalice/Cone adaptive learning model.
+                </p>
+                <Badge variant="outline" className="mt-4 text-orange-400">
+                  COMING SOON
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
