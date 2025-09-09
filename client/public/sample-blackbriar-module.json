@@ -1,0 +1,76 @@
+{
+  "id": "blackbriar-advanced",
+  "title": "Blackbriar Advanced HUMINT Protocol",
+  "description": "Advanced psychological operations training from classified Blackbriar archives",
+  "totalDuration": 75,
+  "sections": [
+    {
+      "id": "psychological-dominance",
+      "title": "Psychological Dominance",
+      "keywords": ["Authority", "Presence", "Control", "Influence", "Intimidation", "Rapport"],
+      "mnemonic": "Authority Presence Controls Intimidation Rapport",
+      "anchor": "Visualize yourself as the dominant figure in any room - feel the psychological weight",
+      "narration": "Command authority through presence. Control through influence. Build rapport, then leverage it.",
+      "frequency": "12 Hz Low-Beta",
+      "duration": 25,
+      "glyph": "⬟",
+      "timing": [
+        { "time": 0, "text": "AUTHORITY", "cue": "spine_straight", "type": "keyword" },
+        { "time": 5, "text": "Stand tall. Project dominance.", "type": "narration" },
+        { "time": 10, "text": "PRESENCE", "cue": "eye_contact", "type": "keyword" },
+        { "time": 15, "text": "Fill the space. Own the moment.", "type": "narration" },
+        { "time": 20, "text": "CONTROL", "cue": "breath_hold", "type": "anchor" }
+      ]
+    },
+    {
+      "id": "counter-surveillance",
+      "title": "Counter-Surveillance Protocol",
+      "keywords": ["Detection", "Evasion", "Misdirection", "Counter-Intel"],
+      "mnemonic": "Detect Evade Misdirect Counter",
+      "anchor": "Mirror tap - you see everything, they see nothing",
+      "narration": "Always watching. Never watched. Detect their patterns. Break your own.",
+      "frequency": "8 Hz Theta",
+      "duration": 20,
+      "glyph": "◉",
+      "timing": [
+        { "time": 0, "text": "DETECTION", "cue": "peripheral_scan", "type": "keyword" },
+        { "time": 5, "text": "Scan without looking. Feel their eyes.", "type": "narration" },
+        { "time": 10, "text": "EVASION", "cue": "route_change", "type": "keyword" },
+        { "time": 15, "text": "Break patterns. Become unpredictable.", "type": "narration" }
+      ]
+    },
+    {
+      "id": "memory-palace",
+      "title": "Memory Palace Protocol",
+      "keywords": ["Palace", "Routes", "Anchors", "Retrieval"],
+      "mnemonic": "Palace Routes Anchor Retrieve",
+      "anchor": "Touch temple - access the palace immediately",
+      "narration": "Build mental architecture. Store secrets in rooms. Navigate at will.",
+      "frequency": "6 Hz Theta",
+      "duration": 20,
+      "glyph": "🏰",
+      "timing": [
+        { "time": 0, "text": "PALACE", "cue": "temple_touch", "type": "keyword" },
+        { "time": 5, "text": "Construct the architecture in your mind.", "type": "visualization" },
+        { "time": 10, "text": "ROUTES", "cue": "path_walk", "type": "keyword" },
+        { "time": 15, "text": "Walk the familiar paths to stored knowledge.", "type": "visualization" }
+      ]
+    },
+    {
+      "id": "master-compression",
+      "title": "Master Compression (Delta)",
+      "keywords": ["Integration", "Synthesis", "BLACKBRIAR"],
+      "mnemonic": "Dominance + Surveillance + Memory = BLACKBRIAR",
+      "anchor": "Say BLACKBRIAR. Feel all protocols integrate into one unified system.",
+      "narration": "All systems converge. Psychological dominance, counter-surveillance, memory palace - unified in BLACKBRIAR protocol.",
+      "frequency": "3 Hz Delta",
+      "duration": 10,
+      "glyph": "◈",
+      "timing": [
+        { "time": 0, "text": "BLACKBRIAR", "cue": "full_integration", "type": "anchor" },
+        { "time": 3, "text": "Dominance + Surveillance + Memory = BLACKBRIAR", "type": "compression" },
+        { "time": 6, "text": "Feel the unified protocol activate in your consciousness.", "type": "visualization" }
+      ]
+    }
+  ]
+}
