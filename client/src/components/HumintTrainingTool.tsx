@@ -310,11 +310,29 @@ export function HumintTrainingTool() {
   const loadTrainingModule = (moduleJson: string) => {
     try {
       const newModule: TrainingModule = JSON.parse(moduleJson);
+      
+      // Validate required fields
+      if (!newModule.id || !newModule.title || !newModule.sections || newModule.sections.length === 0) {
+        throw new Error('Invalid module format: missing required fields');
+      }
+
+      // Validate sections have required fields
+      for (const section of newModule.sections) {
+        if (!section.id || !section.title || !section.timing) {
+          throw new Error(`Invalid section format in section: ${section.id || 'unknown'}`);
+        }
+      }
+
       setTrainingModule(newModule);
       // Reset session when new module is loaded
       resetSession();
+      
+      // Success feedback
+      alert(`✅ Module loaded successfully: ${newModule.title}\nSections: ${newModule.sections.length}\nDuration: ${newModule.totalDuration || 'Unknown'} minutes`);
+      
     } catch (error) {
-      console.error('Invalid training module JSON:', error);
+      console.error('Failed to load training module:', error);
+      alert(`❌ Failed to load module: ${error instanceof Error ? error.message : 'Invalid JSON format'}`);
     }
   };
 
@@ -451,15 +469,20 @@ export function HumintTrainingTool() {
                       const content = event.target?.result as string;
                       loadTrainingModule(content);
                     };
+                    reader.onerror = () => {
+                      alert('❌ Failed to read file');
+                    };
                     reader.readAsText(file);
                   }
+                  // Reset the input so the same file can be loaded again
+                  e.target.value = '';
                 }}
                 className="hidden"
                 id="module-upload"
               />
               <label htmlFor="module-upload">
-                <Button variant="outline" size="sm" className="cursor-pointer">
-                  Load Module
+                <Button variant="outline" size="sm" className="cursor-pointer" data-testid="load-module-button">
+                  📁 Load Module
                 </Button>
               </label>
             </div>
