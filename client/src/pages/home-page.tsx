@@ -3,12 +3,11 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Shield, Code, Zap, Brain, Users, TrendingUp, Lock, Star, ChevronRight, Timer } from "lucide-react";
+import { Shield, Code, Zap, Brain, Users, TrendingUp, Lock, Star, ChevronRight, Timer, Terminal, FileText, Settings, Search, Play, BarChart3, Database, Wifi } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { FrequencyLogo } from "@/components/frequency-logo";
 import { BrainwaveFrequencyDisplay } from "@/components/brainwave-frequency-display";
 import { BrainwaveSynchronizedWheel } from "@/components/brainwave-synchronized-wheel";
-import { EnhancedTerminal } from "@/components/enhanced-terminal";
 
 export default function HomePage() {
   const [wheelSize, setWheelSize] = useState(350);
@@ -251,15 +250,18 @@ export default function HomePage() {
             <BrainwaveFrequencyDisplay className="mx-auto max-w-6xl" />
           </div>
 
-          {/* Interactive Terminal - Primary Interface */}
+          {/* Mock Termux Interface - Button Based */}
           <div className="mb-16 max-w-4xl mx-auto px-4">
             <div className="text-center mb-6">
               <h3 className="text-xl sm:text-2xl font-bold text-terminal-red-bright mb-2 font-mono">
                 Neural Command Interface
               </h3>
-              <p className="text-sm text-gray-400">Try the demo • Full access requires subscription</p>
+              <p className="text-sm text-gray-400">Tap commands • Full access requires subscription</p>
             </div>
+            
+            {/* Termux-style interface */}
             <div className="bg-black rounded-lg border border-gray-600 overflow-hidden shadow-2xl">
+              {/* Header bar */}
               <div className="bg-gray-900 px-3 sm:px-4 py-2 flex items-center justify-between border-b border-gray-700">
                 <div className="flex items-center space-x-3">
                   <div className="flex items-center space-x-1">
@@ -285,8 +287,112 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-              <div className="h-96 sm:h-[500px]">
-                <EnhancedTerminal />
+              
+              {/* Terminal content area */}
+              <div className="bg-black p-4 space-y-3">
+                {/* Welcome message */}
+                <div className="text-green-400 text-sm font-mono mb-4">
+                  <span className="text-gray-500">$</span> welcome to neural matrix v2.1.3
+                  <br />
+                  <span className="text-gray-400">Type commands or tap buttons below...</span>
+                </div>
+                
+                {/* Command buttons grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                  <Link href="/subscribe">
+                    <Button 
+                      variant="outline" 
+                      className="w-full bg-gray-900 border-red-600/50 text-red-400 hover:bg-red-600/20 hover:text-red-300 h-16 flex flex-col items-center justify-center space-y-1"
+                      data-testid="button-upgrade"
+                    >
+                      <Lock className="w-5 h-5" />
+                      <span className="text-xs font-mono">upgrade</span>
+                    </Button>
+                  </Link>
+                  
+                  <Button 
+                    variant="outline" 
+                    className="w-full bg-gray-900 border-gray-600 text-cyan-400 hover:bg-cyan-600/20 hover:text-cyan-300 h-16 flex flex-col items-center justify-center space-y-1"
+                    data-testid="button-alpha"
+                  >
+                    <Zap className="w-5 h-5" />
+                    <span className="text-xs font-mono">alpha</span>
+                  </Button>
+                  
+                  <Button 
+                    variant="outline" 
+                    className="w-full bg-gray-900 border-gray-600 text-blue-400 hover:bg-blue-600/20 hover:text-blue-300 h-16 flex flex-col items-center justify-center space-y-1"
+                    data-testid="button-beta"
+                  >
+                    <BarChart3 className="w-5 h-5" />
+                    <span className="text-xs font-mono">beta</span>
+                  </Button>
+                  
+                  <Button 
+                    variant="outline" 
+                    className="w-full bg-gray-900 border-gray-600 text-purple-400 hover:bg-purple-600/20 hover:text-purple-300 h-16 flex flex-col items-center justify-center space-y-1"
+                    data-testid="button-theta"
+                  >
+                    <Brain className="w-5 h-5" />
+                    <span className="text-xs font-mono">theta</span>
+                  </Button>
+                  
+                  <Button 
+                    variant="outline" 
+                    className="w-full bg-gray-900 border-gray-600 text-green-400 hover:bg-green-600/20 hover:text-green-300 h-16 flex flex-col items-center justify-center space-y-1"
+                    data-testid="button-gamma"
+                  >
+                    <Wifi className="w-5 h-5" />
+                    <span className="text-xs font-mono">gamma</span>
+                  </Button>
+                  
+                  <Link href="/neural-matrix">
+                    <Button 
+                      variant="outline" 
+                      className="w-full bg-gray-900 border-gray-600 text-yellow-400 hover:bg-yellow-600/20 hover:text-yellow-300 h-16 flex flex-col items-center justify-center space-y-1"
+                      data-testid="button-matrix"
+                    >
+                      <Database className="w-5 h-5" />
+                      <span className="text-xs font-mono">matrix</span>
+                    </Button>
+                  </Link>
+                  
+                  <Link href="/ops-manual">
+                    <Button 
+                      variant="outline" 
+                      className="w-full bg-gray-900 border-gray-600 text-orange-400 hover:bg-orange-600/20 hover:text-orange-300 h-16 flex flex-col items-center justify-center space-y-1"
+                      data-testid="button-ops"
+                    >
+                      <FileText className="w-5 h-5" />
+                      <span className="text-xs font-mono">ops</span>
+                    </Button>
+                  </Link>
+                  
+                  <Link href="/methodology">
+                    <Button 
+                      variant="outline" 
+                      className="w-full bg-gray-900 border-gray-600 text-gray-400 hover:bg-gray-600/20 hover:text-gray-300 h-16 flex flex-col items-center justify-center space-y-1"
+                      data-testid="button-research"
+                    >
+                      <Search className="w-5 h-5" />
+                      <span className="text-xs font-mono">research</span>
+                    </Button>
+                  </Link>
+                </div>
+                
+                {/* Status line */}
+                <div className="mt-6 pt-4 border-t border-gray-800 text-xs font-mono text-gray-500">
+                  <div className="flex items-center justify-between">
+                    <span>Status: <span className="text-yellow-400">Demo Mode</span></span>
+                    <span>Users: <span className="text-green-400">{currentUserCount}</span></span>
+                  </div>
+                  <div className="mt-2 text-gray-600">
+                    For full access to all neural frequencies, 
+                    <Link href="/subscribe" className="text-red-400 hover:text-red-300 underline">
+                      upgrade to neurohacker elite
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
