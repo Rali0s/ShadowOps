@@ -1,8 +1,9 @@
 import { FrequencyGenerator } from '@/components/FrequencyGenerator';
 import { BinauralBeatGenerator } from '@/components/BinauralBeatGenerator';
+import { FrequencyChart } from '@/components/FrequencyChart';
 import { BrainwaveSynchronizedWheel } from '@/components/brainwave-synchronized-wheel';
 import { Link } from 'wouter';
-import { ArrowLeft, Brain, Zap } from 'lucide-react';
+import { ArrowLeft, Brain, Zap, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState, useEffect } from 'react';
@@ -91,9 +92,9 @@ export default function FrequencyGeneratorPage() {
         </div>
 
         {/* Dual Generator Interface */}
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <Tabs defaultValue="single" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-900 border border-gray-700">
+            <TabsList className="grid w-full grid-cols-3 mb-6 bg-gray-900 border border-gray-700">
               <TabsTrigger value="single" className="flex items-center space-x-2" data-testid="tab-single">
                 <Brain className="w-4 h-4" />
                 <span>Single Tone</span>
@@ -101,6 +102,10 @@ export default function FrequencyGeneratorPage() {
               <TabsTrigger value="binaural" className="flex items-center space-x-2" data-testid="tab-binaural">
                 <Zap className="w-4 h-4" />
                 <span>Binaural Beats</span>
+              </TabsTrigger>
+              <TabsTrigger value="chart" className="flex items-center space-x-2" data-testid="tab-chart">
+                <BookOpen className="w-4 h-4" />
+                <span>Frequency Chart</span>
               </TabsTrigger>
             </TabsList>
             
@@ -115,9 +120,15 @@ export default function FrequencyGeneratorPage() {
             <TabsContent value="binaural" className="space-y-6">
               <div className="text-center mb-4">
                 <h3 className="text-xl font-bold text-white mb-2">Binaural Beat Protocols</h3>
-                <p className="text-gray-400 text-sm">Dual-tone carrier system for advanced cognitive states</p>
+                <p className="text-gray-400 text-sm">Evidence-based dual-tone carrier system for cognitive enhancement</p>
               </div>
-              <BinauralBeatGenerator onFrequencyChange={handleBinauralFrequencyChange} />
+              <div className="max-w-4xl mx-auto">
+                <BinauralBeatGenerator onFrequencyChange={handleBinauralFrequencyChange} />
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="chart" className="space-y-6">
+              <FrequencyChart />
             </TabsContent>
           </Tabs>
         </div>
