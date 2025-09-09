@@ -250,62 +250,14 @@ export default function HomePage() {
               </div>
               
               {/* Terminal content area */}
-              <div className="bg-black p-4 space-y-3">
+              <div className="bg-black p-3 space-y-2">
                 {/* Welcome message */}
-                <div className="text-green-400 text-sm font-mono mb-4">
-                  <span className="text-gray-500">$</span> welcome to neural matrix v2.1.3
-                  <br />
-                  <span className="text-gray-400">Type commands or tap buttons below...</span>
+                <div className="text-green-400 text-sm font-mono mb-3">
+                  <span className="text-gray-500">$</span> neural_matrix_v2.1.3 <span className="text-gray-400">ready</span>
                 </div>
                 
-                {/* Command buttons grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                  <Link href="/subscribe">
-                    <Button 
-                      variant="outline" 
-                      className="w-full bg-gray-900 border-red-600/50 text-red-400 hover:bg-red-600/20 hover:text-red-300 h-16 flex flex-col items-center justify-center space-y-1"
-                      data-testid="button-upgrade"
-                    >
-                      <Lock className="w-5 h-5" />
-                      <span className="text-xs font-mono">upgrade</span>
-                    </Button>
-                  </Link>
-                  
-                  <Button 
-                    variant="outline" 
-                    className="w-full bg-gray-900 border-gray-600 text-cyan-400 hover:bg-cyan-600/20 hover:text-cyan-300 h-16 flex flex-col items-center justify-center space-y-1"
-                    data-testid="button-alpha"
-                  >
-                    <Zap className="w-5 h-5" />
-                    <span className="text-xs font-mono">alpha</span>
-                  </Button>
-                  
-                  <Button 
-                    variant="outline" 
-                    className="w-full bg-gray-900 border-gray-600 text-blue-400 hover:bg-blue-600/20 hover:text-blue-300 h-16 flex flex-col items-center justify-center space-y-1"
-                    data-testid="button-beta"
-                  >
-                    <BarChart3 className="w-5 h-5" />
-                    <span className="text-xs font-mono">beta</span>
-                  </Button>
-                  
-                  <Button 
-                    variant="outline" 
-                    className="w-full bg-gray-900 border-gray-600 text-purple-400 hover:bg-purple-600/20 hover:text-purple-300 h-16 flex flex-col items-center justify-center space-y-1"
-                    data-testid="button-theta"
-                  >
-                    <Brain className="w-5 h-5" />
-                    <span className="text-xs font-mono">theta</span>
-                  </Button>
-                  
-                  <Button 
-                    variant="outline" 
-                    className="w-full bg-gray-900 border-gray-600 text-green-400 hover:bg-green-600/20 hover:text-green-300 h-16 flex flex-col items-center justify-center space-y-1"
-                    data-testid="button-gamma"
-                  >
-                    <Wifi className="w-5 h-5" />
-                    <span className="text-xs font-mono">gamma</span>
-                  </Button>
+                {/* Command buttons grid - Streamlined */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   
                   <Link href="/neural-matrix">
                     <Button 

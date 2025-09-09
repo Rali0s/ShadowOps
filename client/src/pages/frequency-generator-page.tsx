@@ -1,35 +1,81 @@
 import { FrequencyGenerator } from '@/components/FrequencyGenerator';
+import { BrainwaveSynchronizedWheel } from '@/components/brainwave-synchronized-wheel';
 import { Link } from 'wouter';
 import { ArrowLeft, Brain } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useState, useEffect } from 'react';
 
 export default function FrequencyGeneratorPage() {
+  const [currentFrequency, setCurrentFrequency] = useState(432);
+  const [wheelSize, setWheelSize] = useState(200);
+
+  // Update wheel size based on screen
+  useEffect(() => {
+    const updateSize = () => {
+      if (window.innerWidth < 640) {
+        setWheelSize(150);
+      } else if (window.innerWidth < 768) {
+        setWheelSize(200);
+      } else {
+        setWheelSize(250);
+      }
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
+  // Listen for frequency changes from the generator
+  useEffect(() => {
+    const handleFrequencyChange = (event: CustomEvent) => {
+      setCurrentFrequency(event.detail.frequency);
+    };
+
+    window.addEventListener('frequencyChange', handleFrequencyChange as EventListener);
+    return () => {
+      window.removeEventListener('frequencyChange', handleFrequencyChange as EventListener);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-terminal-bg text-gray-100">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <Link href="/">
+      <div className="container mx-auto px-4 py-4 sm:py-8">
+        {/* Header - Fixed responsive layout */}
+        <div className="flex flex-col sm:flex-row items-center justify-between mb-6 sm:mb-8 space-y-4 sm:space-y-0">
+          <Link href="/" className="self-start sm:self-center">
             <Button variant="ghost" className="text-gray-400 hover:text-white">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Terminal
             </Button>
           </Link>
           
-          <div className="text-center">
+          <div className="text-center flex-1">
             <div className="flex items-center justify-center space-x-2 mb-2">
               <Brain className="w-6 h-6 text-red-400" />
-              <h1 className="text-2xl font-bold text-white font-mono">Neural Frequency Lab</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-white font-mono">Neural Frequency Lab</h1>
             </div>
             <p className="text-gray-400 text-sm">Precision brainwave frequency synthesis</p>
           </div>
           
-          <div className="w-20"></div> {/* Spacer for centering */}
+          <div className="w-20 hidden sm:block"></div> {/* Spacer for centering on desktop */}
+        </div>
+
+        {/* Visual Matrix Sync */}
+        <div className="text-center mb-8">
+          <BrainwaveSynchronizedWheel 
+            size={wheelSize} 
+            frequency={currentFrequency}
+            className="mb-4"
+          />
+          <p className="text-sm text-gray-400">
+            Visual matrix synced to frequency: <span className="text-red-400 font-mono">{currentFrequency.toFixed(1)} Hz</span>
+          </p>
         </div>
 
         {/* Main Generator */}
         <div className="max-w-2xl mx-auto">
-          <FrequencyGenerator />
+          <FrequencyGenerator onFrequencyChange={setCurrentFrequency} />
         </div>
 
         {/* Quick Presets */}

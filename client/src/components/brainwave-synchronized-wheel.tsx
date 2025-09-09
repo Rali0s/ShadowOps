@@ -4,11 +4,13 @@ import { SacredGeometryWheel } from "./sacred-geometry-wheel";
 interface BrainwaveSynchronizedWheelProps {
   className?: string;
   size?: number;
+  frequency?: number; // External frequency control
 }
 
 export function BrainwaveSynchronizedWheel({ 
   className = "",
-  size = 350 
+  size = 350,
+  frequency
 }: BrainwaveSynchronizedWheelProps) {
   const [currentFrequency, setCurrentFrequency] = useState(10); // Alpha start
   const [currentBand, setCurrentBand] = useState("Alpha");
@@ -22,24 +24,35 @@ export function BrainwaveSynchronizedWheel({
     { name: "Gamma", min: 30, max: 100, color: "rgba(220, 50, 50, 0.8)" }
   ];
 
+  // Update frequency when external frequency changes
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-    
-    // Cycle through different frequencies every 8 seconds
-    intervalId = setInterval(() => {
-      const randomBand = frequencyBands[Math.floor(Math.random() * frequencyBands.length)];
-      const randomFreq = randomBand.min + Math.random() * (randomBand.max - randomBand.min);
+    if (frequency !== undefined) {
+      setCurrentFrequency(frequency);
       
-      setCurrentFrequency(randomFreq);
-      setCurrentBand(randomBand.name);
+      // Determine band based on frequency
+      const band = frequencyBands.find(b => frequency >= b.min && frequency <= b.max) || 
+                   { name: frequency > 100 ? "Ultra" : frequency < 4 ? "Delta" : "Custom" };
+      setCurrentBand(band.name);
       
       // Adjust intensity based on frequency
-      const normalizedIntensity = Math.min(1, (randomFreq - 4) / 96); // 4-100 Hz range
-      setIntensity(0.6 + normalizedIntensity * 0.4);
-    }, 8000);
+      const normalizedIntensity = Math.min(1, Math.max(0, (frequency - 0.5) / 99.5));
+      setIntensity(0.4 + normalizedIntensity * 0.6);
+    } else {
+      // Auto-cycle mode when no external frequency is provided
+      const intervalId = setInterval(() => {
+        const randomBand = frequencyBands[Math.floor(Math.random() * frequencyBands.length)];
+        const randomFreq = randomBand.min + Math.random() * (randomBand.max - randomBand.min);
+        
+        setCurrentFrequency(randomFreq);
+        setCurrentBand(randomBand.name);
+        
+        const normalizedIntensity = Math.min(1, (randomFreq - 4) / 96);
+        setIntensity(0.6 + normalizedIntensity * 0.4);
+      }, 8000);
 
-    return () => clearInterval(intervalId);
-  }, []);
+      return () => clearInterval(intervalId);
+    }
+  }, [frequency]);
 
   // Speed calculation based on frequency
   const getSpeed = (frequency: number) => {
