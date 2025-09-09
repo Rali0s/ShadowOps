@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { SacredGeometryWheel } from "@/components/sacred-geometry-wheel";
 import { TriggerAnchorSystem } from "@/components/trigger-anchor-system";
+import { WorkedExamples } from "@/components/WorkedExamples";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -18,36 +19,50 @@ interface OpsManual {
 
 const opsManuals: OpsManual[] = [
   {
-    id: 'theta-induction',
-    title: 'Theta Level Schema Induction',
+    id: 'frequency-neuro-programming',
+    title: 'Academic Memorization Schema',
     schemaType: 'A',
     duration: '1hr',
-    anchors: ['Visual dial recall', 'Cisco phone sound', 'Flashlight indicator'],
-    triggers: ['External sound trigger', 'Coo-coo clock timer', 'Internal OFF concept'],
-    tiedownProtocol: 'Debrief normalization - prevent cognitive dissonance',
+    anchors: ['Audio entrainment tools', 'Schema logbooks', 'Light/sound/touch cues'],
+    triggers: ['Pen tapping', 'Study frequency activation', 'Theta reinforcement'],
+    tiedownProtocol: 'Structured debrief with reality grounding confirmation',
     content: `
-THETA LEVEL PROGRAMMING PROTOCOL
+ACADEMIC MEMORIZATION SCHEMA - WORKED EXAMPLE
 
-Prerequisites:
-- Knowledge of MK-Ultra methodology
-- ECG baseline established
-- ENDEL sound app for brain states
-- Track book and log ready
+OBJECTIVE: 50 contract law clauses memorization and triggered recall
 
-Schema Design Process:
-1. Create desired schema or mindset (Type A)
-2. Record desired outcomes of schema
-3. Practice meditation to enter THETA level
-4. Introduction of prefabricated schema
-5. Add anchor/trigger at end of induction
+MATERIALS REQUIRED:
+• EEG devices for monitoring brainwave states
+• Audio entrainment tools (binaural beats, isochronic tones)
+• Schema logbooks for detailed documentation
+• Anchors: light cues, sound triggers, tactile stimuli
 
-Flow-Gate Processing:
-- Entrance: External trigger activation
-- Operation: Latent schema processing
-- Exit: Internal OFF or external stimulus
-- Tiedown: Grounding protocol activation
+SCHEMA DESIGN METHODOLOGY:
+1. Define Objective: Precise memorization of 50 contract law clauses
+2. Visualization: Vivid mental imagery of clause content and structure
+3. Concentration: Enter theta focus state (4-8 Hz) using audio entrainment
+4. Affirmation: "When I tap my pen, my memory releases the clauses"
+5. Anchoring: Pair pen tapping with clause recall during theta state
+6. Reinforcement: Rehearsal with 14 Hz beta (study), 6 Hz theta (consolidation)
 
-Warning: Longer flow states = increased cognitive dissonance risk
+FREQUENCY PROTOCOL:
+• Study Phase: 14-18 Hz low-beta for active learning and encoding
+• Encoding Phase: 6-8 Hz theta for deep memory consolidation 
+• Recall Phase: Triggered activation via pen tapping anchor
+
+SESSION STRUCTURE:
+• Phase 1: Beta entrainment during initial learning (30 min)
+• Phase 2: Theta induction for schema encoding (20 min)
+• Phase 3: Anchor/trigger pairing and reinforcement (10 min)
+• Phase 4: Tie-down protocol for cognitive integration
+
+EXIT & TIE-DOWN PROTOCOL:
+• FlowGate: Visual flashlight signal for controlled exit
+• DropGate: Auditory cue for immediate disengagement
+• Structured debrief to prevent disorientation
+• Reality check and cognitive dissonance prevention
+
+WARNING: Longer flow states increase cognitive dissonance risk. Monitor session duration carefully.
     `
   },
   {
@@ -157,11 +172,16 @@ export default function OpsManualPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-terminal-red-bright mb-2">
-          Operations Manual System
+          Frequency-Based Neuro-Programming Manual
         </h1>
         <p className="text-terminal-red-secondary">
-          Knot-So-lution Programming - Psychological Operations Framework
+          Comprehensive framework for memory & cognition enhancement
         </p>
+        <div className="mt-4 p-3 bg-yellow-600/10 border border-yellow-500/30 rounded-lg max-w-2xl mx-auto">
+          <p className="text-yellow-200 text-sm">
+            <strong>Academic Research Framework:</strong> Evidence-based approaches to cognitive enhancement using frequency entrainment as an ethical alternative to historical pharmacological methods.
+          </p>
+        </div>
       </div>
 
       {/* Sacred Geometry Visualization for Theta State */}
@@ -246,8 +266,9 @@ export default function OpsManualPage() {
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="content" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
+              <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="content">Manual Content</TabsTrigger>
+                <TabsTrigger value="examples">Worked Examples</TabsTrigger>
                 <TabsTrigger value="anchors">Anchor System</TabsTrigger>
                 <TabsTrigger value="triggers">Trigger Protocols</TabsTrigger>
                 <TabsTrigger value="tiedown">Tiedown Process</TabsTrigger>
@@ -257,6 +278,10 @@ export default function OpsManualPage() {
                 <pre className="text-sm text-terminal-red-secondary whitespace-pre-wrap bg-black/50 p-4 rounded border border-terminal-red-muted/20">
                   {selectedManual.content}
                 </pre>
+              </TabsContent>
+              
+              <TabsContent value="examples" className="mt-6">
+                <WorkedExamples />
               </TabsContent>
               
               <TabsContent value="anchors" className="mt-6">

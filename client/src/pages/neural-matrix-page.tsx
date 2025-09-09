@@ -17,58 +17,86 @@ interface ClassifiedDocument {
 
 const classifiedDocs: ClassifiedDocument[] = [
   {
-    id: 'bb-001',
-    title: 'Neural Matrix Psychological Programming Manual',
+    id: 'freq-neuro-manual',
+    title: 'Frequency-Based Neuro-Programming Research Manual',
     classification: 'DECLASSIFIED',
     source: 'NEURAL-MATRIX',
-    dateAcquired: 'Infiltration Phase Alpha',
-    content: `NEURAL MATRIX CLASSIFIED OPERATIONS MANUAL
+    dateAcquired: 'Academic Research Phase',
+    content: `COMPREHENSIVE RESEARCH FRAMEWORK FOR COGNITIVE ENHANCEMENT
     
-Subject: Psychological Programming Implementation
-Classification: FORMERLY TOP SECRET - NOW DECLASSIFIED
+Subject: Frequency-Based Neuro-Programming for Memory & Cognition Enhancement
+Classification: ACADEMIC RESEARCH - DECLASSIFIED
 
-INFILTRATION REPORT:
-Subject successfully penetrated Neural Matrix training facility by falsifying age documentation. Access gained to classified psychological programming manuals during pre-public release phase.
+ABSTRACT:
+Comprehensive research and experimental framework for memory and cognition enhancement using frequency-based entrainment as an ethical, replicable alternative to historical pharmacological methods. Building upon declassified MK-Ultra documents and schema-based psychological theory, it formalizes a dual-process model of cognition and proposes intentional design of schemas.
 
-TRAINING ACQUIRED:
-- Jason Bourne-style trigger activation protocols
-- MK-Ultra derivative methodologies
-- Theta state induction techniques
-- Schema programming (A, B, C classifications)
-- Trigger-anchor-knot systems
-- Tiedown protocols for cognitive dissonance prevention
+HISTORICAL CONTEXT:
+The CIA's MK-Ultra program attempted cognitive manipulation using chemical and behavioral methods. A 1963 Inspector General memorandum admitted no effective "truth serum" was found. Chemical manipulation proved inconsistent, risky, and ethically indefensible.
 
-WARNING: These techniques were classified for a reason. Implementation requires extreme caution and proper psychological safeguards.
+THEORETICAL FRAMEWORK:
 
-CURRENT STATUS: All materials now declassified and integrated into _Fq training platform.`,
+LONG VS. SHORT THINKING:
+• Long Thinking: deliberate, reflective reasoning used to build schemas
+• Short Thinking: rapid, automatic responses triggered by encoded schemas
+• Jason Bourne Effect: intentional design of triggers to activate Short Thinking when needed
+
+SCHEMA AND TRIGGER DESIGN:
+Schemas are mental programs binding Objects (knowledge, skills) to Triggers (sensory cues). Encoded in theta states, reinforced by entrainment, they enable automatic action.
+
+FREQUENCY ENTRAINMENT AS PSYCHOACTIVE ANALOGUE:
+• LSD analogue: 6–10 Hz theta-alpha crossover
+• Cannabis analogue: 8–12 Hz alpha relaxation
+• Opioid analogue: 1–3 Hz delta with noise
+
+HYPOTHESIS:
+Through frequency entrainment and schema anchoring, individuals can encode latent mental programs in theta states and trigger their automatic activation in response to designed stimuli.
+
+CURRENT STATUS: Research framework integrated into neurohacking platform for ethical cognitive enhancement applications.`,
     isUnlocked: false
   },
   {
-    id: 'bb-002', 
-    title: 'Treadstone Memory Implantation Protocols',
+    id: 'methodology-protocol',
+    title: 'Schema Creation & Implementation Methodology',
     classification: 'DECLASSIFIED',
-    source: 'TREADSTONE',
-    dateAcquired: 'Deep Cover Operation',
-    content: `TREADSTONE MEMORY OPERATIONS
+    source: 'NEURAL-MATRIX',
+    dateAcquired: 'Research Development Phase',
+    content: `COMPREHENSIVE METHODOLOGY & IMPLEMENTATION PROTOCOLS
     
-Subject: Advanced Memory Manipulation Techniques
-Classification: FORMERLY TOP SECRET - NOW DECLASSIFIED
+Subject: Schema Creation and Frequency-Based Implementation
+Classification: ACADEMIC RESEARCH - DECLASSIFIED
 
-ACQUIRED THROUGH INFILTRATION:
-Deep cover infiltration of Treadstone memory labs provided access to advanced psychological programming techniques now integrated into civilian brainwave training systems.
+MATERIALS REQUIRED:
+• EEG devices for monitoring brainwave states
+• Audio entrainment tools (binaural beats, isochronic tones)
+• Schema logbooks for detailed session documentation
+• Anchors: light cues, sound triggers, tactile stimuli
 
-TECHNIQUES LEARNED:
-- Visual recall anchor implementation
-- Flashlight trigger systems
-- Phone-based audio cues (Cisco 90s model)
-- Internal dial visualization
-- Exit sequence protocols
-- Dead battery backup systems
+SETTING THE OBJECT:
+The Object is the precise unit of knowledge or behavior chosen for encoding.
+• Must be clear, contextual, and trigger-able
+• Examples: "recall contract law clauses", "defensive stance when glass breaks", "release stress at 10 PM"
 
-INTEGRATION NOTES:
-All military-grade techniques have been adapted for civilian cognitive enhancement and brainwave frequency training. Sacred geometry wheel serves as visual anchor replacement for more intensive visual memory systems.
+SCHEMA CREATION (THOUGHT PATTERN PROGRAMMING):
+1. Define Objective - Clear, specific, measurable goal
+2. Visualization - Vivid mental imagery of desired outcome
+3. Concentration - Enter theta focus state (4-8 Hz) using audio entrainment
+4. Affirmation - Spoken or recorded phrase reinforcing schema
+5. Anchoring - Pair sensory stimulus with schema activation
+6. Reinforcement - Rehearsal with frequency entrainment protocols
 
-DISCLAIMER: Former classified techniques now used for beneficial cognitive enhancement only.`,
+FLOW STATE DURATIONS:
+• 1 hour: Basic skill encoding
+• 24 hours: Complex behavior integration
+• 3 days: Deep pattern establishment
+• 1 week: Long-term schema consolidation
+
+EXIT & TIE-DOWN PROTOCOLS:
+• FlowGate: Visual flashlight signal for controlled exit
+• DropGate: Auditory signal for immediate disengagement  
+• Tie-Down: Structured debrief to prevent disorientation
+
+NIGHTLY RECALL ("Mental Dump"):
+10 minutes of theta-state review to reinforce Objects and release maladaptive thought loops.`,
     isUnlocked: false
   },
   {
