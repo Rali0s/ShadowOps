@@ -458,33 +458,35 @@ export function HumintTrainingTool() {
               <Badge variant="outline" className="text-yellow-400 border-yellow-500">
                 {session.onboardingMode ? 'ONBOARDING PHASE' : 'CLASSIFIED SECTION TRAINING'}
               </Badge>
-              <input
-                type="file"
-                accept=".json"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                      const content = event.target?.result as string;
-                      loadTrainingModule(content);
-                    };
-                    reader.onerror = () => {
-                      alert('❌ Failed to read file');
-                    };
-                    reader.readAsText(file);
-                  }
-                  // Reset the input so the same file can be loaded again
-                  e.target.value = '';
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="cursor-pointer" 
+                data-testid="load-module-button"
+                onClick={() => {
+                  const input = document.createElement('input');
+                  input.type = 'file';
+                  input.accept = '.json';
+                  input.onchange = (e) => {
+                    const target = e.target as HTMLInputElement;
+                    const file = target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (event) => {
+                        const content = event.target?.result as string;
+                        loadTrainingModule(content);
+                      };
+                      reader.onerror = () => {
+                        alert('❌ Failed to read file');
+                      };
+                      reader.readAsText(file);
+                    }
+                  };
+                  input.click();
                 }}
-                className="hidden"
-                id="module-upload"
-              />
-              <label htmlFor="module-upload">
-                <Button variant="outline" size="sm" className="cursor-pointer" data-testid="load-module-button">
-                  📁 Load Module
-                </Button>
-              </label>
+              >
+                📁 Load Module
+              </Button>
             </div>
           </div>
         </CardHeader>
