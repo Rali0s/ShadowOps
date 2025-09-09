@@ -1,6 +1,6 @@
 {
-  "id": "humint-manual-v1",
-  "title": "HUMINT Programming Manual",
+  "id": "humint-programming-v1",
+  "title": "HUMINT-PROGRAMMING-v1",
   "description": "On-screen guided teleprompter for HUMINT schema training using Keywords, Anchors, Narration, and Frequency-based entrainment.",
   "totalDuration": 105,
   "version": "1.0",
