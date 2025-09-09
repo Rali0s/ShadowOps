@@ -1,183 +1,282 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
 import Stripe from "stripe";
-import { setupAuth } from "./auth";
+import session from "express-session";
+import { scrypt, randomBytes, timingSafeEqual } from "crypto";
+import { promisify } from "util";
+
+const scryptAsync = promisify(scrypt);
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
 }
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2023-10-16",
+  apiVersion: "2025-07-30.basil" as any,
 });
 
+// In-memory user storage for this demo
+interface User {
+  id: number;
+  email: string;
+  password: string;
+  subscriptionStatus: 'active' | 'inactive' | 'trial' | 'cancelled';
+  subscriptionId?: string;
+  customerId?: string;
+  trialEndsAt?: Date;
+  createdAt: Date;
+}
+
+let users: User[] = [];
+let userIdCounter = 1;
+
+// Password hashing
+async function hashPassword(password: string): Promise<string> {
+  const salt = randomBytes(16).toString("hex");
+  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
+  return `${buf.toString("hex")}.${salt}`;
+}
+
+async function comparePasswords(supplied: string, stored: string): Promise<boolean> {
+  const [hashed, salt] = stored.split(".");
+  const hashedBuf = Buffer.from(hashed, "hex");
+  const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
+  return timingSafeEqual(hashedBuf, suppliedBuf);
+}
+
+// Extend Express session types
+declare module 'express-session' {
+  interface SessionData {
+    userId?: number;
+  }
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Setup authentication for subscription management
-  setupAuth(app);
   
-  // Simple health check endpoint
-  app.get("/api/health", (req, res) => {
-    res.json({ 
-      status: "operational",
-      mode: "open_access",
-      timestamp: new Date().toISOString(),
-      brainwaveSystem: "active",
-      frequencyBands: ["alpha", "beta", "theta", "gamma"]
-    });
-  });
+  // Session middleware
+  app.use(session({
+    secret: process.env.SESSION_SECRET || 'neural-matrix-secret-key-2025',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // Set to true in production with HTTPS
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    }
+  }));
 
-  // Mock admin stats for dashboard
-  app.get("/api/admin/stats", (req, res) => {
-    res.json({
-      totalSessions: 1247,
-      activeUsers: 89,
-      totalFrequencyAnalyses: 5634,
-      systemUptime: "99.9%",
-      averageSessionLength: "45 minutes",
-      popularFrequencies: {
-        alpha: 34,
-        beta: 28,
-        theta: 25,
-        gamma: 13
+  // Helper to find user
+  const findUser = (id: number): User | undefined => users.find(u => u.id === id);
+  const findUserByEmail = (email: string): User | undefined => users.find(u => u.email === email);
+
+  // Auth middleware
+  const requireAuth = (req: any, res: any, next: any) => {
+    if (!req.session.userId || !findUser(req.session.userId)) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+    next();
+  };
+  // Register endpoint
+  app.post("/api/register", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      if (!email || !password) {
+        return res.status(400).json({ message: 'Email and password required' });
       }
-    });
-  });
 
-  // Brainwave frequency data endpoint
-  app.get("/api/frequencies", (req, res) => {
-    res.json([
-      {
-        id: 1,
-        name: "Alpha",
-        range: "8-12 Hz",
-        description: "Relaxed wakefulness and creative flow state",
-        color: "#ff6b6b",
-        available: true
-      },
-      {
-        id: 2,
-        name: "Beta", 
-        range: "12-30 Hz",
-        description: "Alert analytical thinking and problem-solving",
-        color: "#4ecdc4",
-        available: true
-      },
-      {
-        id: 3,
-        name: "Theta",
-        range: "4-8 Hz", 
-        description: "Deep processing and creative insights",
-        color: "#45b7d1",
-        available: true
-      },
-      {
-        id: 4,
-        name: "Gamma",
-        range: "30-100+ Hz",
-        description: "Peak cognitive performance and consciousness",
-        color: "#96ceb4",
-        available: true
+      // Check if user already exists
+      if (findUserByEmail(email)) {
+        return res.status(400).json({ message: 'User already exists with this email' });
       }
-    ]);
+
+      // Create user with trial
+      const hashedPassword = await hashPassword(password);
+      const trialEndsAt = new Date();
+      trialEndsAt.setDate(trialEndsAt.getDate() + 7); // 7-day trial
+
+      const newUser: User = {
+        id: userIdCounter++,
+        email,
+        password: hashedPassword,
+        subscriptionStatus: 'trial',
+        trialEndsAt,
+        createdAt: new Date(),
+      };
+
+      users.push(newUser);
+      req.session.userId = newUser.id;
+      
+      // Return user without password
+      const { password: _, ...userResponse } = newUser;
+      res.status(201).json(userResponse);
+    } catch (error) {
+      console.error('Registration error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
   });
 
-  // Neurohacker subscription endpoint
-  app.post('/api/subscribe-neurohacker', async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Authentication required' });
+  // Login endpoint
+  app.post("/api/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      if (!email || !password) {
+        return res.status(400).json({ message: 'Email and password required' });
+      }
+
+      const user = findUserByEmail(email);
+      if (!user || !(await comparePasswords(password, user.password))) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+
+      req.session.userId = user.id;
+      
+      // Return user without password
+      const { password: _, ...userResponse } = user;
+      res.json(userResponse);
+    } catch (error) {
+      console.error('Login error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+
+  // Get current user
+  app.get("/api/user", (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: 'Not authenticated' });
     }
 
-    let user = req.user;
+    const user = findUser(req.session.userId);
+    if (!user) {
+      req.session.userId = undefined;
+      return res.status(401).json({ message: 'User not found' });
+    }
 
-    if (user.stripeSubscriptionId) {
-      const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId);
-      if (subscription.status === 'active') {
+    // Check if trial has expired
+    if (user.subscriptionStatus === 'trial' && user.trialEndsAt && new Date() > user.trialEndsAt) {
+      user.subscriptionStatus = 'inactive';
+    }
+
+    // Return user without password
+    const { password: _, ...userResponse } = user;
+    res.json(userResponse);
+  });
+
+  // Logout endpoint
+  app.post("/api/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Logout error:', err);
+        return res.status(500).json({ message: 'Logout failed' });
+      }
+      res.json({ message: 'Logged out successfully' });
+    });
+  });
+
+  // Create subscription
+  app.post("/api/create-subscription", requireAuth, async (req, res) => {
+    try {
+      const user = findUser(req.session.userId!);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // If user already has active subscription, return existing
+      if (user.subscriptionStatus === 'active' && user.subscriptionId) {
+        const subscription = await stripe.subscriptions.retrieve(user.subscriptionId);
+        const invoice = await stripe.invoices.retrieve(subscription.latest_invoice as string, {
+          expand: ['payment_intent']
+        });
+        
         return res.json({
           subscriptionId: subscription.id,
-          status: 'already_subscribed',
-          message: 'Already subscribed to neurohacker tier'
+          clientSecret: (invoice.payment_intent as any)?.client_secret,
         });
       }
-    }
-    
-    if (!user.email) {
-      return res.status(400).json({ error: 'Email required for subscription' });
-    }
 
-    try {
-      let customer;
-      if (user.stripeCustomerId) {
-        customer = await stripe.customers.retrieve(user.stripeCustomerId);
-      } else {
-        customer = await stripe.customers.create({
+      // Create Stripe customer if needed
+      let customerId = user.customerId;
+      if (!customerId) {
+        const customer = await stripe.customers.create({
           email: user.email,
-          name: user.username,
-          metadata: {
-            userId: user.id,
-            tier: 'neurohacker'
-          }
         });
-        user = await storage.updateUserStripeInfo(user.id, customer.id);
+        customerId = customer.id;
+        user.customerId = customerId;
       }
 
+      // Create subscription
       const subscription = await stripe.subscriptions.create({
-        customer: customer.id,
+        customer: customerId,
         items: [{
           price: process.env.STRIPE_PRICE_ID,
         }],
         payment_behavior: 'default_incomplete',
         expand: ['latest_invoice.payment_intent'],
-        metadata: {
-          userId: user.id,
-          tier: 'neurohacker'
-        }
       });
 
-      await storage.updateUserStripeInfo(user.id, customer.id, subscription.id);
-      await storage.updateUserSubscriptionTier(user.id, 'neurohacker');
-  
+      // Update user
+      user.subscriptionId = subscription.id;
+      
       res.json({
         subscriptionId: subscription.id,
         clientSecret: (subscription.latest_invoice as any)?.payment_intent?.client_secret,
-        status: 'subscription_created'
       });
     } catch (error: any) {
       console.error('Subscription creation error:', error);
-      return res.status(400).json({ error: error.message });
+      res.status(500).json({ message: error.message || 'Failed to create subscription' });
     }
   });
 
-  // Check subscription status
-  app.get('/api/subscription-status', async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.json({ tier: 'free', subscribed: false });
-    }
-
-    const user = req.user;
-    if (!user.stripeSubscriptionId) {
-      return res.json({ tier: 'free', subscribed: false });
-    }
+  // Stripe webhook handler (for subscription updates)
+  app.post("/api/webhook", async (req, res) => {
+    const sig = req.headers['stripe-signature'];
+    let event;
 
     try {
-      const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId);
-      const isActive = subscription.status === 'active';
-      
-      if (isActive && user.subscriptionTier !== 'neurohacker') {
-        await storage.updateUserSubscriptionTier(user.id, 'neurohacker');
-      } else if (!isActive && user.subscriptionTier === 'neurohacker') {
-        await storage.updateUserSubscriptionTier(user.id, 'free');
-      }
-
-      res.json({
-        tier: isActive ? 'neurohacker' : 'free',
-        subscribed: isActive,
-        status: subscription.status,
-        currentPeriodEnd: (subscription as any).current_period_end
-      });
-    } catch (error) {
-      console.error('Subscription status error:', error);
-      res.json({ tier: 'free', subscribed: false });
+      event = stripe.webhooks.constructEvent(req.body, sig as string, process.env.STRIPE_WEBHOOK_SECRET || '');
+    } catch (err) {
+      console.error('Webhook signature verification failed:', err);
+      return res.status(400).send(`Webhook Error: ${err}`);
     }
+
+    // Handle subscription events
+    switch (event.type) {
+      case 'invoice.payment_succeeded':
+        const invoice = event.data.object;
+        if (invoice.subscription) {
+          // Find user by subscription ID and update status
+          const user = users.find(u => u.subscriptionId === invoice.subscription);
+          if (user) {
+            user.subscriptionStatus = 'active';
+          }
+        }
+        break;
+      
+      case 'invoice.payment_failed':
+        const failedInvoice = event.data.object;
+        if (failedInvoice.subscription) {
+          const user = users.find(u => u.subscriptionId === failedInvoice.subscription);
+          if (user) {
+            user.subscriptionStatus = 'inactive';
+          }
+        }
+        break;
+
+      case 'customer.subscription.deleted':
+        const cancelledSubscription = event.data.object;
+        const user = users.find(u => u.subscriptionId === cancelledSubscription.id);
+        if (user) {
+          user.subscriptionStatus = 'cancelled';
+        }
+        break;
+    }
+
+    res.json({ received: true });
+  });
+
+  // Health check
+  app.get("/api/health", (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
   const httpServer = createServer(app);

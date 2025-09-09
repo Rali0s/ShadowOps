@@ -115,7 +115,7 @@
   }
 }
 
-/* Mobile-First Responsive Utilities */
+/* Mobile-First Responsive Design & PWA Optimizations */
 @layer utilities {
   .mobile-safe-padding {
     padding-left: max(16px, env(safe-area-inset-left));
@@ -162,6 +162,147 @@
   @media (min-width: 1280px) {
     .container-responsive {
       max-width: 1280px;
+    }
+  }
+  
+  /* Mobile Touch Optimizations */
+  @media (max-width: 768px) {
+    /* Larger touch targets for mobile */
+    .btn-mobile, button, .button, [role="button"] {
+      min-height: 44px !important;
+      min-width: 44px !important;
+    }
+    
+    /* Prevent zoom on focus for iOS */
+    input, textarea, select {
+      font-size: 16px !important;
+    }
+    
+    /* Better mobile form spacing */
+    .form-mobile input, .form-mobile textarea {
+      padding: 12px 16px;
+    }
+    
+    /* Mobile-friendly cards */
+    .card-mobile {
+      margin: 0 -1rem;
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+    }
+    
+    /* Optimized mobile typography */
+    .text-4xl {
+      font-size: 2.25rem;
+      line-height: 1.2;
+    }
+    
+    .text-5xl {
+      font-size: 3rem;
+      line-height: 1.1;
+    }
+    
+    /* Mobile scroll improvements */
+    .scroll-container {
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+    
+    /* Improved mobile grid layouts */
+    .grid-mobile-stack > * {
+      grid-column: 1 / -1;
+    }
+    
+    /* Mobile-friendly spacing */
+    .space-y-mobile > * + * {
+      margin-top: 1.5rem;
+    }
+    
+    .space-x-mobile > * + * {
+      margin-left: 1rem;
+    }
+  }
+  
+  /* Tablet optimizations */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  
+  /* High DPI display optimizations */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .text-sharp {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  }
+}
+
+/* PWA & Mobile Performance Optimizations */
+@layer base {
+  /* Improved mobile touch targets */
+  @media (max-width: 768px) {
+    button, .btn, [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    
+    /* Better mobile form inputs */
+    input, textarea, select {
+      font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    /* Mobile-friendly scrolling */
+    .scroll-container {
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* Improved contrast and readability */
+  .bg-gradient-to-b {
+    background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
+  }
+  
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .text-gray-400 {
+      color: #9ca3af;
+    }
+    
+    .border-gray-700 {
+      border-color: #4b5563;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Dark mode optimizations */
+  .dark {
+    color-scheme: dark;
+  }
+  
+  /* Focus improvements for accessibility */
+  *:focus {
+    outline: 2px solid #ef4444;
+    outline-offset: 2px;
+  }
+  
+  /* Better mobile card layouts */
+  @media (max-width: 640px) {
+    .card-mobile {
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
     }
   }
 }

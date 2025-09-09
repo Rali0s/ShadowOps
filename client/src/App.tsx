@@ -4,37 +4,81 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/hooks/use-auth";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Navigation from "@/components/ui/navigation";
-import HomePage from "@/pages/home-page";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
+// Public pages
+import LandingPage from "@/pages/landing-page";
 import AuthPage from "@/pages/auth-page";
 import SubscribePage from "@/pages/subscribe-page";
+import NotFound from "@/pages/not-found";
+
+// Protected pages (require subscription)
+import BlackbriarTrainingPage from "@/pages/blackbriar-training-page";
 import OpsManualPage from "@/pages/ops-manual-page";
 import NeuralMatrixPage from "@/pages/neural-matrix-page";
 import KSPDossier from "@/pages/ksp-dossier";
 import ScientificMethodPage from "@/pages/scientific-method-page";
-
 import EducationMaterialsPage from "@/pages/education-materials-page";
 import SelfReportMethodologyPage from "@/pages/self-report-methodology";
 import FrequencyGeneratorPage from "@/pages/frequency-generator-page";
-import BlackbriarTrainingPage from "@/pages/blackbriar-training-page";
-import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={HomePage} />
+      {/* Public Routes */}
+      <Route path="/" component={LandingPage} />
       <Route path="/auth" component={AuthPage} />
       <Route path="/subscribe" component={SubscribePage} />
-      <Route path="/ops-manual" component={OpsManualPage} />
-      <Route path="/neural-matrix" component={NeuralMatrixPage} />
-      <Route path="/ksp-dossier" component={KSPDossier} />
-      <Route path="/scientific-method" component={ScientificMethodPage} />
-
-      <Route path="/education" component={EducationMaterialsPage} />
-      <Route path="/methodology" component={SelfReportMethodologyPage} />
-      <Route path="/frequency-generator" component={FrequencyGeneratorPage} />
-      <Route path="/blackbriar-training" component={BlackbriarTrainingPage} />
+      
+      {/* Protected Routes - Require Subscription */}
+      <Route path="/blackbriar-training">
+        <ProtectedRoute>
+          <BlackbriarTrainingPage />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/ops-manual">
+        <ProtectedRoute>
+          <OpsManualPage />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/neural-matrix">
+        <ProtectedRoute>
+          <NeuralMatrixPage />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/ksp-dossier">
+        <ProtectedRoute>
+          <KSPDossier />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/scientific-method">
+        <ProtectedRoute>
+          <ScientificMethodPage />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/education">
+        <ProtectedRoute>
+          <EducationMaterialsPage />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/methodology">
+        <ProtectedRoute>
+          <SelfReportMethodologyPage />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/frequency-generator">
+        <ProtectedRoute>
+          <FrequencyGeneratorPage />
+        </ProtectedRoute>
+      </Route>
+      
       <Route component={NotFound} />
     </Switch>
   );
@@ -44,15 +88,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-      <TooltipProvider>
-        <div className="min-h-screen bg-terminal-bg text-gray-100">
-          <Navigation />
-          <main className="pt-0">
+        <TooltipProvider>
+          <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
             <Router />
-          </main>
-          <Toaster />
-        </div>
-      </TooltipProvider>
+            <Toaster />
+          </div>
+        </TooltipProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
