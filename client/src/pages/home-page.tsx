@@ -178,12 +178,44 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Main Thesis - Sell Monthly Package */}
+      <section className="py-20">
+        <div className="container mx-auto px-4 text-center">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
+              Why <span className="text-red-400">2,847 Neurohackers</span> Choose _Fq
+            </h2>
+            <p className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+              Skip years of trial and error. Get instant access to proven brainwave optimization protocols used by cognitive enhancement professionals, researchers, and elite performers.
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+              <div className="bg-black/30 border border-red-700/30 rounded-xl p-6">
+                <div className="text-red-400 text-3xl font-bold mb-3">$5.89</div>
+                <div className="text-white font-semibold mb-2">vs $300+/hour</div>
+                <div className="text-gray-400 text-sm">Professional neurofeedback sessions</div>
+              </div>
+              <div className="bg-black/30 border border-green-700/30 rounded-xl p-6">
+                <div className="text-green-400 text-3xl font-bold mb-3">24/7</div>
+                <div className="text-white font-semibold mb-2">Instant Access</div>
+                <div className="text-gray-400 text-sm">Train anytime, anywhere</div>
+              </div>
+              <div className="bg-black/30 border border-blue-700/30 rounded-xl p-6">
+                <div className="text-blue-400 text-3xl font-bold mb-3">94%</div>
+                <div className="text-white font-semibold mb-2">Success Rate</div>
+                <div className="text-gray-400 text-sm">Measurable cognitive improvement</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Command Interface Section */}
       <section className="py-20 bg-gray-900/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
-            <h3 className="text-3xl font-bold text-white mb-4">Command Interface</h3>
-            <p className="text-gray-400">Access neural training modules</p>
+            <h3 className="text-3xl font-bold text-white mb-4">Neural Training Interface</h3>
+            <p className="text-gray-400">Professional-grade cognitive enhancement tools</p>
           </div>
           
           <div className="max-w-4xl mx-auto">
@@ -278,22 +310,22 @@ export default function HomePage() {
                   <Link href="/neural-matrix">
                     <Button 
                       variant="outline" 
-                      className="w-full bg-gray-900 border-gray-600 text-yellow-400 hover:bg-yellow-600/20 hover:text-yellow-300 h-16 flex flex-col items-center justify-center space-y-1"
+                      className="w-full bg-gray-900 border-yellow-600/50 text-yellow-400 hover:bg-yellow-600/20 hover:text-yellow-300 h-16 flex flex-col items-center justify-center space-y-1"
                       data-testid="button-matrix"
                     >
-                      <Database className="w-5 h-5" />
-                      <span className="text-xs font-mono">matrix</span>
+                      <Shield className="w-5 h-5" />
+                      <span className="text-xs font-mono">neural_matrix</span>
                     </Button>
                   </Link>
                   
                   <Link href="/ops-manual">
                     <Button 
                       variant="outline" 
-                      className="w-full bg-gray-900 border-gray-600 text-orange-400 hover:bg-orange-600/20 hover:text-orange-300 h-16 flex flex-col items-center justify-center space-y-1"
+                      className="w-full bg-gray-900 border-orange-600/50 text-orange-400 hover:bg-orange-600/20 hover:text-orange-300 h-16 flex flex-col items-center justify-center space-y-1"
                       data-testid="button-ops"
                     >
-                      <FileText className="w-5 h-5" />
-                      <span className="text-xs font-mono">ops</span>
+                      <Terminal className="w-5 h-5" />
+                      <span className="text-xs font-mono">ops_manual</span>
                     </Button>
                   </Link>
                   
@@ -309,16 +341,29 @@ export default function HomePage() {
                   </Link>
                 </div>
                 
-                {/* Status line */}
-                <div className="mt-6 pt-4 border-t border-gray-800 text-xs font-mono text-gray-500">
-                  <div className="flex items-center justify-between">
-                    <span>Status: <span className="text-yellow-400">Demo Mode</span></span>
-                    <span>Users: <span className="text-green-400">{currentUserCount}</span></span>
+                {/* Membership Benefits */}
+                <div className="mt-6 pt-4 border-t border-gray-800">
+                  <div className="text-center mb-4">
+                    <div className="text-sm font-mono text-red-400 mb-2">NEUROHACKER ELITE MEMBERSHIP</div>
+                    <div className="text-xs text-gray-400">What You Get:</div>
                   </div>
-                  <div className="mt-2 text-gray-600">
-                    For full access to all neural frequencies, 
-                    <Link href="/subscribe" className="text-red-400 hover:text-red-300 underline">
-                      upgrade to neurohacker elite
+                  
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="text-cyan-400">✓ All 4 Frequency Bands</div>
+                    <div className="text-green-400">✓ Sacred Geometry Matrix</div>
+                    <div className="text-yellow-400">✓ Classified Archives</div>
+                    <div className="text-purple-400">✓ Research Protocols</div>
+                    <div className="text-blue-400">✓ Advanced Training</div>
+                    <div className="text-red-400">✓ 24/7 Access</div>
+                  </div>
+                  
+                  <div className="mt-4 text-center">
+                    <div className="text-xs font-mono text-gray-500 mb-2">
+                      Status: <span className="text-yellow-400">Demo Mode</span> • 
+                      Users: <span className="text-green-400">{currentUserCount}</span>
+                    </div>
+                    <Link href="/subscribe" className="text-red-400 hover:text-red-300 underline text-sm font-semibold">
+                      → Unlock Full Neural Matrix Access
                     </Link>
                   </div>
                 </div>
