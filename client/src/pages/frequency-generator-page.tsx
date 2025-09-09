@@ -1,13 +1,17 @@
 import { FrequencyGenerator } from '@/components/FrequencyGenerator';
+import { BinauralBeatGenerator } from '@/components/BinauralBeatGenerator';
 import { BrainwaveSynchronizedWheel } from '@/components/brainwave-synchronized-wheel';
 import { Link } from 'wouter';
-import { ArrowLeft, Brain } from 'lucide-react';
+import { ArrowLeft, Brain, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState, useEffect } from 'react';
 
 export default function FrequencyGeneratorPage() {
   const [currentFrequency, setCurrentFrequency] = useState(432);
+  const [binauralBeatFreq, setBinauralBeatFreq] = useState(10);
   const [wheelSize, setWheelSize] = useState(200);
+  const [activeMode, setActiveMode] = useState('single');
 
   // Update wheel size based on screen
   useEffect(() => {
@@ -26,7 +30,7 @@ export default function FrequencyGeneratorPage() {
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
-  // Listen for frequency changes from the generator
+  // Listen for frequency changes from generators
   useEffect(() => {
     const handleFrequencyChange = (event: CustomEvent) => {
       setCurrentFrequency(event.detail.frequency);
@@ -37,6 +41,16 @@ export default function FrequencyGeneratorPage() {
       window.removeEventListener('frequencyChange', handleFrequencyChange as EventListener);
     };
   }, []);
+
+  const handleBinauralFrequencyChange = (leftFreq: number, rightFreq: number, beatFreq: number) => {
+    setBinauralBeatFreq(beatFreq);
+    setActiveMode('binaural');
+  };
+
+  const handleSingleFrequencyChange = (frequency: number) => {
+    setCurrentFrequency(frequency);
+    setActiveMode('single');
+  };
 
   return (
     <div className="min-h-screen bg-terminal-bg text-gray-100">
@@ -65,17 +79,47 @@ export default function FrequencyGeneratorPage() {
         <div className="text-center mb-8">
           <BrainwaveSynchronizedWheel 
             size={wheelSize} 
-            frequency={currentFrequency}
+            frequency={activeMode === 'binaural' ? binauralBeatFreq : currentFrequency}
             className="mb-4"
           />
           <p className="text-sm text-gray-400">
-            Visual matrix synced to frequency: <span className="text-red-400 font-mono">{currentFrequency.toFixed(1)} Hz</span>
+            Visual matrix synced to {activeMode === 'binaural' ? 'beat' : 'carrier'} frequency: 
+            <span className="text-red-400 font-mono ml-1">
+              {activeMode === 'binaural' ? binauralBeatFreq.toFixed(1) : currentFrequency.toFixed(1)} Hz
+            </span>
           </p>
         </div>
 
-        {/* Main Generator */}
-        <div className="max-w-2xl mx-auto">
-          <FrequencyGenerator onFrequencyChange={setCurrentFrequency} />
+        {/* Dual Generator Interface */}
+        <div className="max-w-4xl mx-auto">
+          <Tabs defaultValue="single" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-900 border border-gray-700">
+              <TabsTrigger value="single" className="flex items-center space-x-2" data-testid="tab-single">
+                <Brain className="w-4 h-4" />
+                <span>Single Tone</span>
+              </TabsTrigger>
+              <TabsTrigger value="binaural" className="flex items-center space-x-2" data-testid="tab-binaural">
+                <Zap className="w-4 h-4" />
+                <span>Binaural Beats</span>
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="single" className="space-y-6">
+              <div className="text-center mb-4">
+                <h3 className="text-xl font-bold text-white mb-2">Precision Frequency Generator</h3>
+                <p className="text-gray-400 text-sm">Single-tone brainwave entrainment with full spectrum control</p>
+              </div>
+              <FrequencyGenerator onFrequencyChange={handleSingleFrequencyChange} />
+            </TabsContent>
+            
+            <TabsContent value="binaural" className="space-y-6">
+              <div className="text-center mb-4">
+                <h3 className="text-xl font-bold text-white mb-2">Binaural Beat Protocols</h3>
+                <p className="text-gray-400 text-sm">Dual-tone carrier system for advanced cognitive states</p>
+              </div>
+              <BinauralBeatGenerator onFrequencyChange={handleBinauralFrequencyChange} />
+            </TabsContent>
+          </Tabs>
         </div>
 
         {/* Quick Presets */}
