@@ -483,7 +483,7 @@ export function HumintTrainingTool() {
                       <div className="text-xs text-gray-300 space-y-1">
                         <div><span className="text-cyan-400">Duration:</span> {currentSection.duration} minutes</div>
                         <div><span className="text-cyan-400">Frequency:</span> {currentSection.frequency}</div>
-                        <div><span className="text-cyan-400">Objective:</span> {currentSection.description}</div>
+                        <div><span className="text-cyan-400">Objective:</span> {currentSection.narration}</div>
                       </div>
                     </div>
 
