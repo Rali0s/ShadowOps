@@ -449,70 +449,123 @@ export function HumintTrainingTool() {
             <CardContent className="space-y-6">
               {/* Live Teleprompter Display */}
               <div className="space-y-4">
-                {/* Current Cue Display */}
+                {/* Simple Top Bar Prompting */}
                 {currentCue && (
-                  <div className="p-4 bg-cyan-600/10 border border-cyan-500/30 rounded-lg">
-                    <div className="flex items-center space-x-3 mb-2">
-                      <Timer className="w-4 h-4 text-cyan-400" />
-                      <span className="text-sm text-cyan-400">
-                        [{formatTime(currentCue.time)}] {currentCue.type.toUpperCase()}
+                  <div className="p-2 bg-cyan-600/10 border border-cyan-500/30 rounded flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Timer className="w-3 h-3 text-cyan-400" />
+                      <span className="text-xs text-cyan-400 font-mono">
+                        [{formatTime(currentCue.time)}]
                       </span>
-                      {currentCue.cue && (
-                        <Badge variant="outline" className="text-yellow-400 text-xs">
-                          {currentCue.cue}
-                        </Badge>
-                      )}
+                      <Badge variant="outline" className="text-xs">
+                        {currentCue.type}
+                      </Badge>
                     </div>
-                    <div className={`text-xl ${
-                      currentCue.type === 'keyword' ? 'font-bold text-white' :
-                      currentCue.type === 'anchor' ? 'text-red-400 font-bold' :
-                      currentCue.type === 'compression' ? 'text-purple-400 font-bold' :
-                      currentCue.type === 'visualization' ? 'text-blue-400 italic' :
-                      'text-gray-300 italic'
+                    <div className={`text-sm font-medium ${
+                      currentCue.type === 'keyword' ? 'text-white' :
+                      currentCue.type === 'anchor' ? 'text-red-400' :
+                      currentCue.type === 'compression' ? 'text-purple-400' :
+                      currentCue.type === 'visualization' ? 'text-blue-400' :
+                      'text-gray-300'
                     }`}>
                       {currentCue.text}
                     </div>
                   </div>
                 )}
 
-                {/* Teleprompter Scroll View */}
-                <div className="p-4 bg-black/50 border border-gray-600 rounded-lg max-h-64 overflow-y-auto">
-                  <div className="space-y-2">
-                    {currentSection.timing.map((timing, index) => {
-                      const isPast = session.sectionTime > timing.time;
-                      const isCurrent = currentCue?.time === timing.time;
-                      const isUpcoming = session.sectionTime < timing.time;
-                      
-                      return (
-                        <div 
-                          key={index}
-                          className={`p-2 rounded text-sm transition-all duration-300 ${
-                            isCurrent ? 'bg-cyan-600/20 border-l-4 border-cyan-400 transform scale-105' :
-                            isPast ? 'text-gray-500 opacity-50' :
-                            isUpcoming ? 'text-gray-300' : ''
-                          }`}
-                        >
-                          <div className="flex items-center space-x-2 mb-1">
-                            <span className="font-mono text-xs">
-                              [{formatTime(timing.time)}]
-                            </span>
-                            <Badge variant="outline" className="text-xs">
-                              {timing.type}
-                            </Badge>
-                            {timing.cue && (
-                              <Badge variant="outline" className="text-xs text-yellow-400">
-                                {timing.cue}
-                              </Badge>
+                {/* Comprehensive Training Content Scroll */}
+                <div className="p-4 bg-black/50 border border-gray-600 rounded-lg max-h-96 overflow-y-auto">
+                  <div className="space-y-4">
+                    
+                    {/* Section Overview */}
+                    <div className="mb-4 p-3 bg-gray-800/50 rounded border border-gray-600">
+                      <h4 className="text-sm font-bold text-white mb-2">TRAINING SPECIFICATION: {currentSection.title}</h4>
+                      <div className="text-xs text-gray-300 space-y-1">
+                        <div><span className="text-cyan-400">Duration:</span> {currentSection.duration} minutes</div>
+                        <div><span className="text-cyan-400">Frequency:</span> {currentSection.frequency}</div>
+                        <div><span className="text-cyan-400">Objective:</span> {currentSection.description}</div>
+                      </div>
+                    </div>
+
+                    {/* Live Timeline */}
+                    <div className="border-l-2 border-gray-600 pl-4 space-y-3">
+                      {currentSection.timing.map((timing, index) => {
+                        const isPast = session.sectionTime > timing.time;
+                        const isCurrent = currentCue?.time === timing.time;
+                        const isUpcoming = session.sectionTime < timing.time;
+                        
+                        return (
+                          <div 
+                            key={index}
+                            className={`p-3 rounded transition-all duration-300 border-l-4 ${
+                              isCurrent ? 'bg-cyan-600/20 border-cyan-400' :
+                              isPast ? 'bg-gray-700/30 border-gray-500 opacity-60' :
+                              isUpcoming ? 'bg-gray-800/50 border-gray-600' : ''
+                            }`}
+                          >
+                            {/* Timing Header */}
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center space-x-2">
+                                <span className={`font-mono text-xs px-2 py-1 rounded ${
+                                  isCurrent ? 'bg-cyan-500 text-black' :
+                                  isPast ? 'bg-gray-600 text-gray-300' :
+                                  'bg-gray-700 text-gray-400'
+                                }`}>
+                                  {formatTime(timing.time)}
+                                </span>
+                                <Badge variant="outline" className={`text-xs ${
+                                  isCurrent ? 'border-cyan-400 text-cyan-300' : ''
+                                }`}>
+                                  {timing.type}
+                                </Badge>
+                                {timing.cue && (
+                                  <Badge variant="outline" className="text-xs text-yellow-400">
+                                    {timing.cue}
+                                  </Badge>
+                                )}
+                              </div>
+                              {isCurrent && <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>}
+                            </div>
+
+                            {/* Main Content */}
+                            <div className={`text-sm mb-2 ${
+                              timing.type === 'keyword' ? 'font-bold text-white' :
+                              timing.type === 'anchor' ? 'text-red-300 font-semibold' :
+                              timing.type === 'compression' ? 'text-purple-300 font-semibold' :
+                              timing.type === 'visualization' ? 'text-blue-300 italic' :
+                              'text-gray-300'
+                            }`}>
+                              {timing.text}
+                            </div>
+
+                            {/* Associated Training Content */}
+                            {timing.type === 'keyword' && (
+                              <div className="text-xs text-gray-400 mt-2 p-2 bg-gray-800/50 rounded">
+                                <span className="text-yellow-400">Training Note:</span> Focus on neural pathway reinforcement. Repeat keyword mentally while maintaining alpha/beta frequency entrainment.
+                              </div>
+                            )}
+                            
+                            {timing.type === 'anchor' && (
+                              <div className="text-xs text-gray-400 mt-2 p-2 bg-red-900/20 rounded border border-red-800/30">
+                                <span className="text-red-400">Anchor Protocol:</span> Establish deep psychological marker. Utilize Chalice compression technique for long-term retention. Visualize anchor embedding at Delta frequency.
+                              </div>
+                            )}
+
+                            {timing.type === 'compression' && (
+                              <div className="text-xs text-gray-400 mt-2 p-2 bg-purple-900/20 rounded border border-purple-800/30">
+                                <span className="text-purple-400">Cone Compression:</span> Compress all section data into single cognitive unit. Utilize theta state for schema formation and integration.
+                              </div>
+                            )}
+
+                            {timing.type === 'visualization' && (
+                              <div className="text-xs text-gray-400 mt-2 p-2 bg-blue-900/20 rounded border border-blue-800/30">
+                                <span className="text-blue-400">Visual Protocol:</span> Engage spatial memory centers. Coordinate with sacred geometry patterns. Enhance with binaural entrainment for optimal encoding.
+                              </div>
                             )}
                           </div>
-                          <div className={`${
-                            timing.type === 'keyword' ? 'font-bold' : 'italic'
-                          }`}>
-                            {timing.text}
-                          </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
               </div>
