@@ -144,6 +144,7 @@ interface TrainingSession {
   frequency: number;
   showVisuals: boolean;
   showTeleprompter: boolean;
+  audioPlaying: boolean;
 }
 
 export function HumintTrainingTool() {
@@ -155,19 +156,115 @@ export function HumintTrainingTool() {
     currentPhase: 'surface',
     frequency: 10,
     showVisuals: true,
-    showTeleprompter: true
+    showTeleprompter: true,
+    audioPlaying: false
   });
 
   const [currentTiming, setCurrentTiming] = useState(0);
   const sessionTimer = useRef<NodeJS.Timeout>();
   const sectionTimer = useRef<NodeJS.Timeout>();
+  
+  // Audio management refs
+  const leftOscillatorRef = useRef<OscillatorNode | null>(null);
+  const rightOscillatorRef = useRef<OscillatorNode | null>(null);
+  const leftGainRef = useRef<GainNode | null>(null);
+  const rightGainRef = useRef<GainNode | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
 
   const currentSection = HUMINT_SECTIONS[session.currentSection];
   const totalDuration = HUMINT_SECTIONS.reduce((sum, section) => sum + section.duration, 0);
 
+  // Audio management functions
+  const initAudioContext = () => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    return audioContextRef.current;
+  };
+
+  const startAudio = () => {
+    try {
+      const audioContext = initAudioContext();
+      
+      // Stop any existing audio first
+      stopAudio();
+      
+      // Create stereo setup with separate oscillators for each ear
+      const leftOscillator = audioContext.createOscillator();
+      const rightOscillator = audioContext.createOscillator();
+      const leftGain = audioContext.createGain();
+      const rightGain = audioContext.createGain();
+      const merger = audioContext.createChannelMerger(2);
+      
+      // Configure oscillators based on current frequency
+      leftOscillator.type = 'sine';
+      rightOscillator.type = 'sine';
+      leftOscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+      rightOscillator.frequency.setValueAtTime(200 + session.frequency, audioContext.currentTime);
+      
+      // Configure gains (moderate volume)
+      const gainValue = 0.3;
+      leftGain.gain.setValueAtTime(gainValue, audioContext.currentTime);
+      rightGain.gain.setValueAtTime(gainValue, audioContext.currentTime);
+      
+      // Create stereo separation
+      leftOscillator.connect(leftGain);
+      rightOscillator.connect(rightGain);
+      leftGain.connect(merger, 0, 0);  // Left channel
+      rightGain.connect(merger, 0, 1); // Right channel
+      merger.connect(audioContext.destination);
+      
+      // Start oscillators
+      leftOscillator.start();
+      rightOscillator.start();
+      
+      // Store references
+      leftOscillatorRef.current = leftOscillator;
+      rightOscillatorRef.current = rightOscillator;
+      leftGainRef.current = leftGain;
+      rightGainRef.current = rightGain;
+      
+      setSession(prev => ({ ...prev, audioPlaying: true }));
+    } catch (error) {
+      console.error('Failed to start audio:', error);
+    }
+  };
+
+  const stopAudio = () => {
+    if (leftOscillatorRef.current) {
+      leftOscillatorRef.current.stop();
+      leftOscillatorRef.current.disconnect();
+      leftOscillatorRef.current = null;
+    }
+    if (rightOscillatorRef.current) {
+      rightOscillatorRef.current.stop();
+      rightOscillatorRef.current.disconnect();
+      rightOscillatorRef.current = null;
+    }
+    if (leftGainRef.current) {
+      leftGainRef.current.disconnect();
+      leftGainRef.current = null;
+    }
+    if (rightGainRef.current) {
+      rightGainRef.current.disconnect();
+      rightGainRef.current = null;
+    }
+    setSession(prev => ({ ...prev, audioPlaying: false }));
+  };
+
+  const updateAudioFrequency = (newFreq: number) => {
+    if (audioContextRef.current && rightOscillatorRef.current) {
+      rightOscillatorRef.current.frequency.setValueAtTime(
+        200 + newFreq, 
+        audioContextRef.current.currentTime
+      );
+    }
+  };
+
   // Session control functions
   const startSession = () => {
     setSession(prev => ({ ...prev, isRunning: true }));
+    startAudio(); // Start audio when session starts
     
     sessionTimer.current = setInterval(() => {
       setSession(prev => ({ ...prev, sessionTime: prev.sessionTime + 1 }));
@@ -180,13 +277,18 @@ export function HumintTrainingTool() {
           // Move to next section
           const nextSection = prev.currentSection + 1;
           if (nextSection < HUMINT_SECTIONS.length) {
+            const newSection = HUMINT_SECTIONS[nextSection];
+            const newFreq = parseInt(newSection.frequency.split(' ')[0]);
+            updateAudioFrequency(newFreq); // Update audio frequency for new section
             return {
               ...prev,
               currentSection: nextSection,
-              sectionTime: 0
+              sectionTime: 0,
+              frequency: newFreq
             };
           } else {
             // Session complete
+            stopAudio();
             return { ...prev, isRunning: false };
           }
         }
@@ -197,11 +299,13 @@ export function HumintTrainingTool() {
 
   const pauseSession = () => {
     setSession(prev => ({ ...prev, isRunning: false }));
+    // Don't stop audio on pause - keep it playing
     if (sessionTimer.current) clearInterval(sessionTimer.current);
     if (sectionTimer.current) clearInterval(sectionTimer.current);
   };
 
   const resetSession = () => {
+    stopAudio(); // Stop audio on reset
     setSession({
       currentSection: 0,
       isRunning: false,
@@ -210,7 +314,8 @@ export function HumintTrainingTool() {
       currentPhase: 'surface',
       frequency: 10,
       showVisuals: true,
-      showTeleprompter: true
+      showTeleprompter: true,
+      audioPlaying: false
     });
     setCurrentTiming(0);
     if (sessionTimer.current) clearInterval(sessionTimer.current);
@@ -238,6 +343,7 @@ export function HumintTrainingTool() {
 
   useEffect(() => {
     return () => {
+      stopAudio(); // Clean up audio on component unmount
       if (sessionTimer.current) clearInterval(sessionTimer.current);
       if (sectionTimer.current) clearInterval(sectionTimer.current);
     };
@@ -341,29 +447,75 @@ export function HumintTrainingTool() {
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Current Cue Display */}
-              {currentCue && (
-                <div className="p-4 bg-cyan-600/10 border border-cyan-500/30 rounded-lg">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <Timer className="w-4 h-4 text-cyan-400" />
-                    <span className="text-sm text-cyan-400">
-                      [{formatTime(currentCue.time)}] {currentCue.type.toUpperCase()}
-                    </span>
-                    {currentCue.cue && (
-                      <Badge variant="outline" className="text-yellow-400 text-xs">
-                        {currentCue.cue}
-                      </Badge>
-                    )}
+              {/* Live Teleprompter Display */}
+              <div className="space-y-4">
+                {/* Current Cue Display */}
+                {currentCue && (
+                  <div className="p-4 bg-cyan-600/10 border border-cyan-500/30 rounded-lg">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <Timer className="w-4 h-4 text-cyan-400" />
+                      <span className="text-sm text-cyan-400">
+                        [{formatTime(currentCue.time)}] {currentCue.type.toUpperCase()}
+                      </span>
+                      {currentCue.cue && (
+                        <Badge variant="outline" className="text-yellow-400 text-xs">
+                          {currentCue.cue}
+                        </Badge>
+                      )}
+                    </div>
+                    <div className={`text-xl ${
+                      currentCue.type === 'keyword' ? 'font-bold text-white' :
+                      currentCue.type === 'anchor' ? 'text-red-400 font-bold' :
+                      currentCue.type === 'compression' ? 'text-purple-400 font-bold' :
+                      currentCue.type === 'visualization' ? 'text-blue-400 italic' :
+                      'text-gray-300 italic'
+                    }`}>
+                      {currentCue.text}
+                    </div>
                   </div>
-                  <div className={`text-lg ${
-                    currentCue.type === 'keyword' ? 'font-bold text-white' :
-                    currentCue.type === 'anchor' ? 'text-red-400 font-bold' :
-                    'text-gray-300 italic'
-                  }`}>
-                    {currentCue.text}
+                )}
+
+                {/* Teleprompter Scroll View */}
+                <div className="p-4 bg-black/50 border border-gray-600 rounded-lg max-h-64 overflow-y-auto">
+                  <div className="space-y-2">
+                    {currentSection.timing.map((timing, index) => {
+                      const isPast = session.sectionTime > timing.time;
+                      const isCurrent = currentCue?.time === timing.time;
+                      const isUpcoming = session.sectionTime < timing.time;
+                      
+                      return (
+                        <div 
+                          key={index}
+                          className={`p-2 rounded text-sm transition-all duration-300 ${
+                            isCurrent ? 'bg-cyan-600/20 border-l-4 border-cyan-400 transform scale-105' :
+                            isPast ? 'text-gray-500 opacity-50' :
+                            isUpcoming ? 'text-gray-300' : ''
+                          }`}
+                        >
+                          <div className="flex items-center space-x-2 mb-1">
+                            <span className="font-mono text-xs">
+                              [{formatTime(timing.time)}]
+                            </span>
+                            <Badge variant="outline" size="sm" className="text-xs">
+                              {timing.type}
+                            </Badge>
+                            {timing.cue && (
+                              <Badge variant="outline" size="sm" className="text-xs text-yellow-400">
+                                {timing.cue}
+                              </Badge>
+                            )}
+                          </div>
+                          <div className={`${
+                            timing.type === 'keyword' ? 'font-bold' : 'italic'
+                          }`}>
+                            {timing.text}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
-              )}
+              </div>
 
               {/* Keywords */}
               <div>
@@ -465,13 +617,37 @@ export function HumintTrainingTool() {
               <div className="space-y-4">
                 <div className="text-center">
                   <div className="text-lg font-semibold text-white mb-2">
-                    Current Frequency: {session.frequency} Hz
+                    Current Frequency: {session.frequency} Hz ({currentSection.frequency})
                   </div>
                   <div className="text-sm text-gray-400">
                     Phase: {FREQUENCY_PROTOCOLS[session.currentPhase as keyof typeof FREQUENCY_PROTOCOLS]?.description}
                   </div>
+                  <div className="flex items-center justify-center space-x-4 mt-4">
+                    <div className={`w-3 h-3 rounded-full ${session.audioPlaying ? 'bg-green-400 animate-pulse' : 'bg-gray-600'}`}></div>
+                    <span className="text-sm">
+                      Audio: {session.audioPlaying ? 'ACTIVE' : 'INACTIVE'}
+                    </span>
+                  </div>
                 </div>
-                <BinauralBeatGenerator />
+                
+                <div className="p-4 bg-gray-800/50 rounded border border-gray-600">
+                  <h4 className="font-semibold text-white mb-3">Binaural Beat Generator</h4>
+                  <div className="space-y-2 text-sm text-gray-300">
+                    <div>Left Ear: 200 Hz</div>
+                    <div>Right Ear: {200 + session.frequency} Hz</div>
+                    <div>Beat Frequency: {session.frequency} Hz</div>
+                    <div>Entrainment Target: {currentSection.frequency}</div>
+                  </div>
+                  <div className="mt-4">
+                    <Button 
+                      onClick={session.audioPlaying ? stopAudio : startAudio}
+                      className={session.audioPlaying ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"}
+                    >
+                      <Volume2 className="w-4 h-4 mr-2" />
+                      {session.audioPlaying ? 'Stop Audio' : 'Start Audio'}
+                    </Button>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
