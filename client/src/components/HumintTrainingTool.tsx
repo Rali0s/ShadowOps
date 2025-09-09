@@ -22,8 +22,13 @@ import {
 import { BinauralBeatGenerator } from './BinauralBeatGenerator';
 import { SacredGeometryWheel } from './sacred-geometry-wheel';
 
-// HUMINT Training Sections from Classified Manuals
-const HUMINT_SECTIONS = [
+// Default Blackbriar Training Module (JSON-compatible structure)
+const DEFAULT_BLACKBRIAR_MODULE: TrainingModule = {
+  id: 'blackbriar-core',
+  title: 'Blackbriar Core HUMINT Protocol',
+  description: 'Foundational HUMINT training from classified Blackbriar manuals',
+  totalDuration: 95,
+  sections: [
   {
     id: 'core-traits',
     title: 'Core Traits',
@@ -125,7 +130,12 @@ const HUMINT_SECTIONS = [
       { time: 6, text: 'Feel CONTROL expand into full schema.', type: 'visualization' }
     ]
   }
-];
+  ]
+};
+
+// Current training module (can be loaded from JSON)
+let CURRENT_MODULE = DEFAULT_BLACKBRIAR_MODULE;
+const HUMINT_SECTIONS = CURRENT_MODULE.sections;
 
 // Frequency protocols for different phases
 const FREQUENCY_PROTOCOLS = {
@@ -134,6 +144,34 @@ const FREQUENCY_PROTOCOLS = {
   'encode': { freq: 6, type: 'Theta', description: 'Deep encoding and schema formation' },
   'anchor': { freq: 3, type: 'Delta', description: 'Anchor compression and long-term storage' }
 };
+
+interface TrainingModule {
+  id: string;
+  title: string;
+  description: string;
+  totalDuration: number;
+  sections: TrainingSection[];
+}
+
+interface TrainingSection {
+  id: string;
+  title: string;
+  keywords: string[];
+  mnemonic: string;
+  anchor: string;
+  narration: string;
+  frequency: string;
+  duration: number;
+  glyph: string;
+  timing: TimingCue[];
+}
+
+interface TimingCue {
+  time: number;
+  text: string;
+  cue?: string;
+  type: 'keyword' | 'narration' | 'anchor' | 'compression' | 'visualization';
+}
 
 interface TrainingSession {
   currentSection: number;
@@ -145,9 +183,13 @@ interface TrainingSession {
   showVisuals: boolean;
   showTeleprompter: boolean;
   audioPlaying: boolean;
+  onboardingMode: boolean;
+  onboardingTime: number;
+  visualMode: 'onboarding' | 'glyphs' | 'blackgrey';
 }
 
 export function HumintTrainingTool() {
+  const [trainingModule, setTrainingModule] = useState<TrainingModule>(DEFAULT_BLACKBRIAR_MODULE);
   const [session, setSession] = useState<TrainingSession>({
     currentSection: 0,
     isRunning: false,
@@ -157,7 +199,10 @@ export function HumintTrainingTool() {
     frequency: 10,
     showVisuals: true,
     showTeleprompter: true,
-    audioPlaying: false
+    audioPlaying: false,
+    onboardingMode: true,
+    onboardingTime: 0,
+    visualMode: 'onboarding'
   });
 
   const [currentTiming, setCurrentTiming] = useState(0);
@@ -171,8 +216,8 @@ export function HumintTrainingTool() {
   const rightGainRef = useRef<GainNode | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
 
-  const currentSection = HUMINT_SECTIONS[session.currentSection];
-  const totalDuration = HUMINT_SECTIONS.reduce((sum, section) => sum + section.duration, 0);
+  const currentSection = trainingModule.sections[session.currentSection];
+  const totalDuration = trainingModule.totalDuration;
 
   // Audio management functions
   const initAudioContext = () => {
@@ -261,23 +306,48 @@ export function HumintTrainingTool() {
     }
   };
 
+  // Module loading function
+  const loadTrainingModule = (moduleJson: string) => {
+    try {
+      const newModule: TrainingModule = JSON.parse(moduleJson);
+      setTrainingModule(newModule);
+      // Reset session when new module is loaded
+      resetSession();
+    } catch (error) {
+      console.error('Invalid training module JSON:', error);
+    }
+  };
+
   // Session control functions
   const startSession = () => {
     setSession(prev => ({ ...prev, isRunning: true }));
     startAudio(); // Start audio when session starts
     
     sessionTimer.current = setInterval(() => {
-      setSession(prev => ({ ...prev, sessionTime: prev.sessionTime + 1 }));
+      setSession(prev => ({ 
+        ...prev, 
+        sessionTime: prev.sessionTime + 1,
+        onboardingTime: prev.onboardingMode ? prev.onboardingTime + 1 : prev.onboardingTime
+      }));
     }, 1000);
 
     sectionTimer.current = setInterval(() => {
       setSession(prev => {
+        // Handle onboarding phase (15 minutes = 900 seconds)
+        if (prev.onboardingMode && prev.onboardingTime >= 900) {
+          return {
+            ...prev,
+            onboardingMode: false,
+            visualMode: 'glyphs'
+          };
+        }
+
         const newSectionTime = prev.sectionTime + 1;
         if (newSectionTime >= currentSection.duration * 60) {
           // Move to next section
           const nextSection = prev.currentSection + 1;
-          if (nextSection < HUMINT_SECTIONS.length) {
-            const newSection = HUMINT_SECTIONS[nextSection];
+          if (nextSection < trainingModule.sections.length) {
+            const newSection = trainingModule.sections[nextSection];
             const newFreq = parseInt(newSection.frequency.split(' ')[0]);
             updateAudioFrequency(newFreq); // Update audio frequency for new section
             return {
@@ -315,7 +385,10 @@ export function HumintTrainingTool() {
       frequency: 10,
       showVisuals: true,
       showTeleprompter: true,
-      audioPlaying: false
+      audioPlaying: false,
+      onboardingMode: true,
+      onboardingTime: 0,
+      visualMode: 'onboarding'
     });
     setCurrentTiming(0);
     if (sessionTimer.current) clearInterval(sessionTimer.current);
@@ -360,11 +433,36 @@ export function HumintTrainingTool() {
               <div>
                 <CardTitle className="text-2xl text-red-400">HUMINT AIO Training Tool</CardTitle>
                 <p className="text-gray-400">Blackbriar Enhanced • Chalice/Cone Adaptive Learning Model™</p>
+                <p className="text-xs text-cyan-400">{trainingModule.title}</p>
               </div>
             </div>
-            <Badge variant="outline" className="text-yellow-400 border-yellow-500">
-              CLASSIFIED SECTION TRAINING
-            </Badge>
+            <div className="flex items-center space-x-3">
+              <Badge variant="outline" className="text-yellow-400 border-yellow-500">
+                {session.onboardingMode ? 'ONBOARDING PHASE' : 'CLASSIFIED SECTION TRAINING'}
+              </Badge>
+              <input
+                type="file"
+                accept=".json"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                      const content = event.target?.result as string;
+                      loadTrainingModule(content);
+                    };
+                    reader.readAsText(file);
+                  }
+                }}
+                className="hidden"
+                id="module-upload"
+              />
+              <label htmlFor="module-upload">
+                <Button variant="outline" size="sm" className="cursor-pointer">
+                  Load Module
+                </Button>
+              </label>
+            </div>
           </div>
         </CardHeader>
       </Card>
@@ -605,53 +703,153 @@ export function HumintTrainingTool() {
 
         {/* Visual Glyphs Tab */}
         <TabsContent value="visuals" className="space-y-4">
+          {/* Visual Mode Controls */}
+          <Card className="bg-black/50 border-gray-700">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm text-gray-400">Visual Mode:</span>
+                  <div className="flex space-x-2">
+                    <Button
+                      size="sm"
+                      variant={session.visualMode === 'onboarding' ? 'default' : 'outline'}
+                      onClick={() => setSession(prev => ({ ...prev, visualMode: 'onboarding' }))}
+                    >
+                      Onboarding
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant={session.visualMode === 'glyphs' ? 'default' : 'outline'}
+                      onClick={() => setSession(prev => ({ ...prev, visualMode: 'glyphs' }))}
+                    >
+                      Glyphs
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant={session.visualMode === 'blackgrey' ? 'default' : 'outline'}
+                      onClick={() => setSession(prev => ({ ...prev, visualMode: 'blackgrey' }))}
+                    >
+                      Black & Grey
+                    </Button>
+                  </div>
+                </div>
+                {session.onboardingMode && (
+                  <div className="text-sm text-cyan-400">
+                    Onboarding: {Math.floor(session.onboardingTime / 60)}:{(session.onboardingTime % 60).toString().padStart(2, '0')} / 15:00
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Left Panel - Sacred Geometry or Onboarding */}
             <Card className="bg-black/50 border-gray-700">
               <CardHeader>
                 <CardTitle className="text-white flex items-center space-x-2">
                   <Eye className="w-5 h-5 text-purple-400" />
-                  <span>Sacred Geometry Wheel</span>
+                  <span>
+                    {session.visualMode === 'onboarding' ? 'Onboarding Visualization' : 'Sacred Geometry Wheel'}
+                  </span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex justify-center">
-                  <SacredGeometryWheel 
-                    brainwaveFrequency={session.frequency}
-                    size={300}
-                    speed={session.isRunning ? 1 : 0}
-                    intensity={session.isRunning ? 0.8 : 0.3}
-                  />
-                </div>
+                {session.visualMode === 'onboarding' ? (
+                  <div className="text-center space-y-4">
+                    <div className="text-6xl text-cyan-400 animate-pulse">◉</div>
+                    <div className="space-y-2">
+                      <div className="text-lg text-white">Focus Phase</div>
+                      <div className="text-sm text-gray-400">
+                        Establishing baseline frequency entrainment
+                      </div>
+                      <Progress 
+                        value={(session.onboardingTime / 900) * 100} 
+                        className="h-2 mt-4"
+                      />
+                      <div className="text-xs text-cyan-400">
+                        {session.onboardingTime < 300 ? 'Alpha Wave Preparation' :
+                         session.onboardingTime < 600 ? 'Beta Wave Activation' :
+                         'Theta Wave Integration'}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex justify-center">
+                    <SacredGeometryWheel 
+                      brainwaveFrequency={session.frequency}
+                      size={300}
+                      speed={session.isRunning ? 1 : 0}
+                      intensity={session.isRunning ? 0.8 : 0.3}
+                    />
+                  </div>
+                )}
               </CardContent>
             </Card>
 
+            {/* Right Panel - HUMINT Glyphs or Black & Grey Model */}
             <Card className="bg-black/50 border-gray-700">
               <CardHeader>
                 <CardTitle className="text-white flex items-center space-x-2">
                   <Target className="w-5 h-5 text-cyan-400" />
-                  <span>HUMINT Glyphs</span>
+                  <span>
+                    {session.visualMode === 'blackgrey' ? 'Tactical Display' : 'HUMINT Glyphs'}
+                  </span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="text-center">
-                  <div className="text-6xl text-cyan-400 mb-2">{currentSection.glyph}</div>
-                  <div className="text-sm text-gray-400">{currentSection.title}</div>
-                </div>
-                <div className="grid grid-cols-3 gap-4 text-center">
-                  {HUMINT_SECTIONS.map((section, index) => (
-                    <div 
-                      key={section.id}
-                      className={`p-3 rounded border ${
-                        index === session.currentSection 
-                          ? 'border-cyan-500 bg-cyan-600/10' 
-                          : 'border-gray-600 bg-gray-800/20'
-                      }`}
-                    >
-                      <div className="text-2xl mb-1">{section.glyph}</div>
-                      <div className="text-xs text-gray-400">{section.title}</div>
+                {session.visualMode === 'blackgrey' ? (
+                  <div className="space-y-4">
+                    {/* Black & Grey Model with Teleprompter Integration */}
+                    <div className="bg-gray-900 border border-gray-600 p-4 rounded text-center">
+                      <div className="text-4xl text-gray-400 mb-2">{currentSection.glyph}</div>
+                      <div className="text-sm text-gray-500">{currentSection.title}</div>
                     </div>
-                  ))}
-                </div>
+                    
+                    {/* Current keyword display */}
+                    {getCurrentTimingCue() && (
+                      <div className="bg-black border border-gray-700 p-3 rounded">
+                        <div className="text-xs text-gray-500 mb-1">ACTIVE KEYWORD</div>
+                        <div className="text-lg text-gray-300 font-mono">
+                          {getCurrentTimingCue()?.text}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Keyword matrix */}
+                    <div className="grid grid-cols-2 gap-2">
+                      {currentSection.keywords.map((keyword, index) => (
+                        <div 
+                          key={index}
+                          className="bg-gray-800 border border-gray-600 p-2 rounded text-center"
+                        >
+                          <div className="text-xs text-gray-400">{keyword}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="text-center mb-4">
+                      <div className="text-6xl text-cyan-400 mb-2">{currentSection.glyph}</div>
+                      <div className="text-sm text-gray-400">{currentSection.title}</div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 text-center">
+                      {trainingModule.sections.map((section, index) => (
+                        <div 
+                          key={section.id}
+                          className={`p-3 rounded border ${
+                            index === session.currentSection 
+                              ? 'border-cyan-500 bg-cyan-600/10' 
+                              : 'border-gray-600 bg-gray-800/20'
+                          }`}
+                        >
+                          <div className="text-2xl mb-1">{section.glyph}</div>
+                          <div className="text-xs text-gray-400">{section.title}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
