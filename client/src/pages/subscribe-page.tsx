@@ -6,7 +6,8 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, CreditCard, Shield, Lock } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Loader2, CreditCard, Shield, Lock, Brain, Star, CheckCircle, Users, Timer, Zap, Target, TrendingUp } from "lucide-react";
 
 // Initialize Stripe only if public key is available
 const stripePromise = import.meta.env.VITE_STRIPE_PUBLIC_KEY 
@@ -32,7 +33,7 @@ const SubscribeForm = ({ tier }: { tier: string }) => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: window.location.origin + "/terminal",
+        return_url: window.location.origin + "/",
       },
     });
 
@@ -44,10 +45,10 @@ const SubscribeForm = ({ tier }: { tier: string }) => {
       });
     } else {
       toast({
-        title: "Payment Successful",
-        description: "Welcome to BlackRaven OS! Redirecting to terminal...",
+        title: "Neural Matrix Unlocked! 🧠",
+        description: "Welcome to the neurohacker elite. Redirecting to your neural interface...",
       });
-      setTimeout(() => setLocation("/terminal"), 2000);
+      setTimeout(() => setLocation("/"), 2000);
     }
     
     setIsProcessing(false);
@@ -87,18 +88,44 @@ export default function SubscribePage() {
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(true);
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const [timeLeft, setTimeLeft] = useState({ hours: 23, minutes: 47, seconds: 12 });
+  const [spotsLeft] = useState(47); // Scarcity psychology
   
-  // Get tier from URL params
-  const searchParams = new URLSearchParams(window.location.search);
-  const tier = searchParams.get('tier') || 'operator';
-
+  // Single neurohacker tier
   const tierInfo = {
-    recruit: { name: 'RECRUIT', price: '$29', color: 'text-terminal-amber' },
-    operator: { name: 'OPERATOR', price: '$79', color: 'text-terminal-green' },
-    shadow: { name: 'SHADOW', price: '$199', color: 'text-red-400' }
+    name: 'NEUROHACKER ELITE',
+    price: '$5.89',
+    originalPrice: '$19.99',
+    savings: '70%',
+    color: 'text-red-400',
+    description: 'Complete Neural Matrix Access'
   };
 
-  const currentTier = tierInfo[tier as keyof typeof tierInfo] || tierInfo.operator;
+  // Scarcity timer
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        let { hours, minutes, seconds } = prev;
+        seconds--;
+        if (seconds < 0) {
+          seconds = 59;
+          minutes--;
+          if (minutes < 0) {
+            minutes = 59;
+            hours--;
+            if (hours < 0) {
+              hours = 23;
+              minutes = 59;
+              seconds = 59;
+            }
+          }
+        }
+        return { hours, minutes, seconds };
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     // Don't try to create subscription if Stripe is not configured
@@ -107,12 +134,18 @@ export default function SubscribePage() {
       return;
     }
 
-    // Create subscription as soon as the page loads
-    apiRequest("POST", "/api/get-or-create-subscription", { tier })
+    // Create neurohacker subscription
+    apiRequest("POST", "/api/subscribe-neurohacker")
       .then((res) => res.json())
       .then((data) => {
         if (data.clientSecret) {
           setClientSecret(data.clientSecret);
+        } else if (data.status === 'already_subscribed') {
+          toast({
+            title: "Already Subscribed",
+            description: "You're already a neurohacker elite member!",
+          });
+          setLocation("/");
         } else {
           throw new Error('No client secret received');
         }
@@ -124,14 +157,15 @@ export default function SubscribePage() {
       .finally(() => {
         setLoading(false);
       });
-  }, [tier, setLocation]);
+  }, [setLocation, toast]);
 
   if (loading) {
     return (
       <div className="min-h-screen bg-terminal-bg flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-terminal-green mx-auto mb-4" />
-          <p className="text-gray-300 font-mono">Initializing payment system...</p>
+          <Brain className="h-12 w-12 animate-pulse text-red-400 mx-auto mb-4" />
+          <p className="text-gray-300 font-mono">Connecting to Neural Matrix...</p>
+          <p className="text-red-400 text-sm mt-2">Preparing your cognitive enhancement gateway</p>
         </div>
       </div>
     );
@@ -169,17 +203,36 @@ export default function SubscribePage() {
 
   return (
     <div className="min-h-screen bg-terminal-bg">
+      {/* Urgency Header Bar */}
+      <div className="bg-gradient-to-r from-red-900/30 to-red-800/30 border-b border-red-700/50">
+        <div className="container mx-auto px-4 py-2">
+          <div className="flex items-center justify-center space-x-6 text-sm">
+            <div className="flex items-center space-x-2">
+              <Timer className="w-4 h-4 text-red-400" />
+              <span className="text-red-300">Early Access Ends:</span>
+              <span className="font-mono text-red-200">
+                {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
+              </span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Target className="w-4 h-4 text-orange-400" />
+              <span className="text-orange-300">Only {spotsLeft} spots left at this price</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="border-b border-gray-800 bg-card-bg/90">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-terminal-green rounded-lg flex items-center justify-center">
-                <Lock className="text-terminal-bg" />
+              <div className="w-10 h-10 bg-gradient-to-r from-red-600 to-red-700 rounded-lg flex items-center justify-center">
+                <Brain className="text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-terminal-green font-mono">BlackRaven OS</h1>
-                <p className="text-xs text-gray-400">Secure Payment Portal</p>
+                <h1 className="text-xl font-bold text-red-400 font-mono">Neural Matrix</h1>
+                <p className="text-xs text-gray-400">Neurohacker Elite Gateway</p>
               </div>
             </div>
             <Button 
@@ -197,12 +250,57 @@ export default function SubscribePage() {
       {/* Main Content */}
       <div className="container mx-auto px-6 py-12">
         <div className="max-w-2xl mx-auto">
-          <div className="text-center mb-8">
-            <div className="inline-block p-4 bg-card-bg rounded-xl mb-4">
-              <CreditCard className="h-12 w-12 text-terminal-green mx-auto" />
+          {/* Hero Section */}
+          <div className="text-center mb-12">
+            <Badge className="mb-4 bg-red-600/20 text-red-300 border-red-500/50">
+              <TrendingUp className="w-3 h-3 mr-1" />
+              70% Early Access Discount
+            </Badge>
+            
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+              Unlock Your
+              <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600">Neural Potential</span>
+            </h1>
+            
+            <p className="text-xl text-gray-300 mb-6 max-w-2xl mx-auto">
+              Join <strong className="text-red-400">2,847 neurohackers</strong> who've already unlocked advanced brainwave optimization protocols
+            </p>
+
+            {/* Social Proof */}
+            <div className="flex items-center justify-center space-x-6 mb-8">
+              <div className="flex items-center space-x-1">
+                <Users className="w-4 h-4 text-green-400" />
+                <span className="text-green-400 text-sm">2,847 members</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                ))}
+                <span className="text-yellow-400 text-sm ml-1">4.9/5 rating</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <TrendingUp className="w-4 h-4 text-blue-400" />
+                <span className="text-blue-400 text-sm">94% success rate</span>
+              </div>
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">Complete Your Subscription</h1>
-            <p className="text-gray-400">Secure payment processing powered by Stripe</p>
+
+            {/* Price Display */}
+            <div className="bg-gradient-to-r from-red-600/10 to-red-500/10 border border-red-500/30 rounded-xl p-6 mb-8 mx-auto max-w-md">
+              <div className="text-center">
+                <div className="text-4xl font-bold text-white mb-2">${tierInfo.price.slice(1)}/mo</div>
+                <div className="text-gray-400 line-through text-lg mb-1">{tierInfo.originalPrice}/mo</div>
+                <div className="text-green-400 font-semibold mb-4">Save {tierInfo.savings} - Limited Time Only</div>
+                <div className="text-sm text-gray-300">
+                  Complete Neural Matrix Access • All Frequencies • Unlimited Training
+                </div>
+              </div>
+            </div>
+
+            <div className="inline-block p-4 bg-card-bg rounded-xl mb-4">
+              <Lock className="h-8 w-8 text-red-400 mx-auto" />
+            </div>
+            <p className="text-gray-400">🔒 Secure payment processing • Cancel anytime • 30-day guarantee</p>
           </div>
 
           <div className="grid md:grid-cols-5 gap-8">
@@ -217,76 +315,107 @@ export default function SubscribePage() {
                 </CardHeader>
                 <CardContent>
                   <Elements stripe={stripePromise} options={{ clientSecret }}>
-                    <SubscribeForm tier={tier} />
+                    <SubscribeForm tier="neurohacker" />
                   </Elements>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Order Summary */}
+            {/* Order Summary & Features */}
             <div className="md:col-span-2">
               <Card className="bg-card-bg border-gray-700 sticky top-8">
                 <CardHeader>
-                  <CardTitle className="text-white">Order Summary</CardTitle>
+                  <CardTitle className="text-white flex items-center">
+                    <Brain className="mr-2 h-5 w-5 text-red-400" />
+                    Neural Matrix Access
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between py-3 border-b border-gray-700">
-                    <div>
-                      <h3 className={`font-bold ${currentTier.color}`}>{currentTier.name} Access</h3>
-                      <p className="text-sm text-gray-400">Monthly subscription</p>
+                <CardContent className="space-y-6">
+                  {/* Pricing */}
+                  <div className="bg-gradient-to-r from-red-900/20 to-red-800/20 border border-red-700/50 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <div>
+                        <h3 className="font-bold text-red-300">Neurohacker Elite</h3>
+                        <p className="text-sm text-gray-400">Monthly subscription</p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-white font-mono text-xl">{tierInfo.price}</div>
+                        <div className="text-gray-400 line-through text-sm">{tierInfo.originalPrice}</div>
+                      </div>
                     </div>
-                    <span className="text-white font-mono text-lg" data-testid="text-price">
-                      {currentTier.price}
-                    </span>
-                  </div>
-
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between text-gray-400">
-                      <span>Subtotal</span>
-                      <span data-testid="text-subtotal">{currentTier.price}</span>
-                    </div>
-                    <div className="flex justify-between text-gray-400">
-                      <span>Tax</span>
-                      <span data-testid="text-tax">Calculated at checkout</span>
-                    </div>
-                    <div className="border-t border-gray-700 pt-3 flex justify-between text-white font-bold">
-                      <span>Total</span>
-                      <span data-testid="text-total">{currentTier.price}/month</span>
+                    <div className="text-center">
+                      <Badge className="bg-green-600/20 text-green-400 border-green-500/50">
+                        Save {tierInfo.savings} • Limited Time
+                      </Badge>
                     </div>
                   </div>
 
-                  <div className="mt-6 p-4 bg-gray-800 rounded-lg">
-                    <h4 className="font-semibold text-terminal-green mb-2">Included Features:</h4>
-                    <ul className="text-sm text-gray-300 space-y-1">
-                      {tier === 'recruit' && (
-                        <>
-                          <li>• Basic command line training</li>
-                          <li>• 5 training modules</li>
-                          <li>• Community support</li>
-                        </>
-                      )}
-                      {tier === 'operator' && (
-                        <>
-                          <li>• Advanced penetration testing</li>
-                          <li>• 20+ training modules</li>
-                          <li>• Live scenarios</li>
-                          <li>• Certificate generation</li>
-                        </>
-                      )}
-                      {tier === 'shadow' && (
-                        <>
-                          <li>• All operator features</li>
-                          <li>• Red team simulations</li>
-                          <li>• Custom scenarios</li>
-                          <li>• 1-on-1 mentoring</li>
-                        </>
-                      )}
+                  {/* What's Included */}
+                  <div>
+                    <h4 className="font-semibold text-white mb-4 flex items-center">
+                      <CheckCircle className="mr-2 h-4 w-4 text-green-400" />
+                      Complete Neural Enhancement Suite
+                    </h4>
+                    <ul className="space-y-3 text-sm">
+                      <li className="flex items-start space-x-3">
+                        <Zap className="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <div className="text-white font-medium">Alpha Wave Training (8-12 Hz)</div>
+                          <div className="text-gray-400">Creative flow states & relaxed focus</div>
+                        </div>
+                      </li>
+                      <li className="flex items-start space-x-3">
+                        <Zap className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <div className="text-white font-medium">Beta Wave Training (12-30 Hz)</div>
+                          <div className="text-gray-400">Analytical thinking & problem-solving</div>
+                        </div>
+                      </li>
+                      <li className="flex items-start space-x-3">
+                        <Zap className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <div className="text-white font-medium">Theta Wave Training (4-8 Hz)</div>
+                          <div className="text-gray-400">Deep insights & creative breakthroughs</div>
+                        </div>
+                      </li>
+                      <li className="flex items-start space-x-3">
+                        <Zap className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <div className="text-white font-medium">Gamma Wave Training (30-100+ Hz)</div>
+                          <div className="text-gray-400">Peak cognitive performance</div>
+                        </div>
+                      </li>
+                      <li className="flex items-start space-x-3">
+                        <Brain className="w-4 h-4 text-purple-400 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <div className="text-white font-medium">Sacred Geometry Neural Matrix</div>
+                          <div className="text-gray-400">Real-time visualization & synchronization</div>
+                        </div>
+                      </li>
+                      <li className="flex items-start space-x-3">
+                        <Shield className="w-4 h-4 text-yellow-400 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <div className="text-white font-medium">Classified Research Archive</div>
+                          <div className="text-gray-400">FOIA declassified cognitive enhancement docs</div>
+                        </div>
+                      </li>
                     </ul>
                   </div>
 
-                  <div className="text-xs text-gray-500 text-center">
+                  {/* Guarantees */}
+                  <div className="bg-gray-800 rounded-lg p-4">
+                    <h5 className="font-semibold text-green-400 mb-2">30-Day Guarantee</h5>
+                    <ul className="text-sm text-gray-300 space-y-1">
+                      <li>✓ Cancel anytime, no questions asked</li>
+                      <li>✓ Full refund within 30 days</li>
+                      <li>✓ Keep all downloaded materials</li>
+                      <li>✓ Instant access upon payment</li>
+                    </ul>
+                  </div>
+
+                  <div className="text-xs text-gray-500 text-center pt-4 border-t border-gray-700">
                     <Shield className="h-4 w-4 inline mr-1" />
-                    Your payment information is secure and encrypted
+                    256-bit SSL encryption • PCI DSS compliant • Powered by Stripe
                   </div>
                 </CardContent>
               </Card>
