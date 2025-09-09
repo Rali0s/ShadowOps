@@ -6,11 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { insertUserSchema } from "@shared/schema";
 import { z } from "zod";
-import { Code, Lock, Shield, Terminal } from "lucide-react";
+import { Brain, Lock, Shield, Timer, Zap, TrendingUp, Users, Target, Star } from "lucide-react";
 import { FrequencyLogo } from "@/components/frequency-logo";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -101,7 +103,11 @@ export default function AuthPage() {
   const handleLogin = async (data: LoginData) => {
     const result = await loginMutation.mutateAsync(data);
     if (result) {
-      setLocation("/");
+      toast({
+        title: "Neural Matrix Connected! 🧠",
+        description: `Welcome back, ${result.username}. Redirecting to subscription...`,
+      });
+      setTimeout(() => setLocation("/subscribe"), 1500);
     }
   };
 
@@ -109,7 +115,11 @@ export default function AuthPage() {
     const { confirmPassword, ...registerData } = data;
     const result = await registerMutation.mutateAsync(registerData);
     if (result) {
-      setLocation("/");
+      toast({
+        title: "Neural Matrix Access Granted! 🚀",
+        description: `Account created successfully, ${result.username}. Redirecting to subscription...`,
+      });
+      setTimeout(() => setLocation("/subscribe"), 1500);
     }
   };
 
@@ -164,8 +174,8 @@ export default function AuthPage() {
             <div className="flex justify-center mb-4">
               <FrequencyLogo size={64} className="bg-terminal-bg rounded-xl p-2 border border-terminal-red-primary" />
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-terminal-red-bright font-mono">_Fq</h1>
-            <p className="text-gray-400 mt-2 text-sm sm:text-base">Brainwave Frequency Analysis Training</p>
+            <h1 className="text-3xl font-bold text-white mb-2">Neural Matrix Access</h1>
+            <p className="text-gray-400">Join the neurohacker elite</p>
           </div>
 
           {/* Auth Tabs */}
@@ -191,9 +201,12 @@ export default function AuthPage() {
             <TabsContent value="login">
               <Card className="bg-card-bg border-gray-700">
                 <CardHeader>
-                  <CardTitle className="text-white">Welcome Back</CardTitle>
+                  <CardTitle className="flex items-center text-white">
+                    <Lock className="mr-2 h-5 w-5 text-red-400" />
+                    Access Your Account
+                  </CardTitle>
                   <CardDescription className="text-gray-400">
-                    Enter your credentials to access the terminal
+                    Connect to your neural enhancement dashboard
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -233,11 +246,11 @@ export default function AuthPage() {
 
                     <Button 
                       type="submit" 
-                      className="w-full bg-terminal-green text-terminal-bg hover:bg-terminal-amber font-semibold"
+                      className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold"
                       disabled={loginMutation.isPending}
                       data-testid="button-login-submit"
                     >
-                      {loginMutation.isPending ? "Authenticating..." : "Login"}
+                      {loginMutation.isPending ? "Connecting..." : "Access Neural Matrix"}
                     </Button>
 
                     {/* Forgot Password Link */}
@@ -260,9 +273,12 @@ export default function AuthPage() {
             <TabsContent value="register">
               <Card className="bg-card-bg border-gray-700">
                 <CardHeader>
-                  <CardTitle className="text-white">Create Account</CardTitle>
+                  <CardTitle className="flex items-center text-white">
+                    <Brain className="mr-2 h-5 w-5 text-red-400" />
+                    Create Account
+                  </CardTitle>
                   <CardDescription className="text-gray-400">
-                    Join the elite cybersecurity training program
+                    Join 2,847 neurohackers optimizing their cognitive performance
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -336,11 +352,11 @@ export default function AuthPage() {
 
                     <Button 
                       type="submit" 
-                      className="w-full bg-terminal-green text-terminal-bg hover:bg-terminal-amber font-semibold"
+                      className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold"
                       disabled={registerMutation.isPending}
                       data-testid="button-register-submit"
                     >
-                      {registerMutation.isPending ? "Creating Account..." : "Create Account"}
+                      {registerMutation.isPending ? "Creating Account..." : "Join Neural Matrix"}
                     </Button>
                   </form>
                 </CardContent>
@@ -462,44 +478,84 @@ export default function AuthPage() {
       </div>
 
       {/* Right Column - Hero Section */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-gray-900 to-terminal-bg items-center justify-center p-4 sm:p-8 relative">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="terminal-scanline"></div>
-        </div>
-        <div className="text-center relative z-10">
-          <div className="mb-8">
-            <div className="mx-auto mb-6">
-              <FrequencyLogo size={96} className="bg-terminal-bg rounded-2xl p-4 border border-terminal-red-primary" />
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-red-900/20 to-red-800/20 items-center justify-center p-8">
+        <div className="max-w-lg text-center">
+          {/* Urgency Badge */}
+          <Badge className="mb-6 bg-red-600/20 text-red-300 border-red-500/50 text-lg px-4 py-2">
+            <Timer className="w-4 h-4 mr-2" />
+            Limited Time: 70% Off
+          </Badge>
+
+          <h2 className="text-4xl font-bold text-white mb-6">
+            Unlock Your
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600">
+              Neural Potential
+            </span>
+          </h2>
+
+          <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+            Join <strong className="text-red-400">2,847 neurohackers</strong> mastering 
+            brainwave frequency optimization and cognitive enhancement protocols.
+          </p>
+
+          {/* Features Grid */}
+          <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="bg-black/20 rounded-lg p-4 border border-red-700/30">
+              <Zap className="w-6 h-6 text-red-400 mb-2 mx-auto" />
+              <div className="text-sm font-medium text-white">Alpha Training</div>
+              <div className="text-xs text-gray-400">8-12 Hz</div>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-terminal-red-bright mb-4 font-mono">_Fq</h2>
-            <p className="text-terminal-red-secondary font-mono">BRAINWAVE FREQUENCY SYSTEM</p>
+            <div className="bg-black/20 rounded-lg p-4 border border-cyan-700/30">
+              <Zap className="w-6 h-6 text-cyan-400 mb-2 mx-auto" />
+              <div className="text-sm font-medium text-white">Beta Training</div>
+              <div className="text-xs text-gray-400">12-30 Hz</div>
+            </div>
+            <div className="bg-black/20 rounded-lg p-4 border border-blue-700/30">
+              <Zap className="w-6 h-6 text-blue-400 mb-2 mx-auto" />
+              <div className="text-sm font-medium text-white">Theta Training</div>
+              <div className="text-xs text-gray-400">4-8 Hz</div>
+            </div>
+            <div className="bg-black/20 rounded-lg p-4 border border-green-700/30">
+              <Zap className="w-6 h-6 text-green-400 mb-2 mx-auto" />
+              <div className="text-sm font-medium text-white">Gamma Training</div>
+              <div className="text-xs text-gray-400">30-100+ Hz</div>
+            </div>
           </div>
 
-          <div className="space-y-6 text-left max-w-sm">
-            <div className="flex items-start space-x-3">
-              <Shield className="text-terminal-green mt-1 flex-shrink-0" />
-              <div>
-                <h3 className="text-white font-semibold">Alpha Wave Training (8-12 Hz)</h3>
-                <p className="text-gray-400 text-sm">Relaxed wakefulness and creative flow state mastery</p>
-              </div>
+          {/* Social Proof */}
+          <div className="flex items-center justify-center space-x-6 mb-8">
+            <div className="flex items-center space-x-1">
+              <Users className="w-4 h-4 text-green-400" />
+              <span className="text-green-400 text-sm">2,847 members</span>
             </div>
-
-            <div className="flex items-start space-x-3">
-              <Terminal className="text-cyber-blue mt-1 flex-shrink-0" />
-              <div>
-                <h3 className="text-white font-semibold">Beta Wave Analysis (12-30 Hz)</h3>
-                <p className="text-gray-400 text-sm">Alert analytical thinking and problem-solving focus</p>
-              </div>
+            <div className="flex items-center space-x-1">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+              ))}
+              <span className="text-yellow-400 text-sm ml-1">4.9/5</span>
             </div>
-
-            <div className="flex items-start space-x-3">
-              <Code className="text-terminal-amber mt-1 flex-shrink-0" />
-              <div>
-                <h3 className="text-white font-semibold">Theta-Gamma Integration (4-100+ Hz)</h3>
-                <p className="text-gray-400 text-sm">Deep processing states and peak cognitive performance</p>
-              </div>
+            <div className="flex items-center space-x-1">
+              <TrendingUp className="w-4 h-4 text-blue-400" />
+              <span className="text-blue-400 text-sm">94% success</span>
             </div>
           </div>
+
+          {/* Pricing */}
+          <div className="bg-gradient-to-r from-red-600/10 to-red-500/10 border border-red-500/30 rounded-xl p-6 mb-6">
+            <div className="text-3xl font-bold text-white mb-2">$5.89/mo</div>
+            <div className="text-gray-400 line-through mb-1">Regular: $19.99/mo</div>
+            <div className="text-green-400 font-semibold">Save 70% - Limited Time Only</div>
+          </div>
+
+          {/* Security Notice */}
+          <Alert className="border-blue-500/30 bg-blue-500/5">
+            <Shield className="h-4 w-4" />
+            <AlertDescription className="text-left text-sm">
+              <strong>Secure & Private:</strong> Your data is encrypted and never shared. 
+              Cancel anytime with our 30-day money-back guarantee.
+            </AlertDescription>
+          </Alert>
         </div>
       </div>
     </div>
