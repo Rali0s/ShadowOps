@@ -9,10 +9,19 @@ type WaveformType = 'sine' | 'square' | 'sawtooth' | 'triangle';
 
 interface FrequencyGeneratorProps {
   className?: string;
+  onFrequencyChange?: (frequency: number) => void;
 }
 
-export function FrequencyGenerator({ className = '' }: FrequencyGeneratorProps) {
+export function FrequencyGenerator({ className = '', onFrequencyChange }: FrequencyGeneratorProps) {
   const [frequency, setFrequency] = useState(432);
+
+  // Notify parent on initial load
+  useEffect(() => {
+    onFrequencyChange?.(frequency);
+    window.dispatchEvent(new CustomEvent('frequencyChange', { 
+      detail: { frequency } 
+    }));
+  }, []);  // Only on mount
   const [volume, setVolume] = useState([50]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [waveform, setWaveform] = useState<WaveformType>('sine');
@@ -83,12 +92,21 @@ export function FrequencyGenerator({ className = '' }: FrequencyGeneratorProps) 
 
   const handleFrequencyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newFreq = parseFloat(e.target.value) || 0;
-    setFrequency(Math.max(1, Math.min(20000, newFreq)));
+    const clampedFreq = Math.max(1, Math.min(20000, newFreq));
+    setFrequency(clampedFreq);
+    
+    // Notify parent component of frequency change
+    onFrequencyChange?.(clampedFreq);
+    
+    // Dispatch global event for other components
+    window.dispatchEvent(new CustomEvent('frequencyChange', { 
+      detail: { frequency: clampedFreq } 
+    }));
     
     // Update frequency if playing
     if (oscillatorRef.current && audioContextRef.current) {
       oscillatorRef.current.frequency.setValueAtTime(
-        newFreq, 
+        clampedFreq, 
         audioContextRef.current.currentTime
       );
     }
@@ -167,13 +185,19 @@ export function FrequencyGenerator({ className = '' }: FrequencyGeneratorProps) 
     const handlePresetChange = (event: CustomEvent) => {
       const { frequency: newFreq } = event.detail;
       setFrequency(newFreq);
+      onFrequencyChange?.(newFreq);
+      
+      // Dispatch global event
+      window.dispatchEvent(new CustomEvent('frequencyChange', { 
+        detail: { frequency: newFreq } 
+      }));
     };
 
     window.addEventListener('setFrequencyPreset', handlePresetChange as EventListener);
     return () => {
       window.removeEventListener('setFrequencyPreset', handlePresetChange as EventListener);
     };
-  }, []);
+  }, [onFrequencyChange]);
 
   return (
     <Card className={`bg-black/50 border-red-700/30 ${className}`}>
