@@ -1,0 +1,239 @@
+{
+  "registry": {
+    "title": "Blackbriar Training Manual Registry",
+    "description": "OpenSource & Declassified HUMINT Training Manual Archive",
+    "classification": "OPEN SOURCE / DECLASSIFIED",
+    "last_updated": "2025-09-08",
+    "total_manuals": 24,
+    "categories": {
+      "core_military": {
+        "title": "Core Military Doctrine & Training Manuals",
+        "manuals": [
+          {
+            "id": "fm-2-22-3",
+            "title": "FM 2-22.3 (FM 34-52) – Human Intelligence Collector Operations",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "high"
+          },
+          {
+            "id": "fm-34-52",
+            "title": "FM 34-52 – Intelligence Interrogation",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "high"
+          },
+          {
+            "id": "st-2-22-7",
+            "title": "ST 2-22.7 – Tactical HUMINT and Counterintelligence Operations",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "medium"
+          },
+          {
+            "id": "fm-2-0",
+            "title": "FM 2-0 – Intelligence",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "medium"
+          },
+          {
+            "id": "commanders-guide-humint",
+            "title": "Commander's Guide to HUMINT (CALL)",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "medium"
+          },
+          {
+            "id": "mcdp-2",
+            "title": "MCDP-2 (Intelligence)",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "low"
+          },
+          {
+            "id": "mcwp-2-10",
+            "title": "MCWP 2-10 (Intelligence Operations)",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "low"
+          },
+          {
+            "id": "mcwp-2-14",
+            "title": "MCWP 2-14 (Counterintelligence)",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "low"
+          }
+        ]
+      },
+      "declassified_foia": {
+        "title": "Declassified / FOIA Training & Interrogation Materials",
+        "manuals": [
+          {
+            "id": "kubark-1963",
+            "title": "KUBARK Counterintelligence Interrogation (CIA, 1963)",
+            "status": "available",
+            "classification": "declassified",
+            "priority": "high"
+          },
+          {
+            "id": "hre-1983",
+            "title": "Human Resource Exploitation Training Manual (HRE, 1983)",
+            "status": "available",
+            "classification": "declassified",
+            "priority": "high"
+          },
+          {
+            "id": "cia-interrogations-compilation",
+            "title": "CIA Reading Room – Interrogations Compilation",
+            "status": "available",
+            "classification": "declassified",
+            "priority": "medium"
+          }
+        ]
+      },
+      "law_enforcement": {
+        "title": "Law-Enforcement Source Handling (U.S.)",
+        "manuals": [
+          {
+            "id": "ag-guidelines-chs",
+            "title": "Attorney General's Guidelines on FBI Confidential Human Sources",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "medium"
+          },
+          {
+            "id": "fbi-chs-policy",
+            "title": "FBI Confidential Human Source Policy Guide (redacted)",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "medium"
+          },
+          {
+            "id": "gao-oig-reports",
+            "title": "GAO / OIG Oversight Reports",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "low"
+          }
+        ]
+      },
+      "international": {
+        "title": "UK & International Governance / Practice",
+        "manuals": [
+          {
+            "id": "uk-chis-code",
+            "title": "Covert Human Intelligence Sources (CHIS) – Revised Code of Practice (UK)",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "medium"
+          },
+          {
+            "id": "nato-ajp-2",
+            "title": "NATO AJP-2 / AJP-2.3 / AIntP-05 (HUMINT)",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "high"
+          },
+          {
+            "id": "nato-humint-coe",
+            "title": "NATO HUMINT COE – Training Catalogues",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "medium"
+          }
+        ]
+      },
+      "academic": {
+        "title": "Peer-Reviewed & Scholarly (Training-Relevant)",
+        "manuals": [
+          {
+            "id": "nunan-2020-rapport",
+            "title": "Nunan (2020) – Rapport in CHIS Interactions",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "low"
+          },
+          {
+            "id": "moffett-2021-planning",
+            "title": "Moffett et al. (2021) – HUMINT Planning Factors",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "low"
+          },
+          {
+            "id": "hartwig-interviewing",
+            "title": "Hartwig, Meissner, Semel – Human Intelligence Interviewing & Interrogation",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "medium"
+          },
+          {
+            "id": "peace-model",
+            "title": "PEACE Model – Investigative Interviewing",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "medium"
+          },
+          {
+            "id": "un-manual-2024",
+            "title": "UN Manual (2024) – Investigative Interviewing",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "low"
+          }
+        ]
+      },
+      "historic": {
+        "title": "Historic Editions / Mirrors",
+        "manuals": [
+          {
+            "id": "fm-2-22-3-mirrors",
+            "title": "FM 2-22.3 – Alternate Mirrors",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "low"
+          },
+          {
+            "id": "fm-34-52-archives",
+            "title": "FM 34-52 – Mirrors & Archives",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "low"
+          }
+        ]
+      },
+      "training_centers": {
+        "title": "Training Centers & Pipelines (Public-Facing)",
+        "manuals": [
+          {
+            "id": "ht-jcoe",
+            "title": "HUMINT Training – Joint Center of Excellence (HT-JCOE)",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "medium"
+          },
+          {
+            "id": "nato-coe-ecosystem",
+            "title": "NATO COE Ecosystem – Accredited COEs",
+            "status": "available",
+            "classification": "unclassified",
+            "priority": "low"
+          }
+        ]
+      }
+    },
+    "active_modules": [
+      {
+        "id": "humint-programming-v1",
+        "title": "HUMINT-PROGRAMMING-v1",
+        "status": "loaded",
+        "classification": "TOP SECRET",
+        "sections": 6,
+        "duration": 105,
+        "created": "2025-09-08"
+      }
+    ]
+  }
+}
