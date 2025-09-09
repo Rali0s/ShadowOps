@@ -17,7 +17,10 @@ import {
   Flashlight,
   RadioIcon,
   Zap,
-  Timer
+  Timer,
+  Shield,
+  Clock,
+  Anchor
 } from 'lucide-react';
 import { BinauralBeatGenerator } from './BinauralBeatGenerator';
 import { SacredGeometryWheel } from './sacred-geometry-wheel';
@@ -544,10 +547,11 @@ export function HumintTrainingTool() {
 
       {/* Main Training Interface */}
       <Tabs defaultValue="teleprompter" className="space-y-4">
-        <TabsList className="grid grid-cols-4 w-full">
+        <TabsList className="grid grid-cols-5 w-full">
           <TabsTrigger value="teleprompter">Teleprompter</TabsTrigger>
           <TabsTrigger value="visuals">Visual Glyphs</TabsTrigger>
           <TabsTrigger value="frequency">Frequency</TabsTrigger>
+          <TabsTrigger value="tiedown">Tie-Down</TabsTrigger>
           <TabsTrigger value="scenario">Scenarios</TabsTrigger>
         </TabsList>
 
@@ -925,6 +929,174 @@ export function HumintTrainingTool() {
                   </div>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Tie-Down Protocol Tab */}
+        <TabsContent value="tiedown" className="space-y-4">
+          <Card className="bg-black/50 border-orange-500/30">
+            <CardHeader>
+              <CardTitle className="text-orange-400 flex items-center space-x-2">
+                <Shield className="w-5 h-5" />
+                <span>🔒 Tie-Down Protocol (Portal-Ready)</span>
+              </CardTitle>
+              <div className="text-sm text-gray-400 mt-2">
+                <strong className="text-orange-300">Critical Safety Protocol:</strong> Prevents cognitive dissonance after multi-channel immersion. 
+                Guards against magical-thinking drift and perceptual desync.
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+
+              {/* Four Stages */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                {/* Stage 1: Sanity Check */}
+                <Card className="bg-red-900/20 border border-red-700/50">
+                  <CardHeader>
+                    <CardTitle className="text-red-400 text-lg flex items-center space-x-2">
+                      <Clock className="w-4 h-4" />
+                      <span>1. Sanity / Time Check</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="p-3 bg-red-800/20 rounded border border-red-700/30">
+                      <div className="text-sm text-red-300 font-semibold mb-1">Phrase 1:</div>
+                      <div className="text-red-100 italic">"No one on my left, no one on my right, I'm in my own mind right now."</div>
+                    </div>
+                    <div className="p-3 bg-red-800/20 rounded border border-red-700/30">
+                      <div className="text-sm text-red-300 font-semibold mb-1">Phrase 2:</div>
+                      <div className="text-red-100 italic">"Give me my mind back now."</div>
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      <strong>Anchor:</strong> Flashlight blink or hand tap<br/>
+                      <strong>Purpose:</strong> Reassert inner agency and mark session boundary
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Stage 2: Backward Anchor */}
+                <Card className="bg-blue-900/20 border border-blue-700/50">
+                  <CardHeader>
+                    <CardTitle className="text-blue-400 text-lg flex items-center space-x-2">
+                      <Anchor className="w-4 h-4" />
+                      <span>2. Backward Anchor</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="p-3 bg-blue-800/20 rounded border border-blue-700/30">
+                      <div className="text-sm text-blue-300 font-semibold mb-1">Process:</div>
+                      <div className="text-blue-100 text-sm">Select one vivid, known event (graduation, childhood moment, previous mission)</div>
+                    </div>
+                    <div className="p-3 bg-blue-800/20 rounded border border-blue-700/30">
+                      <div className="text-sm text-blue-300 font-semibold mb-1">Phrase:</div>
+                      <div className="text-blue-100 italic">"As I did before, I do again."</div>
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      <strong>Purpose:</strong> Prevent orphaned "quantum loops" by latching them into existing memory track
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Stage 3: Forward Anchor */}
+                <Card className="bg-green-900/20 border border-green-700/50">
+                  <CardHeader>
+                    <CardTitle className="text-green-400 text-lg flex items-center space-x-2">
+                      <Timer className="w-4 h-4" />
+                      <span>3. Forward Anchor</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="p-3 bg-green-800/20 rounded border border-green-700/30">
+                      <div className="text-sm text-green-300 font-semibold mb-1">Action:</div>
+                      <div className="text-green-100 text-sm">Speak current time, date, and location aloud</div>
+                    </div>
+                    <div className="p-3 bg-green-800/20 rounded border border-green-700/30">
+                      <div className="text-sm text-green-300 font-semibold mb-1">Physical Anchor:</div>
+                      <div className="text-green-100 text-sm">Hand to chest, or touch solid object</div>
+                    </div>
+                    <div className="p-3 bg-green-800/20 rounded border border-green-700/30">
+                      <div className="text-sm text-green-300 font-semibold mb-1">Phrase:</div>
+                      <div className="text-green-100 italic">"Here. Now."</div>
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      <strong>Purpose:</strong> Reset neuro-timing (CPU clock), return orientation to real time
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Stage 4: Breath & Closure */}
+                <Card className="bg-purple-900/20 border border-purple-700/50">
+                  <CardHeader>
+                    <CardTitle className="text-purple-400 text-lg flex items-center space-x-2">
+                      <Volume2 className="w-4 h-4" />
+                      <span>4. Breath & Closure</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="p-3 bg-purple-800/20 rounded border border-purple-700/30">
+                      <div className="text-sm text-purple-300 font-semibold mb-1">Breathing:</div>
+                      <div className="text-purple-100 text-sm">4–4 breathing cycles (inhale 4, exhale 4) ×3</div>
+                    </div>
+                    <div className="p-3 bg-purple-800/20 rounded border border-purple-700/30">
+                      <div className="text-sm text-purple-300 font-semibold mb-1">Visualization:</div>
+                      <div className="text-purple-100 text-sm">See previous "channels" or "loops" folding closed into single line</div>
+                    </div>
+                    <div className="p-3 bg-purple-800/20 rounded border border-purple-700/30">
+                      <div className="text-sm text-purple-300 font-semibold mb-1">Optional Cue:</div>
+                      <div className="text-purple-100 text-sm">End with CONTROL anchor if session built on HUMINT compression</div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Risk Warning */}
+              <Card className="bg-yellow-900/20 border border-yellow-600/50">
+                <CardHeader>
+                  <CardTitle className="text-yellow-400 flex items-center space-x-2">
+                    <Flashlight className="w-5 h-5" />
+                    <span>⚠️ Risk Notes & Guardrails</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="text-yellow-100 text-sm space-y-2">
+                    <div>
+                      <strong className="text-yellow-300">Magical Thinking Risk:</strong> Lucid / RV / Meta-Science states may trigger magical thinking phenomena — illusions of significance, "train-window effect" (static center vs moving periphery).
+                    </div>
+                    <div>
+                      <strong className="text-yellow-300">Schizotypal Mirror:</strong> These mirror schizotypal symptom #3 (magical thinking).
+                    </div>
+                    <div>
+                      <strong className="text-yellow-300">Critical Function:</strong> Tie-Down must act as neuro "clock reset" to prevent drift and maintain baseline reality orientation.
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Quick Actions */}
+              <div className="flex justify-center space-x-4">
+                <Button 
+                  variant="outline" 
+                  className="border-orange-500 text-orange-400 hover:bg-orange-500/10"
+                  onClick={() => {
+                    if (session.audioPlaying) stopAudio();
+                    alert('🔒 Tie-Down Protocol Initiated\n\n1. Say: "No one on my left, no one on my right, I\'m in my own mind right now."\n2. Say: "Give me my mind back now."\n3. Recall a vivid past memory\n4. Say: "As I did before, I do again."\n5. State current time and location aloud\n6. Say: "Here. Now."\n7. Complete 3 cycles of 4-4 breathing\n\nProtocol Complete. Reality synchronized.');
+                  }}
+                >
+                  🔒 Execute Tie-Down Protocol
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="border-red-500 text-red-400 hover:bg-red-500/10"
+                  onClick={() => {
+                    if (session.audioPlaying) stopAudio();
+                    alert('⚠️ Emergency Grounding Activated\n\n"Give me my mind back now."\n"Here. Now."\n\nTake 10 deep breaths. Touch something solid. State your name and location.\n\nEmergency protocol complete.');
+                  }}
+                >
+                  ⚠️ Emergency Ground
+                </Button>
+              </div>
+
             </CardContent>
           </Card>
         </TabsContent>
