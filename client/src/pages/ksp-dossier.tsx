@@ -40,19 +40,19 @@ The objective is not hypnosis, but the creation of programmable schemas — pre-
 • Gamma (30–100+ Hz): Cognitive binding; insight; multi-schema integration
 
 CONDITIONING HYPOTHESIS:
-"One can engage in a Jason Bourne-like trigger by using MK-Ultra protocols and 1–3 external/internal anchors as inception points to operate within a latent schema previously imprinted at Theta levels."`
+"One can engage in a Jason Bourne-like trigger by using protocols and 1–3 external/internal anchors as inception points to operate within a latent schema previously imprinted at Theta levels."`
   },
   {
     id: 'schema-design',
     title: '3. Schema Design',
     classification: 'Internal / Restricted', 
     riskLevel: 'extreme',
-    content: `Schemas are MENTAL KNOTS — tightly constructed flow patterns of behavior, thought, or emotional state.
+    content: `Schemas are MENTAL BLUEPRINTS — tightly constructed flow patterns of behavior, thought, or emotional state.
 
 Each schema requires:
-• Induction Method: Meditation, hypnosis, sound entrainment (Endel, EMOTIV EEG)
+• Induction Method: Meditation, hypnosis, sound entrainment (Endel, EMOTIV EEG, InsiteTimer)
 • Programmed Narrative: Mindset A/B/C with embedded triggers
-• Trigger Mechanism: Auditory cue (90s Cisco phone ring), tactile cue (back-tap), or visual cue (flashlight)
+• Trigger Mechanism: Auditory cue, tactile cue ( Flashlight On During Session or Suspect 0 Type Phase )
 • Exit Protocol: External timer/sound or internal "off-switch"
 • Tie-Down: Debriefing to prevent cognitive dissonance backlash`
   },
@@ -79,7 +79,7 @@ PHASE OPERATIONS:
     classification: 'Internal / Restricted',
     riskLevel: 'medium',
     content: `REQUIRED EQUIPMENT:
-• EEG/ECG baselines (e.g., Emotiv Epoch)
+• EEG/ECG baselines (e.g., Emotiv Epoch) - APA Board Approval
 • Entrainment apps (soundscapes inducing Alpha/Theta)
 • Schema recordings (audio instructions for playback) 
 • Anchor objects (physical or symbolic cues)
@@ -106,7 +106,7 @@ OPS TRAINING (THEORETICAL):
 • Trigger-based operational state activation
 
 THERAPEUTIC EXPERIMENT:
-• Trauma re-patterning (HIGH RISK)
+• Trauma re-patterning (HIGH RISK) - PTSD TRIGGER - WARNING!
 • Cognitive behavioral modification
 • Memory integration protocols
 
@@ -128,7 +128,7 @@ COGNITIVE DISSONANCE COLLAPSE:
 • Memory fragmentation dangers
 
 FALSE MEMORIES / MAGICAL THINKING:
-• Distorted perception of reality
+• Distorted perception of reality - +1 Week
 • Paranormal belief integration
 • Timeline confusion and false narratives
 
@@ -138,12 +138,9 @@ ANCHOR DEPENDENCY:
 • Psychological addiction to schema states
 
 ETHICAL DANGERS:
-• MK-Ultra parallels demand extreme caution
-• Potential for psychological manipulation
 • Violation of informed consent principles
 
 OPERATIONAL SECURITY:
-• Complete - Publish - Theft Possible from All Blow
 • Classified methodology exposure risk
 • Unauthorized replication dangers`
   },
@@ -160,11 +157,6 @@ POPULAR OUTLETS:
 • Psychology Today - General audience publication
 • Academic conferences and symposiums
 
-CONFIDENTIAL OPTIONS:
-• Restricted report circulation
-• Internal research documentation only
-• Psychology degree minus math prerequisites review
-
 PUBLICATION CONSIDERATIONS:
 • Ethics review board approval required
 • Peer review for validation and safety
@@ -172,33 +164,38 @@ PUBLICATION CONSIDERATIONS:
 • Academic versus operational applications`
   },
   {
-    id: 'seal',
-    title: '9. Agency Seal & Identity',
-    classification: 'Internal / Restricted', 
-    riskLevel: 'low',
-    content: `THE AGENCY SEAL OF KNOT SOLUTION PROGRAMMING:
+    id: 'Memorization',
+    title: '9. Memorization',
+    classification: 'Internal / Restricted',
+    riskLevel: 'high',
+    content: `METHODOLOGY:
+  • Gaze Into Red or Grey Color & Shape Sphere Center
+  • or Visualize the Shape of the Sphere On The Wall
+  • Having Prepared your Mind Palace Recall Your Trigger Playing Card 
+  • Duration 1 - 15 Minutes ( Think only of your Card )
+  • Next Time You Enter Your Card - After Rest & Relaxation Session, Check Your Recall
 
-DESIGN ELEMENTS:
-• Central KNOT (schema symbol)
-• Circular FLOW ENCLOSURE  
-• Sacred geometry integration
-• Brainwave pattern borders
-
-OFFICIAL DISCLAIMERS:
-• "Product of A Mad Man"
-• "Psychology Degree Minus Math Prereqs"
-• Internal/Restricted Classification
-• Experimental/Academic Reference Only
-
-IDENTITY MARKERS:
-• KSP designation and classification codes
-• Operational security warnings
-• Ethics review requirements
-• Academic institution affiliations`
+  PUBLICATION CONSIDERATIONS:
+  • Ethics review board approval required
+  • Peer review for validation and safety
+  • Potential classification restrictions
+  • Academic versus operational applications`
+  },
+  {
+    id: 'Schema Design',
+    title: '10. Schema Design',
+    classification: 'Internal / Restricted',
+    riskLevel: 'high',
+    content: `METHODOLOGY:
+  • Read: Master Key System by Charles F. Haanel
+  • Write Down Who You Are & What Makes You
+  • ReWrite It Into Your Own Ideal Personality
+  • Map All New Traits and What They Mean To You
+  • Theory: Use of a Trigger Sound To Activatite Your New Schema`
   },
   {
     id: 'conclusion',
-    title: '10. Conclusion',
+    title: '11. Conclusion',
     classification: 'Internal / Restricted',
     riskLevel: 'extreme', 
     content: `KSP represents a FUSION OF:
@@ -210,7 +207,6 @@ IDENTITY MARKERS:
 CRITICAL WARNINGS:
 ⚠️ OPERATIONAL DEPLOYMENT PROHIBITED
 ⚠️ FOR ACADEMIC REVIEW ONLY
-⚠️ PSYCH-OPS NARRATIVE CONSTRUCTION ONLY
 ⚠️ EXTREME CAUTION REQUIRED
 
 EVOLUTION STATUS:
@@ -466,7 +462,7 @@ export default function KSPDossier() {
                   <li>• Cognitive dissonance risk</li>
                   <li>• Magical thinking potential</li>
                   <li>• Anchor dependency danger</li>
-                  <li>• MK-Ultra ethical parallels</li>
+                  <li>• Ethical parallels</li>
                 </ul>
               </CardContent>
             </Card>
