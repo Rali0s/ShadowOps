@@ -134,8 +134,8 @@ export default function SubscribePage() {
       return;
     }
 
-    // Create neurohacker subscription
-    apiRequest("POST", "/api/subscribe-neurohacker")
+    // Create subscription
+    apiRequest("POST", "/api/create-subscription")
       .then((res) => res.json())
       .then((data) => {
         if (data.clientSecret) {
