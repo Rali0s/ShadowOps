@@ -339,6 +339,17 @@ export default function HomePage() {
                       <span className="text-xs font-mono">research</span>
                     </Button>
                   </Link>
+                  
+                  <Link href="/frequency-generator">
+                    <Button 
+                      variant="outline" 
+                      className="w-full bg-gray-900 border-purple-600/50 text-purple-400 hover:bg-purple-600/20 hover:text-purple-300 h-16 flex flex-col items-center justify-center space-y-1"
+                      data-testid="button-freq-gen"
+                    >
+                      <Brain className="w-5 h-5" />
+                      <span className="text-xs font-mono">freq_gen</span>
+                    </Button>
+                  </Link>
                 </div>
                 
                 {/* Membership Benefits */}

@@ -16,6 +16,7 @@ import ScientificMethodPage from "@/pages/scientific-method-page";
 
 import EducationMaterialsPage from "@/pages/education-materials-page";
 import SelfReportMethodologyPage from "@/pages/self-report-methodology";
+import FrequencyGeneratorPage from "@/pages/frequency-generator-page";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -31,6 +32,7 @@ function Router() {
 
       <Route path="/education" component={EducationMaterialsPage} />
       <Route path="/methodology" component={SelfReportMethodologyPage} />
+      <Route path="/frequency-generator" component={FrequencyGeneratorPage} />
       <Route component={NotFound} />
     </Switch>
   );
