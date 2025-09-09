@@ -17,6 +17,7 @@ import ScientificMethodPage from "@/pages/scientific-method-page";
 import EducationMaterialsPage from "@/pages/education-materials-page";
 import SelfReportMethodologyPage from "@/pages/self-report-methodology";
 import FrequencyGeneratorPage from "@/pages/frequency-generator-page";
+import BlackbriarTrainingPage from "@/pages/blackbriar-training-page";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -33,6 +34,7 @@ function Router() {
       <Route path="/education" component={EducationMaterialsPage} />
       <Route path="/methodology" component={SelfReportMethodologyPage} />
       <Route path="/frequency-generator" component={FrequencyGeneratorPage} />
+      <Route path="/blackbriar-training" component={BlackbriarTrainingPage} />
       <Route component={NotFound} />
     </Switch>
   );
