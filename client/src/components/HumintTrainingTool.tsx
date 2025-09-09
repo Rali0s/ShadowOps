@@ -496,11 +496,11 @@ export function HumintTrainingTool() {
                             <span className="font-mono text-xs">
                               [{formatTime(timing.time)}]
                             </span>
-                            <Badge variant="outline" size="sm" className="text-xs">
+                            <Badge variant="outline" className="text-xs">
                               {timing.type}
                             </Badge>
                             {timing.cue && (
-                              <Badge variant="outline" size="sm" className="text-xs text-yellow-400">
+                              <Badge variant="outline" className="text-xs text-yellow-400">
                                 {timing.cue}
                               </Badge>
                             )}
