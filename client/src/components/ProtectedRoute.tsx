@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,7 +12,9 @@ import {
   Loader2,
   Star,
   Users,
-  ArrowRight
+  ArrowRight,
+  Settings,
+  Eye
 } from 'lucide-react';
 
 interface ProtectedRouteProps {
@@ -22,6 +24,49 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children, requireSubscription = true }: ProtectedRouteProps) {
   const { user, isLoading, isSubscribed } = useAuth();
+  const [isAdminMode, setIsAdminMode] = useState(false);
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
+
+  // Check for admin mode on component mount
+  useEffect(() => {
+    const adminMode = localStorage.getItem('neural_matrix_admin_mode') === 'true';
+    const urlParams = new URLSearchParams(window.location.search);
+    const adminParam = urlParams.get('admin') === 'true';
+    
+    if (adminMode || adminParam) {
+      setIsAdminMode(true);
+      if (adminParam) {
+        localStorage.setItem('neural_matrix_admin_mode', 'true');
+        // Clean URL after setting admin mode
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    }
+    
+    // Show admin panel if user presses Ctrl+Shift+A
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+        e.preventDefault();
+        setShowAdminPanel(true);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, []);
+
+  const toggleAdminMode = () => {
+    const newMode = !isAdminMode;
+    setIsAdminMode(newMode);
+    localStorage.setItem('neural_matrix_admin_mode', newMode.toString());
+    setShowAdminPanel(false);
+    
+    // Show notification
+    if (newMode) {
+      console.log('🔓 Neural Matrix Admin Mode ENABLED - Full access granted');
+    } else {
+      console.log('🔒 Neural Matrix Admin Mode DISABLED - Normal auth required');
+    }
+  };
 
   // Show loading state
   if (isLoading) {
@@ -36,6 +81,67 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
           <p className="text-gray-500 text-sm mt-2">Verifying access permissions</p>
         </div>
       </div>
+    );
+  }
+
+  // Admin bypass - allow access without authentication
+  if (isAdminMode) {
+    return (
+      <>
+        {/* Admin Mode Indicator */}
+        <div className="fixed top-4 right-4 z-50 bg-red-600/20 border border-red-500 rounded-lg p-3 backdrop-blur-sm">
+          <div className="flex items-center space-x-2 text-red-400 text-sm font-mono">
+            <Shield className="w-4 h-4" />
+            <span>ADMIN MODE</span>
+            <Eye className="w-4 h-4" />
+          </div>
+        </div>
+        
+        {/* Admin Panel */}
+        {showAdminPanel && (
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+            <div className="bg-gray-900 border border-red-500 rounded-lg p-6 max-w-md w-full mx-4">
+              <h3 className="text-xl font-bold text-red-400 mb-4 flex items-center">
+                <Settings className="w-5 h-5 mr-2" />
+                Neural Matrix Admin Panel
+              </h3>
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center justify-between p-3 bg-red-900/20 rounded border border-red-500/30">
+                  <span className="text-red-400 font-mono text-sm">Admin Status:</span>
+                  <Badge className="bg-green-600 text-white">ACTIVE</Badge>
+                </div>
+                <p className="text-gray-300 text-sm">
+                  All authentication and subscription requirements are bypassed. Full access to Neural Matrix training protocols enabled.
+                </p>
+              </div>
+              <div className="flex space-x-3">
+                <Button 
+                  onClick={toggleAdminMode}
+                  variant="destructive"
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  Disable Admin Mode
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => setShowAdminPanel(false)}
+                  className="border-gray-600 text-gray-300"
+                >
+                  Close
+                </Button>
+              </div>
+              <div className="mt-4 pt-3 border-t border-gray-700">
+                <p className="text-xs text-gray-500">
+                  Press <kbd className="bg-gray-800 px-1 rounded">Ctrl+Shift+A</kbd> to open this panel<br/>
+                  Add <code className="text-red-400">?admin=true</code> to URL for quick access
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {children}
+      </>
     );
   }
 
@@ -160,6 +266,48 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
                 </Button>
               </Link>
             </div>
+            
+            {/* Admin Panel Access (Hidden) */}
+            {showAdminPanel && (
+              <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+                <div className="bg-gray-900 border border-red-500 rounded-lg p-6 max-w-md w-full mx-4">
+                  <h3 className="text-xl font-bold text-red-400 mb-4 flex items-center">
+                    <Settings className="w-5 h-5 mr-2" />
+                    Neural Matrix Admin Panel
+                  </h3>
+                  <div className="space-y-3 mb-6">
+                    <div className="flex items-center justify-between p-3 bg-gray-800/50 rounded border border-gray-600">
+                      <span className="text-gray-400 font-mono text-sm">Admin Status:</span>
+                      <Badge variant="outline" className="border-gray-500 text-gray-400">DISABLED</Badge>
+                    </div>
+                    <p className="text-gray-300 text-sm">
+                      Enable admin mode to bypass authentication and subscription requirements for testing purposes.
+                    </p>
+                  </div>
+                  <div className="flex space-x-3">
+                    <Button 
+                      onClick={toggleAdminMode}
+                      className="bg-red-600 hover:bg-red-700"
+                    >
+                      Enable Admin Mode
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      onClick={() => setShowAdminPanel(false)}
+                      className="border-gray-600 text-gray-300"
+                    >
+                      Close
+                    </Button>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-gray-700">
+                    <p className="text-xs text-gray-500">
+                      Press <kbd className="bg-gray-800 px-1 rounded">Ctrl+Shift+A</kbd> to open this panel<br/>
+                      Add <code className="text-red-400">?admin=true</code> to URL for quick access
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Social Proof */}
             <div className="flex items-center justify-center space-x-8 text-sm">
