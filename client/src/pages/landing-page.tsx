@@ -65,29 +65,29 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
-      {/* Header */}
+      {/* Header - Optimized for tablets */}
       <header className="sticky top-0 z-50 border-b border-red-500/20 bg-black/90 backdrop-blur-sm">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-red-600 to-red-700 rounded-lg flex items-center justify-center">
-                <Brain className="text-white w-6 h-6" />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            <div className="flex items-center space-x-3 md:space-x-4">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-red-600 to-red-700 rounded-lg flex items-center justify-center">
+                <Brain className="text-white w-6 h-6 md:w-7 md:h-7" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-red-400 font-mono">_Fq</h1>
-                <p className="text-xs text-gray-400 -mt-1">Neurohacker Platform</p>
+                <h1 className="text-xl md:text-2xl font-bold text-red-400 font-mono">_Fq</h1>
+                <p className="text-xs md:text-sm text-gray-400 -mt-1">Neurohacker Platform</p>
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
-              <div className="hidden sm:flex items-center space-x-2 text-sm">
-                <Users className="w-4 h-4 text-green-400" />
+            <div className="flex items-center space-x-4 md:space-x-6">
+              <div className="hidden sm:flex items-center space-x-2 text-sm md:text-base">
+                <Users className="w-4 h-4 md:w-5 md:h-5 text-green-400" />
                 <span className="text-green-400 font-mono">2,847</span>
                 <span className="text-gray-400">active users</span>
               </div>
               <Link href="/subscribe">
-                <Button className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800">
-                  <Lock className="w-4 h-4 mr-2" />
+                <Button className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 md:px-6 md:py-3 md:text-lg">
+                  <Lock className="w-4 h-4 md:w-5 md:h-5 mr-2" />
                   Get Access
                 </Button>
               </Link>
@@ -96,56 +96,56 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="pt-20 pb-16 px-4 sm:px-6">
+      {/* Hero Section - Tablet Optimized */}
+      <section className="pt-20 md:pt-32 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8">
         <div className="container mx-auto text-center">
-          <div className="max-w-4xl mx-auto">
-            <Badge className="mb-6 bg-red-600/20 border-red-500 text-red-400">
+          <div className="max-w-4xl lg:max-w-6xl mx-auto">
+            <Badge className="mb-6 md:mb-8 bg-red-600/20 border-red-500 text-red-400 md:text-lg md:px-6 md:py-3">
               🔒 Declassified • Military-Grade • Neural Enhancement
             </Badge>
             
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-red-200 to-red-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 md:mb-8 bg-gradient-to-r from-white via-red-200 to-red-400 bg-clip-text text-transparent leading-tight">
               Neural Matrix
               <span className="block text-red-400">Training Platform</span>
             </h1>
             
-            <p className="text-xl sm:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-300 mb-8 md:mb-12 max-w-3xl lg:max-w-5xl mx-auto leading-relaxed">
               Master declassified <strong className="text-red-400">HUMINT protocols</strong> through 
               AI-driven frequency entrainment. Access 15+ classified training manuals converted to 
               interactive <strong className="text-cyan-400">binaural beat sessions</strong>.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <div className="flex flex-col sm:flex-row md:flex-row gap-4 md:gap-6 justify-center mb-12 md:mb-16">
               <Link href="/subscribe">
-                <Button size="lg" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-lg px-8 py-4">
+                <Button size="lg" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 w-full sm:w-auto">
                   Start Neural Training
-                  <ArrowRight className="ml-2 w-5 h-5" />
+                  <ArrowRight className="ml-2 w-5 h-5 md:w-6 md:h-6" />
                 </Button>
               </Link>
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-cyan-500 text-cyan-400 hover:bg-cyan-500/10 text-lg px-8 py-4"
+                className="border-cyan-500 text-cyan-400 hover:bg-cyan-500/10 text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 w-full sm:w-auto"
                 onClick={() => setIsVideoPlaying(!isVideoPlaying)}
               >
-                <Play className="mr-2 w-5 h-5" />
+                <Play className="mr-2 w-5 h-5 md:w-6 md:h-6" />
                 Watch Demo
               </Button>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-2xl mx-auto">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-red-400 mb-1">15+</div>
-                <div className="text-gray-400">Training Modules</div>
+            {/* Stats - Tablet Grid Layout */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-8 md:gap-12 max-w-2xl md:max-w-4xl mx-auto">
+              <div className="text-center tablet-grid">
+                <div className="text-3xl md:text-5xl lg:text-6xl font-bold text-red-400 mb-1 md:mb-2">15+</div>
+                <div className="text-gray-400 md:text-lg lg:text-xl">Training Modules</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-cyan-400 mb-1">2,847</div>
-                <div className="text-gray-400">Active Users</div>
+              <div className="text-center tablet-grid">
+                <div className="text-3xl md:text-5xl lg:text-6xl font-bold text-cyan-400 mb-1 md:mb-2">2,847</div>
+                <div className="text-gray-400 md:text-lg lg:text-xl">Active Users</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-green-400 mb-1">97%</div>
-                <div className="text-gray-400">Completion Rate</div>
+              <div className="text-center tablet-grid">
+                <div className="text-3xl md:text-5xl lg:text-6xl font-bold text-green-400 mb-1 md:mb-2">97%</div>
+                <div className="text-gray-400 md:text-lg lg:text-xl">Completion Rate</div>
               </div>
             </div>
           </div>
@@ -164,17 +164,17 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 tablet-grid">
             {features.map((feature, index) => (
-              <Card key={index} className="bg-gray-900/50 border-gray-700 hover:border-red-500/50 transition-all duration-300">
+              <Card key={index} className="bg-gray-900/50 border-gray-700 hover:border-red-500/50 transition-all duration-300 card-tablet md:card-highres">
                 <CardHeader className="text-center">
-                  <div className="w-12 h-12 bg-gradient-to-r from-red-600 to-red-700 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <feature.icon className="text-white w-6 h-6" />
+                  <div className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-gradient-to-r from-red-600 to-red-700 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <feature.icon className="text-white w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
                   </div>
-                  <CardTitle className="text-lg text-white">{feature.title}</CardTitle>
+                  <CardTitle className="text-lg md:text-xl lg:text-2xl text-white">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-400 text-center text-sm">{feature.description}</p>
+                  <p className="text-gray-400 text-center text-sm md:text-base lg:text-lg">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
