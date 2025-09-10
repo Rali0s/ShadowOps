@@ -223,11 +223,136 @@
     }
   }
   
-  /* Tablet optimizations */
-  @media (min-width: 769px) and (max-width: 1024px) {
+  /* Android Tablet Optimizations (9-10 inch screens) */
+  
+  /* Standard tablet portrait: 768px - 1024px */
+  @media (min-width: 768px) and (max-width: 1024px) {
     .container {
       padding-left: 2rem;
       padding-right: 2rem;
+      max-width: 95%;
+    }
+    
+    /* Tablet-optimized grid layouts */
+    .tablet-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    
+    /* Better tablet typography */
+    .text-4xl {
+      font-size: 3rem;
+      line-height: 1.1;
+    }
+    
+    .text-5xl {
+      font-size: 3.5rem;
+      line-height: 1.05;
+    }
+    
+    /* Tablet touch targets - larger than mobile but not desktop */
+    button, .btn, [role="button"] {
+      min-height: 48px;
+      min-width: 48px;
+      padding: 12px 24px;
+    }
+    
+    /* Optimized card layouts for tablets */
+    .card-tablet {
+      padding: 2rem;
+      margin: 1rem 0;
+    }
+    
+    /* Better form layouts for tablets */
+    .form-tablet {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .form-tablet input, .form-tablet textarea {
+      padding: 14px 18px;
+      font-size: 16px;
+    }
+  }
+  
+  /* Landscape tablet optimizations: 1024px - 1366px */
+  @media (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+    .container {
+      max-width: 90%;
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
+    
+    /* Landscape-specific layouts */
+    .landscape-tablet-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    
+    /* Optimize sidebar navigation for landscape tablets */
+    .tablet-sidebar {
+      width: 280px;
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .tablet-sidebar.open {
+      transform: translateX(0);
+    }
+    
+    /* Better use of horizontal space */
+    .tablet-content-wide {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+  }
+  
+  /* High-resolution tablets (WQXGA 2560x1600 and similar) */
+  @media (min-width: 1366px) and (max-width: 1600px) {
+    .container {
+      max-width: 85%;
+    }
+    
+    /* Scale up for high-res displays */
+    .text-responsive {
+      font-size: clamp(1rem, 1.5vw, 1.25rem);
+    }
+    
+    /* Larger cards for high-resolution displays */
+    .card-highres {
+      padding: 3rem;
+      border-radius: 16px;
+    }
+    
+    /* Grid layouts optimized for larger screens */
+    .highres-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2.5rem;
+    }
+  }
+  
+  /* Android-specific optimizations */
+  @media screen and (-webkit-min-device-pixel-ratio: 1.5) {
+    /* Crisp rendering for Android high-DPI displays */
+    .text-crisp {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+    
+    /* Optimize images for high-DPI Android displays */
+    img {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
     }
   }
   

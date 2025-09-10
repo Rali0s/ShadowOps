@@ -2,14 +2,180 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    
+    <!-- Optimized viewport for Android tablets (9-10 inch screens) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    
+    <!-- PWA Manifest for Android app-like experience -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Theme colors optimized for red Neural Matrix theme -->
+    <meta name="theme-color" content="#dc2626" />
+    <meta name="msapplication-navbutton-color" content="#dc2626" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- Android tablet optimizations -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Neural Matrix" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    
+    <!-- SEO and Social Media -->
+    <title>Neural Matrix - Advanced Brainwave Training Platform</title>
+    <meta name="description" content="Master declassified HUMINT protocols through AI-driven frequency entrainment. Access 15+ classified training manuals for cognitive enhancement." />
+    
+    <!-- Open Graph for social sharing -->
+    <meta property="og:title" content="Neural Matrix - Neurohacker Platform" />
+    <meta property="og:description" content="Advanced brainwave frequency training and HUMINT protocols for cognitive enhancement" />
+    <meta property="og:type" content="website" />
+    
+    <!-- Optimized font loading for tablets -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fira+Code:wght@300..700&family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Outfit:wght@100..900&family=Oxanium:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Critical CSS for tablet loading performance -->
+    <style>
+      html, body { 
+        margin: 0; 
+        padding: 0; 
+        background: #000; 
+        color: #fff; 
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+      }
+      
+      /* Prevent zoom on form inputs for tablets */
+      @media screen and (max-device-width: 1024px) {
+        input, textarea, select {
+          font-size: 16px !important;
+        }
+      }
+      
+      /* Android-specific optimizations */
+      @media screen and (-webkit-min-device-pixel-ratio: 1.5) {
+        body {
+          text-rendering: optimizeLegibility;
+        }
+      }
+      
+      /* Loading screen optimized for tablets */
+      .tablet-loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, #000, #1f2937, #000);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+      }
+      
+      .loading-brain {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(45deg, #dc2626, #ef4444);
+        border-radius: 16px;
+        animation: neuralPulse 2s infinite;
+        margin-bottom: 24px;
+        position: relative;
+      }
+      
+      .loading-brain::before {
+        content: '🧠';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 40px;
+      }
+      
+      .loading-text {
+        color: #dc2626;
+        font-size: 24px;
+        font-weight: 600;
+        font-family: 'Orbitron', monospace;
+        text-align: center;
+        margin-bottom: 8px;
+      }
+      
+      .loading-subtext {
+        color: #6b7280;
+        font-size: 16px;
+        text-align: center;
+      }
+      
+      @keyframes neuralPulse {
+        0%, 100% { 
+          transform: scale(1); 
+          opacity: 1; 
+          box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+        }
+        50% { 
+          transform: scale(1.1); 
+          opacity: 0.8; 
+          box-shadow: 0 0 40px rgba(220, 38, 38, 0.6);
+        }
+      }
+      
+      /* Hide scrollbars on Android tablets while maintaining functionality */
+      ::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+      }
+    </style>
   </head>
   <body>
+    <!-- Tablet-optimized loading screen -->
+    <div class="tablet-loading" id="neuralLoading">
+      <div class="loading-brain"></div>
+      <div class="loading-text">Neural Matrix</div>
+      <div class="loading-subtext">Initializing cognitive protocols...</div>
+    </div>
+    
     <div id="root"></div>
+    
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Remove loading screen after app loads -->
+    <script>
+      // Enhanced loading screen for tablets
+      window.addEventListener('load', () => {
+        const loading = document.getElementById('neuralLoading');
+        if (loading) {
+          setTimeout(() => {
+            loading.style.opacity = '0';
+            setTimeout(() => loading.remove(), 300);
+          }, 1000); // Show loading screen for 1 second minimum
+        }
+      });
+      
+      // Prevent default touch behaviors that might interfere with app
+      document.addEventListener('touchstart', function(e) {
+        if (e.touches.length > 1) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+      
+      // Prevent double-tap zoom on Android tablets
+      let lastTouchEnd = 0;
+      document.addEventListener('touchend', function(e) {
+        const now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+          e.preventDefault();
+        }
+        lastTouchEnd = now;
+      }, false);
+    </script>
+    
     <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
     <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
   </body>
