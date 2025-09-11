@@ -5,375 +5,415 @@ import { WorkedExamples } from "@/components/WorkedExamples";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-interface OpsManual {
-  id: string;
-  title: string;
-  schemaType: 'A' | 'B' | 'C';
-  duration: '1hr' | '24hr' | '3day' | '1week';
-  anchors: string[];
-  triggers: string[];
-  tiedownProtocol: string;
-  content: string;
-}
-
-const opsManuals: OpsManual[] = [
-  {
-    id: 'frequency-neuro-programming',
-    title: 'Academic Memorization Schema',
-    schemaType: 'A',
-    duration: '1hr',
-    anchors: ['Audio entrainment tools', 'Schema logbooks', 'Light/sound/touch cues'],
-    triggers: ['Pen tapping', 'Study frequency activation', 'Theta reinforcement'],
-    tiedownProtocol: 'Structured debrief with reality grounding confirmation',
-    content: `
-ACADEMIC MEMORIZATION SCHEMA - WORKED EXAMPLE
-
-OBJECTIVE: 50 contract law clauses memorization and triggered recall
-
-MATERIALS REQUIRED:
-• EEG devices for monitoring brainwave states
-• Audio entrainment tools (binaural beats, isochronic tones)
-• Schema logbooks for detailed documentation
-• Anchors: light cues, sound triggers, tactile stimuli
-
-SCHEMA DESIGN METHODOLOGY:
-1. Define Objective: Precise memorization of 50 contract law clauses
-2. Visualization: Vivid mental imagery of clause content and structure
-3. Concentration: Enter theta focus state (4-8 Hz) using audio entrainment
-4. Affirmation: "When I tap my pen, my memory releases the clauses"
-5. Anchoring: Pair pen tapping with clause recall during theta state
-6. Reinforcement: Rehearsal with 14 Hz beta (study), 6 Hz theta (consolidation)
-
-FREQUENCY PROTOCOL:
-• Study Phase: 14-18 Hz low-beta for active learning and encoding
-• Encoding Phase: 6-8 Hz theta for deep memory consolidation 
-• Recall Phase: Triggered activation via pen tapping anchor
-
-SESSION STRUCTURE:
-• Phase 1: Beta entrainment during initial learning (30 min)
-• Phase 2: Theta induction for schema encoding (20 min)
-• Phase 3: Anchor/trigger pairing and reinforcement (10 min)
-• Phase 4: Tie-down protocol for cognitive integration
-
-EXIT & TIE-DOWN PROTOCOL:
-• FlowGate: Visual flashlight signal for controlled exit
-• DropGate: Auditory cue for immediate disengagement
-• Structured debrief to prevent disorientation
-• Reality check and cognitive dissonance prevention
-
-WARNING: Longer flow states increase cognitive dissonance risk. Monitor session duration carefully.
-    `
-  },
-  {
-    id: 'flow-state-ops',
-    title: 'Flow State Operations Manual',
-    schemaType: 'B',
-    duration: '24hr',
-    anchors: ['Hidden paper task', 'Location anchor', 'Completion signal'],
-    triggers: ['Task processing initiation', 'Exit sequence trigger', 'Dead battery backup'],
-    tiedownProtocol: 'Time-check sanity protocol - second person needed',
-    content: `
-FLOW STATE OPERATIONAL PROTOCOL
-
-Task Processing Framework:
-1. Locate hidden paper during window
-2. Write hidden word as instructed
-3. Place paper on designated table
-4. Begin EXIT process sequence
-
-Exit Protocol Processing:
-1. Task identification
-2. Task completion verification
-3. Exit DROP schema activation
-4. Enter TIE-down state immediately
-
-Tie-Down State Purpose:
-- Prevent cognitive dissonance fully
-- Normalize subject back to reality
-- Keep flow-state goals in memory cache
-- Operation completed - present time grounding
-
-Safety Protocols:
-- Always have second person monitoring
-- Dead battery backup systems ready
-- Multiple exit triggers available
-    `
-  },
-  {
-    id: 'advanced-schema',
-    title: 'Advanced Schema Operations',
-    schemaType: 'C',
-    duration: '1week',
-    anchors: ['Ultrasonic suggestion', 'Pen & paper processing', 'Remote viewing'],
-    triggers: ['Jason Bourne trigger activation', '1-3 stimuli anchors', 'Inception point'],
-    tiedownProtocol: 'Extended debrief - magical thinking prevention',
-    content: `
-ADVANCED SCHEMA PROGRAMMING
-
-WARNING: Suspect Zero movie level operations
-Magical thinking issues and cognitive dissonance abnormalities possible
-Danger level increases with duration
-
-Theory Base:
-- Ultrasonic sub-conscious suggestion
-- Pen & paper processing integration
-- Remote viewing capabilities (CAUTION)
-
-Hypothesis Implementation:
-"One can engage Jason Bourne-like trigger using MK-Ultra methodology
-and 1-3 external/internal stimuli anchors as inception point to operate
-in latent mental schema previously learned in THETA state during
-conscious daily life"
-
-Schema Mapping & Design:
-- Different schema purposes A, B, C
-- Implementation methodology unknown/missing
-- Recording schema for THETA playback
-- Professional hypnosis induction assistance
-
-Extended Protocols:
-- Week-long flow state management
-- Complex trigger systems
-- Advanced anchor methodologies
-- Specialized tiedown procedures
-    `
-  }
-];
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { 
+  BookOpen, 
+  Brain, 
+  Zap, 
+  Shield, 
+  AlertTriangle,
+  Lock,
+  Target,
+  FileText
+} from 'lucide-react';
 
 export default function OpsManualPage() {
-  const [selectedManual, setSelectedManual] = useState<OpsManual | null>(null);
-  const [isVisualizationActive, setVisualizationActive] = useState(false);
-  const [currentFrequency, setCurrentFrequency] = useState(6); // Theta frequency
+  const [brainwaveFreq, setBrainwaveFreq] = useState(10);
+  const [activeSection, setActiveSection] = useState('overview');
 
   useEffect(() => {
-    // Cycle through theta frequencies for ops manual context
     const interval = setInterval(() => {
-      setCurrentFrequency(prev => {
-        if (prev >= 8) return 4; // Theta range 4-8 Hz
-        return prev + 0.5;
-      });
-    }, 2000);
-
+      setBrainwaveFreq(prev => 4 + Math.random() * 26);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
-  const activateVisualization = (manual: OpsManual) => {
-    setSelectedManual(manual);
-    setVisualizationActive(true);
-    
-    // Set frequency based on manual type
-    const frequencies = { 'A': 6, 'B': 7, 'C': 5 };
-    setCurrentFrequency(frequencies[manual.schemaType]);
-  };
-
   return (
-    <div className="min-h-screen bg-black text-terminal-red-primary p-4">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-terminal-red-bright mb-2">
-          Frequency-Based Neuro-Programming Manual
-        </h1>
-        <p className="text-terminal-red-secondary">
-          Comprehensive framework for memory & cognition enhancement
-        </p>
-        <div className="mt-4 p-3 bg-yellow-600/10 border border-yellow-500/30 rounded-lg max-w-2xl mx-auto">
-          <p className="text-yellow-200 text-sm">
-            <strong>Academic Research Framework:</strong> Evidence-based approaches to cognitive enhancement using frequency entrainment as an ethical alternative to historical pharmacological methods.
-          </p>
-        </div>
-      </div>
-
-      {/* Sacred Geometry Visualization for Theta State */}
-      <div className="mb-8 flex justify-center">
-        <div className="bg-card-bg/20 border border-terminal-red-muted/30 rounded-lg p-6">
-          <div className="text-center mb-4">
-            <h3 className="text-lg font-semibold text-terminal-red-bright">
-              Theta State Synchronization
-            </h3>
-            <p className="text-sm text-terminal-red-secondary">
-              {currentFrequency.toFixed(1)} Hz - Schema Programming Active
-            </p>
+    <div className="min-h-screen bg-black text-white p-4">
+      <div className="container mx-auto max-w-7xl">
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <div className="flex justify-center items-center gap-4 mb-4">
+            <BookOpen className="h-8 w-8 text-red-400" />
+            <h1 className="text-3xl md:text-4xl font-bold text-red-400">
+              SHADOWFANG COMPREHENSIVE TRAINING MANUAL
+            </h1>
+            <BookOpen className="h-8 w-8 text-red-400" />
           </div>
-          <SacredGeometryWheel 
-            size={200}
-            speed={1.5}
-            brainwaveFrequency={currentFrequency}
-            intensity={0.8}
-          />
+          <p className="text-gray-400 mb-2">
+            All-In-One Neurohacker Training Protocol
+          </p>
+          <Badge className="bg-red-600/20 border-red-500 text-red-400">
+            VERSION 1.0 • BETA RELEASE
+          </Badge>
         </div>
-      </div>
 
-      {/* Operations Manuals Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {opsManuals.map(manual => (
-          <Card key={manual.id} className="bg-card-bg border-terminal-red-muted/30 hover:border-terminal-red-primary transition-colors">
-            <CardHeader>
-              <CardTitle className="text-terminal-red-bright text-lg">
-                {manual.title}
-              </CardTitle>
-              <div className="flex items-center gap-2 text-sm text-terminal-red-secondary">
-                <span className="bg-terminal-red-dark px-2 py-1 rounded">
-                  Schema {manual.schemaType}
-                </span>
-                <span className="bg-terminal-red-dark px-2 py-1 rounded">
-                  {manual.duration}
-                </span>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h4 className="font-semibold text-terminal-red-secondary mb-2">Anchors:</h4>
-                <ul className="text-sm space-y-1">
-                  {manual.anchors.map((anchor, idx) => (
-                    <li key={idx} className="text-terminal-red-muted">• {anchor}</li>
-                  ))}
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="font-semibold text-terminal-red-secondary mb-2">Triggers:</h4>
-                <ul className="text-sm space-y-1">
-                  {manual.triggers.map((trigger, idx) => (
-                    <li key={idx} className="text-terminal-red-muted">• {trigger}</li>
-                  ))}
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="font-semibold text-terminal-red-secondary mb-2">Tiedown Protocol:</h4>
-                <p className="text-sm text-terminal-red-muted">{manual.tiedownProtocol}</p>
-              </div>
-              
-              <Button 
-                onClick={() => activateVisualization(manual)}
-                className="w-full bg-terminal-red-dark hover:bg-terminal-red-primary text-terminal-red-bright"
-              >
-                Activate Schema {manual.schemaType}
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+        {/* Warning Alert */}
+        <Alert className="mb-8 border-yellow-500/50 bg-yellow-900/20">
+          <AlertTriangle className="h-4 w-4 text-yellow-400" />
+          <AlertDescription className="text-yellow-200">
+            <strong>DISCLAIMER:</strong> This manual contains experimental relaxation research techniques 
+            designed to help people study. All protocols are derived from public sources and academic research. 
+            Use at your own discretion. Always maintain cognitive safety protocols.
+          </AlertDescription>
+        </Alert>
 
-      {/* Detailed Manual View */}
-      {selectedManual && (
-        <Card className="bg-card-bg border-terminal-red-primary">
-          <CardHeader>
-            <CardTitle className="text-terminal-red-bright text-xl">
-              {selectedManual.title} - Detailed Operations
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="content" className="w-full">
-              <TabsList className="grid w-full grid-cols-5">
-                <TabsTrigger value="content">Manual Content</TabsTrigger>
-                <TabsTrigger value="examples">Worked Examples</TabsTrigger>
-                <TabsTrigger value="anchors">Anchor System</TabsTrigger>
-                <TabsTrigger value="triggers">Trigger Protocols</TabsTrigger>
-                <TabsTrigger value="tiedown">Tiedown Process</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="content" className="mt-6">
-                <pre className="text-sm text-terminal-red-secondary whitespace-pre-wrap bg-black/50 p-4 rounded border border-terminal-red-muted/20">
-                  {selectedManual.content}
-                </pre>
-              </TabsContent>
-              
-              <TabsContent value="examples" className="mt-6">
-                <WorkedExamples />
-              </TabsContent>
-              
-              <TabsContent value="anchors" className="mt-6">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-terminal-red-bright">Anchor Configuration</h3>
-                  {selectedManual.anchors.map((anchor, idx) => (
-                    <div key={idx} className="bg-terminal-red-dark/20 p-4 rounded border border-terminal-red-muted/30">
-                      <div className="flex items-center justify-between">
-                        <span className="text-terminal-red-secondary">Anchor #{idx + 1}</span>
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
-                          className="border-terminal-red-muted text-terminal-red-secondary hover:bg-terminal-red-dark"
-                        >
-                          Set Anchor
-                        </Button>
-                      </div>
-                      <p className="text-terminal-red-primary mt-2">{anchor}</p>
+        {/* Main Content Tabs */}
+        <Tabs value={activeSection} onValueChange={setActiveSection} className="space-y-8">
+          <TabsList className="grid grid-cols-2 md:grid-cols-5 gap-2 bg-gray-900/50">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-red-600/20">
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="protocols" className="data-[state=active]:bg-red-600/20">
+              Protocols
+            </TabsTrigger>
+            <TabsTrigger value="frequencies" className="data-[state=active]:bg-red-600/20">
+              Frequencies
+            </TabsTrigger>
+            <TabsTrigger value="safety" className="data-[state=active]:bg-red-600/20">
+              Safety
+            </TabsTrigger>
+            <TabsTrigger value="practice" className="data-[state=active]:bg-red-600/20">
+              Practice
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Overview Tab */}
+          <TabsContent value="overview">
+            <Card className="bg-gray-900/50 border-red-500/30">
+              <CardHeader>
+                <CardTitle className="text-2xl text-red-400 flex items-center">
+                  <Brain className="w-6 h-6 mr-2" />
+                  System Overview
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Core Mission</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-black/50 p-4 rounded border border-cyan-500/30">
+                      <h4 className="text-cyan-400 font-semibold mb-2">HELP PEOPLE STUDY</h4>
+                      <p className="text-gray-400 text-sm">Advanced memorization and learning techniques using frequency entrainment</p>
                     </div>
-                  ))}
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="triggers" className="mt-6">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-terminal-red-bright">Trigger System</h3>
-                  {selectedManual.triggers.map((trigger, idx) => (
-                    <div key={idx} className="bg-terminal-red-dark/20 p-4 rounded border border-terminal-red-muted/30">
-                      <div className="flex items-center justify-between">
-                        <span className="text-terminal-red-secondary">Trigger #{idx + 1}</span>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="border-terminal-red-muted text-terminal-red-secondary hover:bg-terminal-red-dark"
-                        >
-                          Test Trigger
-                        </Button>
-                      </div>
-                      <p className="text-terminal-red-primary mt-2">{trigger}</p>
+                    <div className="bg-black/50 p-4 rounded border border-green-500/30">
+                      <h4 className="text-green-400 font-semibold mb-2">EXPERIMENTAL RELAXATION</h4>
+                      <p className="text-gray-400 text-sm">Cutting-edge research into cognitive enhancement through relaxation states</p>
                     </div>
-                  ))}
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="tiedown" className="mt-6">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-terminal-red-bright">Tiedown Protocol</h3>
-                  <div className="bg-terminal-red-dark/20 p-6 rounded border border-terminal-red-muted/30">
-                    <p className="text-terminal-red-primary mb-4">{selectedManual.tiedownProtocol}</p>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <h4 className="font-semibold text-terminal-red-secondary mb-2">Safety Checks:</h4>
-                        <ul className="text-sm space-y-1 text-terminal-red-muted">
-                          <li>• Time-check verification</li>
-                          <li>• Sanity check protocol</li>
-                          <li>• Reality grounding confirmation</li>
-                          <li>• Cognitive dissonance prevention</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-terminal-red-secondary mb-2">Required Personnel:</h4>
-                        <ul className="text-sm space-y-1 text-terminal-red-muted">
-                          <li>• Second party monitor</li>
-                          <li>• Experiment persona (knowledge)</li>
-                          <li>• Dead battery backup operator</li>
-                          <li>• Exit sequence coordinator</li>
-                        </ul>
-                      </div>
+                    <div className="bg-black/50 p-4 rounded border border-yellow-500/30">
+                      <h4 className="text-yellow-400 font-semibold mb-2">BONUS PROGRAMS</h4>
+                      <p className="text-gray-400 text-sm">Additional neurohacker tools and advanced cognitive protocols</p>
                     </div>
-                    
-                    <Button 
-                      className="w-full mt-4 bg-terminal-red-primary hover:bg-terminal-red-bright text-black"
-                      onClick={() => setVisualizationActive(false)}
-                    >
-                      Initiate Tiedown Protocol
-                    </Button>
                   </div>
                 </div>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
-      )}
 
-      {/* Warning Footer */}
-      <div className="mt-8 p-4 bg-terminal-red-dark/20 border border-terminal-red-primary rounded">
-        <p className="text-terminal-red-bright font-semibold mb-2">⚠ DISCLAIMER: PRODUCT OF A MAD MAN ⚠</p>
-        <p className="text-terminal-red-secondary text-sm">
-          Psychology Degree Minus Prerequisite Math - Submit to peers for review when completed.
-          Caution: Complete - Publish - Theft Possible. Magical thinking issues and cognitive dissonance abnormalities may occur. Danger level increases with extended use.
-        </p>
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Training Components</h3>
+                  <ul className="space-y-2 text-gray-300">
+                    <li className="flex items-start">
+                      <Zap className="w-5 h-5 text-red-400 mr-2 mt-0.5" />
+                      <span><strong>Frequency Entrainment:</strong> Binaural beats synchronized with brainwave states</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Target className="w-5 h-5 text-red-400 mr-2 mt-0.5" />
+                      <span><strong>HUMINT Protocols:</strong> Declassified training techniques for cognitive enhancement</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Shield className="w-5 h-5 text-red-400 mr-2 mt-0.5" />
+                      <span><strong>Safety Systems:</strong> Tie-down protocols and cognitive dissonance prevention</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Brain className="w-5 h-5 text-red-400 mr-2 mt-0.5" />
+                      <span><strong>Sacred Geometry:</strong> Visual programming with frequency synchronization</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="bg-red-900/20 border border-red-500/30 rounded p-4">
+                  <p className="text-red-300 text-sm">
+                    <strong>Note:</strong> This comprehensive manual replaces all previous training documents. 
+                    It contains everything you need for the complete ShadowFang training experience.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Protocols Tab */}
+          <TabsContent value="protocols">
+            <Card className="bg-gray-900/50 border-red-500/30">
+              <CardHeader>
+                <CardTitle className="text-2xl text-red-400 flex items-center">
+                  <Target className="w-6 h-6 mr-2" />
+                  Training Protocols
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Universal Training Protocol</h3>
+                  <div className="bg-black/50 p-6 rounded border border-red-500/20 font-mono text-sm">
+                    <pre className="text-gray-300 whitespace-pre-wrap">
+{`SHADOWFANG UNIVERSAL PROTOCOL v1.0
+
+OBJECTIVE: Enhanced cognitive performance through frequency-guided training
+
+SESSION STRUCTURE:
+Phase 1: Preparation (5 min)
+  - Environment setup
+  - Breathing regulation
+  - Frequency selection
+  
+Phase 2: Induction (10 min)
+  - Alpha state (10 Hz) baseline
+  - Visual focus on sacred geometry
+  - Anchor word establishment
+  
+Phase 3: Training (20-30 min)
+  - Content-specific protocols
+  - Frequency modulation based on task
+  - Trigger-anchor reinforcement
+  
+Phase 4: Integration (10 min)
+  - Theta consolidation (6 Hz)
+  - Memory encoding
+  - Schema formation
+  
+Phase 5: Exit & Tie-Down (5 min)
+  - Gradual frequency normalization
+  - Reality grounding
+  - Cognitive integration
+
+ANCHOR SYSTEM:
+Primary: Visual (sacred geometry)
+Secondary: Auditory (frequency tone)
+Tertiary: Kinesthetic (pen tap/touch)
+
+TRIGGER ACTIVATION:
+- Study Mode: 14 Hz Beta + pen tap
+- Memory Recall: 10 Hz Alpha + visual cue
+- Deep Focus: 6 Hz Theta + breath pattern
+- Integration: 3 Hz Delta + anchor word
+
+EXIT PROTOCOLS:
+FlowGate: Gradual visual fade
+DropGate: Immediate audio cue
+Emergency: Physical movement + light`}</pre>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Application Examples</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-black/50 p-4 rounded border border-cyan-500/20">
+                      <h4 className="text-cyan-400 font-semibold mb-2">Academic Study</h4>
+                      <ul className="text-gray-400 text-sm space-y-1">
+                        <li>• 50-item memorization protocols</li>
+                        <li>• Contract law clause retention</li>
+                        <li>• Language learning acceleration</li>
+                        <li>• Mathematical formula encoding</li>
+                      </ul>
+                    </div>
+                    <div className="bg-black/50 p-4 rounded border border-green-500/20">
+                      <h4 className="text-green-400 font-semibold mb-2">Professional Development</h4>
+                      <ul className="text-gray-400 text-sm space-y-1">
+                        <li>• Presentation preparation</li>
+                        <li>• Code pattern recognition</li>
+                        <li>• Strategic planning states</li>
+                        <li>• Creative problem solving</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Frequencies Tab */}
+          <TabsContent value="frequencies">
+            <Card className="bg-gray-900/50 border-red-500/30">
+              <CardHeader>
+                <CardTitle className="text-2xl text-red-400 flex items-center">
+                  <Zap className="w-6 h-6 mr-2" />
+                  Frequency Protocols
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="flex justify-center mb-6">
+                  <SacredGeometryWheel 
+                    size={200}
+                    speed={1.5}
+                    brainwaveFrequency={brainwaveFreq}
+                    intensity={0.8}
+                  />
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Brainwave Frequency Guide</h3>
+                  <div className="space-y-4">
+                    <div className="bg-black/50 p-4 rounded border border-purple-500/20">
+                      <div className="flex justify-between items-center mb-2">
+                        <h4 className="text-purple-400 font-semibold">DELTA (0.5-4 Hz)</h4>
+                        <Badge className="bg-purple-600/20 text-purple-400">Deep Integration</Badge>
+                      </div>
+                      <p className="text-gray-400 text-sm">Deep sleep, healing, unconscious processing. Used for anchor compression and long-term storage.</p>
+                    </div>
+
+                    <div className="bg-black/50 p-4 rounded border border-blue-500/20">
+                      <div className="flex justify-between items-center mb-2">
+                        <h4 className="text-blue-400 font-semibold">THETA (4-8 Hz)</h4>
+                        <Badge className="bg-blue-600/20 text-blue-400">Memory Encoding</Badge>
+                      </div>
+                      <p className="text-gray-400 text-sm">REM sleep, meditation, creativity. Optimal for deep encoding and schema formation.</p>
+                    </div>
+
+                    <div className="bg-black/50 p-4 rounded border border-green-500/20">
+                      <div className="flex justify-between items-center mb-2">
+                        <h4 className="text-green-400 font-semibold">ALPHA (8-12 Hz)</h4>
+                        <Badge className="bg-green-600/20 text-green-400">Relaxed Focus</Badge>
+                      </div>
+                      <p className="text-gray-400 text-sm">Relaxed awareness, light meditation. Perfect for surface learning and memorization.</p>
+                    </div>
+
+                    <div className="bg-black/50 p-4 rounded border border-yellow-500/20">
+                      <div className="flex justify-between items-center mb-2">
+                        <h4 className="text-yellow-400 font-semibold">BETA (12-30 Hz)</h4>
+                        <Badge className="bg-yellow-600/20 text-yellow-400">Active Learning</Badge>
+                      </div>
+                      <p className="text-gray-400 text-sm">Normal waking consciousness, active thinking. Best for comprehension and analysis.</p>
+                    </div>
+
+                    <div className="bg-black/50 p-4 rounded border border-red-500/20">
+                      <div className="flex justify-between items-center mb-2">
+                        <h4 className="text-red-400 font-semibold">GAMMA (30-100 Hz)</h4>
+                        <Badge className="bg-red-600/20 text-red-400">Peak Performance</Badge>
+                      </div>
+                      <p className="text-gray-400 text-sm">High-level cognitive processing, insight. Advanced practitioners only.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-center text-gray-400">
+                  <p>Current Frequency: <span className="text-2xl font-mono text-cyan-400">{brainwaveFreq.toFixed(1)} Hz</span></p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Safety Tab */}
+          <TabsContent value="safety">
+            <Card className="bg-gray-900/50 border-red-500/30">
+              <CardHeader>
+                <CardTitle className="text-2xl text-red-400 flex items-center">
+                  <Shield className="w-6 h-6 mr-2" />
+                  Safety Protocols
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <Alert className="border-red-500/50 bg-red-900/20">
+                  <AlertTriangle className="h-4 w-4 text-red-400" />
+                  <AlertDescription className="text-red-200">
+                    <strong>CRITICAL:</strong> Always follow tie-down protocols. Never exceed recommended session durations. 
+                    Have a safety partner for extended sessions.
+                  </AlertDescription>
+                </Alert>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Tie-Down Protocol</h3>
+                  <div className="bg-black/50 p-4 rounded border border-red-500/20">
+                    <ol className="space-y-2 text-gray-300">
+                      <li><strong>1. Recognition:</strong> Acknowledge session completion</li>
+                      <li><strong>2. Grounding:</strong> Physical movement and environmental awareness</li>
+                      <li><strong>3. Time Check:</strong> Verify actual time elapsed vs perceived</li>
+                      <li><strong>4. Reality Testing:</strong> Confirm current location and date</li>
+                      <li><strong>5. Integration:</strong> Brief review of session goals and outcomes</li>
+                      <li><strong>6. Normalization:</strong> Return to baseline frequency (10-14 Hz)</li>
+                    </ol>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Warning Signs</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-yellow-900/20 p-4 rounded border border-yellow-500/30">
+                      <h4 className="text-yellow-400 font-semibold mb-2">Cognitive Dissonance</h4>
+                      <ul className="text-gray-400 text-sm space-y-1">
+                        <li>• Time perception distortion</li>
+                        <li>• Reality confusion</li>
+                        <li>• Magical thinking patterns</li>
+                        <li>• Memory fragmentation</li>
+                      </ul>
+                    </div>
+                    <div className="bg-red-900/20 p-4 rounded border border-red-500/30">
+                      <h4 className="text-red-400 font-semibold mb-2">Emergency Exit Triggers</h4>
+                      <ul className="text-gray-400 text-sm space-y-1">
+                        <li>• Physical discomfort</li>
+                        <li>• Anxiety or panic</li>
+                        <li>• Loss of anchor awareness</li>
+                        <li>• External interruption</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Session Duration Limits</h3>
+                  <div className="bg-black/50 p-4 rounded border border-green-500/20">
+                    <ul className="space-y-2 text-gray-300">
+                      <li><strong>Beginner:</strong> 15-30 minutes maximum</li>
+                      <li><strong>Intermediate:</strong> 30-60 minutes with breaks</li>
+                      <li><strong>Advanced:</strong> 60-90 minutes with safety partner</li>
+                      <li><strong>Never exceed:</strong> 2 hours continuous session</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Practice Tab */}
+          <TabsContent value="practice">
+            <div className="space-y-8">
+              <Card className="bg-gray-900/50 border-red-500/30">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-red-400 flex items-center">
+                    <FileText className="w-6 h-6 mr-2" />
+                    Interactive Practice
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-300 mb-6">
+                    Practice your training with interactive tools and worked examples.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Button 
+                      className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
+                      onClick={() => window.location.href = '/shadowfang-training'}
+                    >
+                      <Brain className="w-4 h-4 mr-2" />
+                      Launch Training Tool
+                    </Button>
+                    <Button 
+                      className="bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-700 hover:to-cyan-800"
+                      onClick={() => window.location.href = '/frequency-generator'}
+                    >
+                      <Zap className="w-4 h-4 mr-2" />
+                      Frequency Generator
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <TriggerAnchorSystem />
+              <WorkedExamples />
+            </div>
+          </TabsContent>
+        </Tabs>
+
+        {/* Footer */}
+        <div className="mt-12 text-center text-gray-500 text-sm">
+          <p>ShadowFang Comprehensive Training Manual v1.0</p>
+          <p className="mt-2">© 2025 _Fq Neurohacker Platform • Beta Release</p>
+        </div>
       </div>
     </div>
   );

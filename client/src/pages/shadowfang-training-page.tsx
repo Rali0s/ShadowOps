@@ -101,7 +101,7 @@ export default function ShadowFangTrainingPage() {
             <div className="flex items-center justify-center space-x-4 mb-4">
               <Brain className="w-12 h-12 text-red-400" />
               <div>
-                <h1 className="text-4xl font-bold text-red-400">BLACKBRIAR TRAINING</h1>
+                <h1 className="text-4xl font-bold text-red-400">SHADOWFANG TRAINING</h1>
                 <p className="text-gray-400 text-lg">Enhanced HUMINT Intelligence Training System</p>
               </div>
               <Target className="w-12 h-12 text-red-400" />
