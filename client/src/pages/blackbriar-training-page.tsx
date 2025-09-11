@@ -5,7 +5,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { HumintTrainingTool } from '@/components/HumintTrainingTool';
-import { Link } from 'wouter';
 import { 
   Brain, 
   Shield, 
@@ -14,12 +13,7 @@ import {
   AlertTriangle,
   RadioIcon,
   FileText,
-  Target,
-  Home,
-  BookOpen,
-  Zap,
-  Settings,
-  ArrowLeft
+  Target
 } from 'lucide-react';
 
 export default function BlackbriarTrainingPage() {
@@ -100,63 +94,9 @@ export default function BlackbriarTrainingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Quick Navigation Bar */}
-      <div className="sticky top-0 z-40 bg-black/95 border-b border-red-500/20 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-2">
-          <div className="flex items-center justify-between flex-wrap gap-2">
-            <div className="flex items-center space-x-2">
-              <Badge className="bg-red-600/20 border-red-500 text-red-400 text-xs">
-                🎯 BLACKBRIAR TRAINING
-              </Badge>
-            </div>
-            
-            {/* Navigation Menu */}
-            <div className="flex items-center space-x-1 text-xs">
-              <Link href="/">
-                <Button size="sm" variant="ghost" className="h-7 px-2 text-gray-400 hover:text-white hover:bg-gray-800">
-                  <Home className="w-3 h-3 mr-1" />
-                  Home
-                </Button>
-              </Link>
-              <Link href="/ops-manual">
-                <Button size="sm" variant="ghost" className="h-7 px-2 text-gray-400 hover:text-white hover:bg-gray-800">
-                  <BookOpen className="w-3 h-3 mr-1" />
-                  Manual
-                </Button>
-              </Link>
-              <Link href="/neural-matrix">
-                <Button size="sm" variant="ghost" className="h-7 px-2 text-gray-400 hover:text-white hover:bg-gray-800">
-                  <Brain className="w-3 h-3 mr-1" />
-                  Matrix
-                </Button>
-              </Link>
-              <Link href="/frequency-generator">
-                <Button size="sm" variant="ghost" className="h-7 px-2 text-gray-400 hover:text-white hover:bg-gray-800">
-                  <Zap className="w-3 h-3 mr-1" />
-                  Frequency
-                </Button>
-              </Link>
-              <Link href="/ksp-dossier">
-                <Button size="sm" variant="ghost" className="h-7 px-2 text-gray-400 hover:text-white hover:bg-gray-800">
-                  <FileText className="w-3 h-3 mr-1" />
-                  KSP
-                </Button>
-              </Link>
-              <Link href="/scientific-method">
-                <Button size="sm" variant="ghost" className="h-7 px-2 text-gray-400 hover:text-white hover:bg-gray-800">
-                  <Settings className="w-3 h-3 mr-1" />
-                  Science
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
+    <div className="container mx-auto px-4 py-6 max-w-none overflow-x-hidden">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center space-x-4 mb-4">
               <Brain className="w-12 h-12 text-red-400" />
@@ -376,6 +316,5 @@ export default function BlackbriarTrainingPage() {
           </Tabs>
         </div>
       </div>
-    </div>
   );
 }

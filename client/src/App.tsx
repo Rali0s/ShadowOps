@@ -5,6 +5,7 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { AppShell } from "@/components/app-shell";
 
 // Public pages
 import LandingPage from "@/pages/landing-page";
@@ -89,10 +90,10 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <TooltipProvider>
-          <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
+          <AppShell>
             <Router />
             <Toaster />
-          </div>
+          </AppShell>
         </TooltipProvider>
       </AuthProvider>
     </QueryClientProvider>
