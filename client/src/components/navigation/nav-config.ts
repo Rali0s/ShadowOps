@@ -27,8 +27,8 @@ export const navigationConfig: NavItem[] = [
     description: 'Landing page'
   },
   {
-    href: '/blackbriar-training',
-    label: 'Blackbriar Training',
+    href: '/shadowfang-training',
+    label: 'ShadowFang Training',
     icon: Target,
     protected: true,
     description: 'HUMINT protocols'
