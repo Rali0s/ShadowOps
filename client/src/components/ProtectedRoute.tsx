@@ -42,7 +42,7 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
       }
     }
     
-    // Show admin panel if user presses Ctrl+Shift+A
+    // Desktop: Show admin panel if user presses Ctrl+Shift+A
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.shiftKey && e.key === 'A') {
         e.preventDefault();
@@ -50,8 +50,49 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
       }
     };
     
+    // Mobile: Triple tap sequence on logo to access admin
+    let tapCount = 0;
+    let tapTimer: NodeJS.Timeout;
+    
+    const handleTripleTap = () => {
+      tapCount++;
+      clearTimeout(tapTimer);
+      
+      if (tapCount === 3) {
+        setShowAdminPanel(true);
+        tapCount = 0;
+      } else {
+        tapTimer = setTimeout(() => {
+          tapCount = 0;
+        }, 1000);
+      }
+    };
+    
+    // Add event listeners
     window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    
+    // Add triple-tap listener to any element with class 'admin-tap-trigger'
+    const addTapListeners = () => {
+      const triggers = document.querySelectorAll('.admin-tap-trigger');
+      triggers.forEach(trigger => {
+        trigger.addEventListener('touchend', handleTripleTap);
+        trigger.addEventListener('click', handleTripleTap);
+      });
+    };
+    
+    // Set up tap listeners after a short delay to ensure elements are rendered
+    const setupTimer = setTimeout(addTapListeners, 500);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+      clearTimeout(tapTimer);
+      clearTimeout(setupTimer);
+      const triggers = document.querySelectorAll('.admin-tap-trigger');
+      triggers.forEach(trigger => {
+        trigger.removeEventListener('touchend', handleTripleTap);
+        trigger.removeEventListener('click', handleTripleTap);
+      });
+    };
   }, []);
 
   const toggleAdminMode = () => {
@@ -154,7 +195,7 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
           <div className="container mx-auto px-4 sm:px-6">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-red-600 to-red-700 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-r from-red-600 to-red-700 rounded-lg flex items-center justify-center admin-tap-trigger cursor-pointer" title="Triple tap for admin access">
                   <Brain className="text-white w-6 h-6" />
                 </div>
                 <div>
@@ -283,6 +324,11 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
                     <p className="text-gray-300 text-sm">
                       Enable admin mode to bypass authentication and subscription requirements for testing purposes.
                     </p>
+                    <div className="bg-blue-900/20 border border-blue-500/30 rounded p-3 mt-3">
+                      <p className="text-blue-300 text-xs">
+                        <strong>Mobile Access:</strong> Triple-tap the brain icon 🧠 in any header
+                      </p>
+                    </div>
                   </div>
                   <div className="flex space-x-3">
                     <Button 
@@ -301,8 +347,9 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
                   </div>
                   <div className="mt-4 pt-3 border-t border-gray-700">
                     <p className="text-xs text-gray-500">
-                      Press <kbd className="bg-gray-800 px-1 rounded">Ctrl+Shift+A</kbd> to open this panel<br/>
-                      Add <code className="text-red-400">?admin=true</code> to URL for quick access
+                      <strong>Desktop:</strong> Press <kbd className="bg-gray-800 px-1 rounded">Ctrl+Shift+A</kbd><br/>
+                      <strong>Mobile:</strong> Triple-tap any brain icon 🧠<br/>
+                      <strong>URL:</strong> Add <code className="text-red-400">?admin=true</code>
                     </p>
                   </div>
                 </div>
