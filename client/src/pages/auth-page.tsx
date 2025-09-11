@@ -56,8 +56,8 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
-      {/* Header */}
-      <header className="border-b border-red-500/20 bg-black/90 backdrop-blur-sm">
+      {/* Header - Fixed z-index */}
+      <header className="border-b border-red-500/20 bg-black/95 backdrop-blur-sm relative z-30">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
             <button
@@ -81,7 +81,7 @@ export default function AuthPage() {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 sm:px-6 py-16">
+      <div className="container mx-auto px-4 sm:px-6 py-20">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             

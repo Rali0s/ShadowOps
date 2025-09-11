@@ -109,6 +109,19 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
     }
   };
 
+  // Lock body scroll when admin panel is open
+  useEffect(() => {
+    if (showAdminPanel) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showAdminPanel]);
+
   // Show loading state
   if (isLoading) {
     return (
@@ -129,8 +142,8 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
   if (isAdminMode) {
     return (
       <>
-        {/* Admin Mode Indicator */}
-        <div className="fixed top-4 right-4 z-50 bg-red-600/20 border border-red-500 rounded-lg p-3 backdrop-blur-sm">
+        {/* Admin Mode Indicator - Fixed z-index bleeding */}
+        <div className="fixed top-4 right-4 z-20 bg-red-600/20 border border-red-500 rounded-lg p-3 backdrop-blur-sm pointer-events-none">
           <div className="flex items-center space-x-2 text-red-400 text-sm font-mono">
             <Shield className="w-4 h-4" />
             <span>ADMIN MODE</span>
@@ -140,7 +153,7 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
         
         {/* Admin Panel */}
         {showAdminPanel && (
-          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 overflow-hidden">
             <div className="bg-gray-900 border border-red-500 rounded-lg p-6 max-w-md w-full mx-4">
               <h3 className="text-xl font-bold text-red-400 mb-4 flex items-center">
                 <Settings className="w-5 h-5 mr-2" />
@@ -190,8 +203,8 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
   if (requireSubscription && (!user || !isSubscribed)) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
-        {/* Header */}
-        <header className="border-b border-red-500/20 bg-black/90 backdrop-blur-sm">
+        {/* Header - Fixed z-index */}
+        <header className="border-b border-red-500/20 bg-black/95 backdrop-blur-sm relative z-30">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center space-x-3">
@@ -215,8 +228,8 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
           </div>
         </header>
 
-        {/* Access Required Content */}
-        <div className="container mx-auto px-4 sm:px-6 py-20">
+        {/* Access Required Content - Pulled back from header */}
+        <div className="container mx-auto px-4 sm:px-6 py-24">
           <div className="max-w-4xl mx-auto text-center">
             
             {/* Lock Icon */}
