@@ -25,11 +25,11 @@ import {
 import { BinauralBeatGenerator } from './BinauralBeatGenerator';
 import { SacredGeometryWheel } from './sacred-geometry-wheel';
 
-// Default Blackbriar Training Module (JSON-compatible structure)
-const DEFAULT_BLACKBRIAR_MODULE: TrainingModule = {
-  id: 'blackbriar-core',
-  title: 'Blackbriar Core HUMINT Protocol',
-  description: 'Foundational HUMINT training from classified Blackbriar manuals',
+// Default ShadowFang Training Module (JSON-compatible structure)
+const DEFAULT_SHADOWFANG_MODULE: TrainingModule = {
+  id: 'shadowfang-core',
+  title: 'ShadowFang Core HUMINT Protocol',
+  description: 'Foundational HUMINT training from classified ShadowFang manuals',
   totalDuration: 95,
   sections: [
   {
@@ -137,7 +137,7 @@ const DEFAULT_BLACKBRIAR_MODULE: TrainingModule = {
 };
 
 // Current training module (can be loaded from JSON)
-let CURRENT_MODULE = DEFAULT_BLACKBRIAR_MODULE;
+let CURRENT_MODULE = DEFAULT_SHADOWFANG_MODULE;
 const HUMINT_SECTIONS = CURRENT_MODULE.sections;
 
 // Frequency protocols for different phases
@@ -192,7 +192,7 @@ interface TrainingSession {
 }
 
 export function HumintTrainingTool() {
-  const [trainingModule, setTrainingModule] = useState<TrainingModule>(DEFAULT_BLACKBRIAR_MODULE);
+  const [trainingModule, setTrainingModule] = useState<TrainingModule>(DEFAULT_SHADOWFANG_MODULE);
   const [session, setSession] = useState<TrainingSession>({
     currentSection: 0,
     isRunning: false,
@@ -453,7 +453,7 @@ export function HumintTrainingTool() {
               <Brain className="w-8 h-8 text-red-400" />
               <div>
                 <CardTitle className="text-2xl text-red-400">HUMINT AIO Training Tool</CardTitle>
-                <p className="text-gray-400">Blackbriar Enhanced • Chalice/Cone Adaptive Learning Model™</p>
+                <p className="text-gray-400">ShadowFang Enhanced • Chalice/Cone Adaptive Learning Model™</p>
                 <p className="text-xs text-cyan-400">{trainingModule.title}</p>
               </div>
             </div>

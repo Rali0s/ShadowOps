@@ -178,7 +178,7 @@ export default function NeuralMatrixPage() {
         <div className="flex justify-center items-center gap-4 mb-4">
           <Eye className="h-8 w-8 text-terminal-red-bright" />
           <h1 className="text-3xl font-bold text-terminal-red-bright">
-            BLACKBRIAR INFILTRATION ARCHIVES
+            SHADOWFANG INFILTRATION ARCHIVES
           </h1>
           <Eye className="h-8 w-8 text-terminal-red-bright" />
         </div>
@@ -186,7 +186,7 @@ export default function NeuralMatrixPage() {
           Classified Documents Acquired Through Deep Cover Operations
         </p>
         <p className="text-sm text-terminal-red-muted">
-          Subject infiltrated Blackbriar by falsifying age documentation - Learned program before public release
+          Subject infiltrated ShadowFang by falsifying age documentation - Learned program before public release
         </p>
       </div>
 

@@ -98,7 +98,7 @@ export default function AuthPage() {
               
               <p className="text-xl text-gray-300 mb-8 leading-relaxed">
                 {isLogin ? (
-                  <>Welcome back to the <strong className="text-red-400">Blackbriar Neural Enhancement Platform</strong>. Sign in to continue your cognitive training.</>
+                  <>Welcome back to the <strong className="text-red-400">ShadowFang Neural Enhancement Platform</strong>. Sign in to continue your cognitive training.</>
                 ) : (
                   <>Join <strong className="text-cyan-400">2,847 neurohackers</strong> unlocking advanced brainwave protocols. Start your <strong className="text-green-400">7-day free trial</strong> today.</>
                 )}

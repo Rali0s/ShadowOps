@@ -52,7 +52,7 @@ export default function LandingPage() {
     {
       name: "Marcus Rivera",
       role: "Former Intelligence Analyst", 
-      content: "Finally, declassified techniques made accessible. The Blackbriar system is revolutionary.",
+      content: "Finally, declassified techniques made accessible. The ShadowFang system is revolutionary.",
       rating: 5
     },
     {
@@ -225,7 +225,7 @@ export default function LandingPage() {
                     "Advanced Tie-Down Safety Protocols",
                     "Mobile App Access (iOS/Android)",
                     "Priority Support & Updates",
-                    "Blackbriar Enhanced Training Tools"
+                    "ShadowFang Enhanced Training Tools"
                   ].map((feature, index) => (
                     <div key={index} className="flex items-center space-x-3">
                       <Check className="w-5 h-5 text-green-400 flex-shrink-0" />
