@@ -3,6 +3,7 @@ import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { CountdownTimer } from '@/components/countdown-timer';
 import { 
   Brain, 
   Shield, 
@@ -13,88 +14,105 @@ import {
   Star,
   Users,
   ArrowRight,
-  Play
+  BookOpen,
+  FlaskConical,
+  Gift,
+  AlertCircle,
+  Timer,
+  Crown,
+  MessageCircle
 } from 'lucide-react';
+import { SiDiscord } from 'react-icons/si';
 
 export default function LandingPage() {
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const betaLaunchDate = new Date(Date.now() + 45 * 24 * 60 * 60 * 1000); // 45 days from now
 
-  const features = [
+  const mainGoals = [
     {
-      icon: Brain,
-      title: "AI-Driven Frequency Entrainment",
-      description: "Advanced binaural beat generation synchronized with classified HUMINT protocols"
+      icon: BookOpen,
+      title: "HELP PEOPLE STUDY",
+      description: "Advanced learning techniques using declassified military training protocols",
+      color: "text-cyan-400"
     },
     {
-      icon: Target,
-      title: "Precision Training Modules", 
-      description: "15+ declassified training manuals converted to interactive teleprompter sessions"
+      icon: FlaskConical,
+      title: "EXPERIMENTAL RELAXATION RESEARCH",
+      description: "Cutting-edge frequency entrainment for deep cognitive states",
+      color: "text-green-400"
     },
     {
-      icon: Shield,
-      title: "Tie-Down Safety Protocols",
-      description: "Military-grade psychological safety measures to prevent cognitive dissonance"
-    },
-    {
-      icon: Zap,
-      title: "Real-Time Biometric Sync",
-      description: "Live session tracking with frequency adaptation and progress analytics"
+      icon: Gift,
+      title: "BONUS PROGRAMS",
+      description: "Exclusive access to advanced neurohacker tools and methods",
+      color: "text-yellow-400"
     }
+  ];
+
+  const betaFeatures = [
+    "ShadowFang AIO Training System",
+    "1 Comprehensive Training Manual",
+    "Binaural Frequency Generator",
+    "Sacred Geometry Visualizations",
+    "Mobile Optimized (iOS/Android)",
+    "Private Discord Community",
+    "Elite Member Priority Access",
+    "Weekly Live Sessions"
   ];
 
   const testimonials = [
     {
       name: "Dr. Sarah Chen",
       role: "Cognitive Neuroscientist",
-      content: "The most sophisticated training platform I've encountered. The frequency entrainment protocols are remarkable.",
+      content: "Revolutionary approach to cognitive enhancement. The ShadowFang system delivers real results.",
       rating: 5
     },
     {
       name: "Marcus Rivera",
       role: "Former Intelligence Analyst", 
-      content: "Finally, declassified techniques made accessible. The ShadowFang system is revolutionary.",
+      content: "Finally, professional-grade training tools accessible to serious practitioners.",
       rating: 5
     },
     {
-      name: "Dr. James Wright",
-      role: "Psychology Researcher",
-      content: "Exceptional integration of binaural beats with structured learning. Results speak for themselves.",
+      name: "Alex Thompson",
+      role: "Biohacker",
+      content: "The experimental relaxation protocols are unlike anything else available.",
       rating: 5
     }
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
-      {/* Header - Fixed z-index and simplified for mobile */}
+      {/* Beta Launch Alert Bar */}
+      <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-2 text-center animate-pulse">
+        <p className="text-sm font-bold">
+          🚀 BETA LAUNCH APPROACHING • LIMITED SPOTS AVAILABLE • EARLY ACCESS PRICING 🚀
+        </p>
+      </div>
+
+      {/* Header */}
       <header className="sticky top-0 z-30 border-b border-red-500/20 bg-black/95 backdrop-blur-sm">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            <div className="flex items-center space-x-3 md:space-x-4">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-red-600 to-red-700 rounded-lg flex items-center justify-center admin-tap-trigger cursor-pointer" title="Triple tap for admin access">
-                <Brain className="text-white w-6 h-6 md:w-7 md:h-7" />
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-red-600 to-red-700 rounded-lg flex items-center justify-center">
+                <Brain className="text-white w-6 h-6" />
               </div>
               <div>
-                <h1 className="text-xl md:text-2xl font-bold text-red-400 font-mono">_Fq</h1>
-                <p className="text-xs md:text-sm text-gray-400 -mt-1">Neurohacker Platform</p>
+                <h1 className="text-xl font-bold text-red-400 font-mono">_Fq</h1>
+                <p className="text-xs text-gray-400 -mt-1">Is This A Simulation</p>
               </div>
             </div>
             
-            {/* Simple Navigation Menu */}
             <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-2 text-sm">
+              <div className="hidden sm:flex items-center space-x-2 text-sm">
                 <Users className="w-4 h-4 text-green-400" />
-                <span className="text-green-400 font-mono text-sm">2,847</span>
-                <span className="text-gray-400 text-xs hidden sm:inline">users</span>
+                <span className="text-green-400 font-mono">347</span>
+                <span className="text-gray-400 text-xs">beta waitlist</span>
               </div>
-              <Link href="/blackbriar-training">
-                <Button size="sm" variant="outline" className="border-red-500 text-red-400 hover:bg-red-600/20">
-                  Training
-                </Button>
-              </Link>
-              <Link href="/subscribe">
+              <Link href="#beta-access">
                 <Button size="sm" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800">
-                  <Lock className="w-4 h-4 mr-1" />
-                  Access
+                  <Timer className="w-4 h-4 mr-1" />
+                  Join Beta
                 </Button>
               </Link>
             </div>
@@ -102,85 +120,81 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Hero Section - Content pulled back from header */}
-      <section className="pt-24 md:pt-32 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8">
-        <div className="container mx-auto text-center">
-          <div className="max-w-4xl lg:max-w-6xl mx-auto">
-            <Badge className="mb-6 md:mb-8 bg-red-600/20 border-red-500 text-red-400 md:text-lg md:px-6 md:py-3">
-              🔒 Declassified • Military-Grade • Neural Enhancement
-            </Badge>
-            
-            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 md:mb-8 bg-gradient-to-r from-white via-red-200 to-red-400 bg-clip-text text-transparent leading-tight">
-              Neural Matrix
-              <span className="block text-red-400">Training Platform</span>
-            </h1>
-            
-            <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-300 mb-8 md:mb-12 max-w-3xl lg:max-w-5xl mx-auto leading-relaxed">
-              Master declassified <strong className="text-red-400">HUMINT protocols</strong> through 
-              AI-driven frequency entrainment. Access 15+ classified training manuals converted to 
-              interactive <strong className="text-cyan-400">binaural beat sessions</strong>.
-            </p>
+      {/* Hero Section with Countdown */}
+      <section className="pt-12 pb-16 px-4 sm:px-6">
+        <div className="container mx-auto text-center max-w-6xl">
+          {/* Beta Badge */}
+          <Badge className="mb-6 bg-yellow-600/20 border-yellow-500 text-yellow-400 text-lg px-4 py-2">
+            ⚡ BETA PRE-RELEASE • PHASE ONE ⚡
+          </Badge>
+          
+          {/* Main Headline */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+            <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+              Transform Your Mind With
+            </span>
+            <span className="block text-red-400 mt-2">ShadowFang Training</span>
+          </h1>
+          
+          {/* Subheadline with Main Goals */}
+          <p className="text-xl sm:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto">
+            The world's first <strong className="text-cyan-400">neurohacker membership platform</strong> combining 
+            experimental relaxation research with declassified training protocols to 
+            <strong className="text-green-400"> help you study, focus, and evolve</strong>.
+          </p>
 
-            <div className="flex flex-col sm:flex-row md:flex-row gap-4 md:gap-6 justify-center mb-12 md:mb-16">
-              <Link href="/subscribe">
-                <Button size="lg" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 w-full sm:w-auto">
-                  Start Neural Training
-                  <ArrowRight className="ml-2 w-5 h-5 md:w-6 md:h-6" />
-                </Button>
-              </Link>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-cyan-500 text-cyan-400 hover:bg-cyan-500/10 text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 w-full sm:w-auto"
-                onClick={() => setIsVideoPlaying(!isVideoPlaying)}
-              >
-                <Play className="mr-2 w-5 h-5 md:w-6 md:h-6" />
-                Watch Demo
+          {/* Countdown Timer */}
+          <div className="max-w-2xl mx-auto mb-12">
+            <CountdownTimer targetDate={betaLaunchDate} />
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+            <Link href="#beta-access">
+              <Button size="lg" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-lg px-8 py-6">
+                <Lock className="w-5 h-5 mr-2" />
+                Lock In Beta Price ($5.89/mo)
+                <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-            </div>
+            </Link>
+            <a href="https://discord.gg/neurohacker" target="_blank" rel="noopener noreferrer">
+              <Button size="lg" variant="outline" className="border-cyan-500 text-cyan-400 hover:bg-cyan-600/20 text-lg px-8 py-6">
+                <SiDiscord className="w-5 h-5 mr-2" />
+                Join Private Discord
+              </Button>
+            </a>
+          </div>
 
-            {/* Stats - Tablet Grid Layout */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-8 md:gap-12 max-w-2xl md:max-w-4xl mx-auto">
-              <div className="text-center tablet-grid">
-                <div className="text-3xl md:text-5xl lg:text-6xl font-bold text-red-400 mb-1 md:mb-2">15+</div>
-                <div className="text-gray-400 md:text-lg lg:text-xl">Training Modules</div>
-              </div>
-              <div className="text-center tablet-grid">
-                <div className="text-3xl md:text-5xl lg:text-6xl font-bold text-cyan-400 mb-1 md:mb-2">2,847</div>
-                <div className="text-gray-400 md:text-lg lg:text-xl">Active Users</div>
-              </div>
-              <div className="text-center tablet-grid">
-                <div className="text-3xl md:text-5xl lg:text-6xl font-bold text-green-400 mb-1 md:mb-2">97%</div>
-                <div className="text-gray-400 md:text-lg lg:text-xl">Completion Rate</div>
-              </div>
-            </div>
+          {/* Price Warning */}
+          <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4 max-w-2xl mx-auto">
+            <AlertCircle className="w-5 h-5 text-yellow-400 inline mr-2" />
+            <span className="text-yellow-200 text-sm">
+              Beta members lock in <strong>$5.89/mo forever</strong>. 
+              Post-beta pricing will be <strong className="text-red-400">$20/mo</strong> (Year One)
+            </span>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 px-4 sm:px-6 relative z-0">
-        <div className="container mx-auto">
+      {/* Main Goals Section */}
+      <section className="py-16 px-4 sm:px-6 bg-gray-900/30">
+        <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Advanced Neural <span className="text-red-400">Enhancement</span>
+              Our <span className="text-red-400">Core Mission</span>
             </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Military-grade cognitive training protocols adapted for civilian neural enhancement
+            <p className="text-xl text-gray-400">
+              Three pillars of cognitive enhancement
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 tablet-grid">
-            {features.map((feature, index) => (
-              <Card key={index} className="bg-gray-900/50 border-gray-700 hover:border-red-500/50 transition-all duration-300 card-tablet md:card-highres">
-                <CardHeader className="text-center">
-                  <div className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-gradient-to-r from-red-600 to-red-700 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <feature.icon className="text-white w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
-                  </div>
-                  <CardTitle className="text-lg md:text-xl lg:text-2xl text-white">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-400 text-center text-sm md:text-base lg:text-lg">{feature.description}</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {mainGoals.map((goal, index) => (
+              <Card key={index} className="bg-black/50 border-gray-700 hover:border-red-500/50 transition-all">
+                <CardContent className="p-6 text-center">
+                  <goal.icon className={`w-12 h-12 ${goal.color} mx-auto mb-4`} />
+                  <h3 className="text-lg font-bold text-white mb-3">{goal.title}</h3>
+                  <p className="text-gray-400 text-sm">{goal.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -188,15 +202,95 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section className="py-16 px-4 sm:px-6 bg-gray-900/30 relative z-0">
-        <div className="container mx-auto">
+      {/* Beta Access Tiers */}
+      <section id="beta-access" className="py-16 px-4 sm:px-6">
+        <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Neural <span className="text-red-400">Enhancement</span> Access
+              Beta Access <span className="text-red-400">Tiers</span>
             </h2>
-            <p className="text-xl text-gray-300">
-              Professional-grade cognitive training for serious practitioners
+            <p className="text-xl text-gray-400">
+              Progressive access system for beta members
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Tier 1: Discord Access */}
+            <Card className="bg-gradient-to-b from-blue-900/20 to-black border-blue-500/50">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <Badge className="bg-blue-600/20 border-blue-500 text-blue-400">TIER 1</Badge>
+                  <MessageCircle className="w-6 h-6 text-blue-400" />
+                </div>
+                <CardTitle className="text-2xl text-white mt-4">Private Discord Access</CardTitle>
+                <p className="text-gray-400 text-sm mt-2">Pre-countdown exclusive</p>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3">
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-green-400 mr-2 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-300 text-sm">Direct access to development team</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-green-400 mr-2 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-300 text-sm">Beta testing participation</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-green-400 mr-2 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-300 text-sm">Weekly group sessions</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-green-400 mr-2 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-300 text-sm">Community-driven research</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Tier 2: Elite Access */}
+            <Card className="bg-gradient-to-b from-purple-900/20 to-black border-purple-500/50">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <Badge className="bg-purple-600/20 border-purple-500 text-purple-400">TIER 2</Badge>
+                  <Crown className="w-6 h-6 text-purple-400" />
+                </div>
+                <CardTitle className="text-2xl text-white mt-4">Elite Member Access</CardTitle>
+                <p className="text-gray-400 text-sm mt-2">During public window</p>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3">
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-green-400 mr-2 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-300 text-sm">Everything in Tier 1</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-green-400 mr-2 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-300 text-sm">Priority platform access</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-green-400 mr-2 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-300 text-sm">Advanced training modules</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-green-400 mr-2 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-300 text-sm">1-on-1 guidance sessions</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-16 px-4 sm:px-6 bg-gradient-to-b from-red-900/10 to-black">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              Beta Member <span className="text-red-400">Pricing</span>
+            </h2>
+            <p className="text-xl text-gray-400">
+              Lock in your rate before public launch
             </p>
           </div>
 
@@ -205,28 +299,26 @@ export default function LandingPage() {
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 to-red-700"></div>
               
               <CardHeader className="text-center pb-4">
-                <Badge className="mb-4 bg-red-600 text-white">Most Popular</Badge>
-                <CardTitle className="text-2xl text-white mb-2">Neural Matrix Pro</CardTitle>
+                <Badge className="mb-4 bg-red-600 text-white">BETA PRICING - LIMITED TIME</Badge>
+                <CardTitle className="text-2xl text-white mb-2">ShadowFang Beta Access</CardTitle>
                 <div className="text-center">
-                  <span className="text-4xl font-bold text-red-400">$5.89</span>
-                  <span className="text-gray-400">/month</span>
+                  <div className="flex items-center justify-center space-x-4">
+                    <div>
+                      <span className="text-5xl font-bold text-red-400">$5.89</span>
+                      <span className="text-gray-400">/month</span>
+                      <p className="text-green-400 text-sm mt-1">Locked in forever</p>
+                    </div>
+                    <div className="text-left">
+                      <p className="text-gray-500 line-through">$20.00/mo</p>
+                      <p className="text-xs text-gray-400">Future price</p>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-gray-300 text-sm mt-2">
-                  Unlock all classified training protocols
-                </p>
               </CardHeader>
               
               <CardContent className="space-y-4">
                 <div className="space-y-3">
-                  {[
-                    "15+ Declassified Training Modules",
-                    "AI-Driven Frequency Entrainment", 
-                    "Real-Time Biometric Synchronization",
-                    "Advanced Tie-Down Safety Protocols",
-                    "Mobile App Access (iOS/Android)",
-                    "Priority Support & Updates",
-                    "ShadowFang Enhanced Training Tools"
-                  ].map((feature, index) => (
+                  {betaFeatures.map((feature, index) => (
                     <div key={index} className="flex items-center space-x-3">
                       <Check className="w-5 h-5 text-green-400 flex-shrink-0" />
                       <span className="text-gray-300 text-sm">{feature}</span>
@@ -235,15 +327,70 @@ export default function LandingPage() {
                 </div>
                 
                 <Link href="/subscribe">
-                  <Button className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-lg py-3 mt-6">
-                    Begin Neural Training
+                  <Button className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-lg py-6 mt-6">
+                    Secure Beta Access Now
                     <Lock className="ml-2 w-5 h-5" />
                   </Button>
                 </Link>
                 
                 <p className="text-xs text-gray-400 text-center mt-4">
-                  Cancel anytime • 7-day free trial • Secure payment
+                  Cancel anytime • Instant access • Secure payment
                 </p>
+
+                <div className="bg-yellow-900/20 border border-yellow-500/30 rounded p-3 mt-4">
+                  <p className="text-xs text-yellow-200 text-center">
+                    <AlertCircle className="w-4 h-4 inline mr-1" />
+                    Only {Math.floor(Math.random() * 50) + 100} beta spots remaining
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* What You Get Section */}
+      <section className="py-16 px-4 sm:px-6">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              The <span className="text-red-400">ShadowFang</span> System
+            </h2>
+            <p className="text-xl text-gray-400">
+              All-In-One neurohacker training platform
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="bg-black/50 border-gray-700">
+              <CardContent className="p-6 text-center">
+                <Brain className="w-10 h-10 text-red-400 mx-auto mb-4" />
+                <h3 className="font-semibold text-white mb-2">AIO Training</h3>
+                <p className="text-gray-400 text-sm">Comprehensive HUMINT protocols with teleprompter system</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-black/50 border-gray-700">
+              <CardContent className="p-6 text-center">
+                <Zap className="w-10 h-10 text-cyan-400 mx-auto mb-4" />
+                <h3 className="font-semibold text-white mb-2">Frequency Generator</h3>
+                <p className="text-gray-400 text-sm">Advanced binaural beats for cognitive enhancement</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-black/50 border-gray-700">
+              <CardContent className="p-6 text-center">
+                <Shield className="w-10 h-10 text-green-400 mx-auto mb-4" />
+                <h3 className="font-semibold text-white mb-2">Safety Protocols</h3>
+                <p className="text-gray-400 text-sm">Military-grade psychological safety measures</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-black/50 border-gray-700">
+              <CardContent className="p-6 text-center">
+                <Target className="w-10 h-10 text-yellow-400 mx-auto mb-4" />
+                <h3 className="font-semibold text-white mb-2">Sacred Geometry</h3>
+                <p className="text-gray-400 text-sm">Visual programming with frequency synchronization</p>
               </CardContent>
             </Card>
           </div>
@@ -251,27 +398,27 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 px-4 sm:px-6">
-        <div className="container mx-auto">
+      <section className="py-16 px-4 sm:px-6 bg-gray-900/30">
+        <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Trusted by <span className="text-red-400">Professionals</span>
+              Beta Tester <span className="text-red-400">Feedback</span>
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="bg-gray-900/50 border-gray-700">
+              <Card key={index} className="bg-black/50 border-gray-700">
                 <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
+                  <div className="flex mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
                     ))}
                   </div>
-                  <p className="text-gray-300 mb-4">"{testimonial.content}"</p>
+                  <p className="text-gray-300 mb-4 italic">"{testimonial.content}"</p>
                   <div>
-                    <div className="text-white font-semibold">{testimonial.name}</div>
-                    <div className="text-gray-400 text-sm">{testimonial.role}</div>
+                    <p className="font-semibold text-white">{testimonial.name}</p>
+                    <p className="text-sm text-gray-500">{testimonial.role}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -280,28 +427,43 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-4 sm:px-6 border-t border-gray-800">
-        <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <div className="w-8 h-8 bg-gradient-to-r from-red-600 to-red-700 rounded-lg flex items-center justify-center">
-                <Brain className="text-white w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-red-400 font-mono">_Fq</h3>
-                <p className="text-xs text-gray-400">Neural Enhancement Platform</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-6 text-sm text-gray-400">
-              <span>© 2025 Neural Matrix Platform</span>
-              <span>•</span>
-              <span>Declassified Training Protocols</span>
-              <span>•</span>
-              <span>Military-Grade Security</span>
-            </div>
+      {/* Final CTA */}
+      <section className="py-16 px-4 sm:px-6 bg-gradient-to-b from-red-900/10 to-black">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+            Ready to <span className="text-red-400">Transform Your Mind</span>?
+          </h2>
+          <p className="text-xl text-gray-300 mb-8">
+            Join the beta program and lock in your membership at just $5.89/month forever.
+            <br />
+            <span className="text-yellow-400">Limited spots available • Price increases to $20/mo after beta</span>
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/subscribe">
+              <Button size="lg" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-lg px-8 py-6">
+                <Lock className="w-5 h-5 mr-2" />
+                Join Beta Program Now
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
           </div>
+
+          <p className="text-xs text-gray-500 mt-6">
+            By joining, you agree to our terms of service. Cancel anytime.
+          </p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-8 px-4 border-t border-gray-800">
+        <div className="container mx-auto text-center">
+          <p className="text-gray-500 text-sm">
+            © 2025 _Fq Neurohacker Platform • ShadowFang Training System
+          </p>
+          <p className="text-gray-600 text-xs mt-2">
+            Is This A Simulation?
+          </p>
         </div>
       </footer>
     </div>

@@ -45,8 +45,8 @@ const SubscribeForm = ({ tier }: { tier: string }) => {
       });
     } else {
       toast({
-        title: "Neural Matrix Unlocked! 🧠",
-        description: "Welcome to the neurohacker elite. Redirecting to your neural interface...",
+        title: "ShadowFang Beta Access Unlocked! 🧠",
+        description: "Welcome to the neurohacker beta program. Your rate is locked at $5.89/mo forever!",
       });
       setTimeout(() => setLocation("/"), 2000);
     }
