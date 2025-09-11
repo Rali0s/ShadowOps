@@ -31,7 +31,7 @@ export default function AuthPage() {
   // Redirect if already authenticated
   useEffect(() => {
     if (user && !isLoading) {
-      setLocation('/blackbriar-training');
+      setLocation('/shadowfang-training');
     }
   }, [user, isLoading, setLocation]);
 
@@ -100,7 +100,7 @@ export default function AuthPage() {
                 {isLogin ? (
                   <>Welcome back to the <strong className="text-red-400">ShadowFang Neural Enhancement Platform</strong>. Sign in to continue your cognitive training.</>
                 ) : (
-                  <>Join <strong className="text-cyan-400">2,847 neurohackers</strong> unlocking advanced brainwave protocols. Start your <strong className="text-green-400">7-day free trial</strong> today.</>
+                  <>Join neurohackers unlocking advanced brainwave protocols. Start your <strong className="text-green-400">7-day free trial</strong> today.</>
                 )}
               </p>
 

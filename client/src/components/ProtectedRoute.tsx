@@ -218,11 +218,6 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
               </div>
               
               <div className="flex items-center space-x-4">
-                <div className="hidden sm:flex items-center space-x-2 text-sm">
-                  <Users className="w-4 h-4 text-green-400" />
-                  <span className="text-green-400 font-mono">2,847</span>
-                  <span className="text-gray-400">active members</span>
-                </div>
               </div>
             </div>
           </div>
@@ -247,7 +242,7 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
             
             <p className="text-xl sm:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
               The <strong className="text-red-400">ShadowFang Neural Matrix</strong> requires active membership. 
-              Join <strong className="text-cyan-400">2,847 neurohackers</strong> unlocking advanced cognitive protocols.
+              Join neurohackers unlocking advanced cognitive protocols.
             </p>
 
             {/* Features Preview */}

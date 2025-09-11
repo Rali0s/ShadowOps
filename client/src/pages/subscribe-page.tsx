@@ -152,7 +152,7 @@ export default function SubscribePage() {
       })
       .catch((error) => {
         console.error('Subscription creation failed:', error);
-        setLocation("/auth");
+        setLocation("/subscribe");
       })
       .finally(() => {
         setLoading(false);
@@ -189,11 +189,11 @@ export default function SubscribePage() {
               }
             </p>
             <Button 
-              onClick={() => setLocation(!stripePromise ? "/" : "/auth")} 
+              onClick={() => setLocation(!stripePromise ? "/" : "/subscribe")} 
               className="bg-terminal-green text-terminal-bg hover:bg-terminal-amber"
               data-testid="button-back-or-login"
             >
-              {!stripePromise ? "Back to Home" : "Login / Register"}
+              {!stripePromise ? "Back to Home" : "Try Again"}
             </Button>
           </CardContent>
         </Card>
@@ -264,14 +264,14 @@ export default function SubscribePage() {
             </h1>
             
             <p className="text-xl text-gray-300 mb-6 max-w-2xl mx-auto">
-              Join <strong className="text-red-400">2,847 neurohackers</strong> who've already unlocked advanced brainwave optimization protocols
+Join neurohackers who've already unlocked advanced brainwave optimization protocols
             </p>
 
             {/* Social Proof */}
             <div className="flex items-center justify-center space-x-6 mb-8">
               <div className="flex items-center space-x-1">
                 <Users className="w-4 h-4 text-green-400" />
-                <span className="text-green-400 text-sm">2,847 members</span>
+                <span className="text-green-400 text-sm">Beta members</span>
               </div>
               <div className="flex items-center space-x-1">
                 {[...Array(5)].map((_, i) => (
