@@ -3,6 +3,7 @@ import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { HamburgerMenu } from '@/components/ui/hamburger-menu';
 import { 
   Brain, 
   Shield, 
@@ -65,8 +66,8 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
-      {/* Header - Optimized for tablets */}
-      <header className="sticky top-0 z-50 border-b border-red-500/20 bg-black/90 backdrop-blur-sm">
+      {/* Header - Fixed z-index and simplified for mobile */}
+      <header className="sticky top-0 z-30 border-b border-red-500/20 bg-black/95 backdrop-blur-sm">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
             <div className="flex items-center space-x-3 md:space-x-4">
@@ -79,25 +80,16 @@ export default function LandingPage() {
               </div>
             </div>
             
-            <div className="flex items-center space-x-4 md:space-x-6">
-              <div className="hidden sm:flex items-center space-x-2 text-sm md:text-base">
-                <Users className="w-4 h-4 md:w-5 md:h-5 text-green-400" />
-                <span className="text-green-400 font-mono">2,847</span>
-                <span className="text-gray-400">active users</span>
-              </div>
-              <Link href="/subscribe">
-                <Button className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 md:px-6 md:py-3 md:text-lg">
-                  <Lock className="w-4 h-4 md:w-5 md:h-5 mr-2" />
-                  Get Access
-                </Button>
-              </Link>
+            {/* Hamburger Menu - Mobile First Navigation */}
+            <div className="flex items-center space-x-3">
+              <HamburgerMenu userCount="2,847" showAuthButton={true} />
             </div>
           </div>
         </div>
       </header>
 
-      {/* Hero Section - Tablet Optimized */}
-      <section className="pt-20 md:pt-32 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8">
+      {/* Hero Section - Content pulled back from header */}
+      <section className="pt-24 md:pt-32 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8">
         <div className="container mx-auto text-center">
           <div className="max-w-4xl lg:max-w-6xl mx-auto">
             <Badge className="mb-6 md:mb-8 bg-red-600/20 border-red-500 text-red-400 md:text-lg md:px-6 md:py-3">
@@ -153,7 +145,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 px-4 sm:px-6">
+      <section className="py-16 px-4 sm:px-6 relative z-0">
         <div className="container mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
@@ -183,7 +175,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-16 px-4 sm:px-6 bg-gray-900/30">
+      <section className="py-16 px-4 sm:px-6 bg-gray-900/30 relative z-0">
         <div className="container mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
