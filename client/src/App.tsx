@@ -14,7 +14,7 @@ import SubscribePage from "@/pages/subscribe-page";
 import NotFound from "@/pages/not-found";
 
 // Protected pages (require subscription)
-import BlackbriarTrainingPage from "@/pages/blackbriar-training-page";
+import ShadowFangTrainingPage from "@/pages/blackbriar-training-page";
 import OpsManualPage from "@/pages/ops-manual-page";
 import NeuralMatrixPage from "@/pages/neural-matrix-page";
 import KSPDossier from "@/pages/ksp-dossier";
@@ -32,9 +32,9 @@ function Router() {
       <Route path="/subscribe" component={SubscribePage} />
       
       {/* Protected Routes - Require Subscription */}
-      <Route path="/blackbriar-training">
+      <Route path="/shadowfang-training">
         <ProtectedRoute>
-          <BlackbriarTrainingPage />
+          <ShadowFangTrainingPage />
         </ProtectedRoute>
       </Route>
       

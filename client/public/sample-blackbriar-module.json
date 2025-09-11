@@ -1,7 +1,7 @@
 {
-  "id": "blackbriar-advanced",
-  "title": "Blackbriar Advanced HUMINT Protocol",
-  "description": "Advanced psychological operations training from classified Blackbriar archives",
+  "id": "shadowfang-advanced",
+  "title": "ShadowFang Advanced HUMINT Protocol",
+  "description": "Advanced psychological operations training from classified ShadowFang archives",
   "totalDuration": 75,
   "sections": [
     {
@@ -59,16 +59,16 @@
     {
       "id": "master-compression",
       "title": "Master Compression (Delta)",
-      "keywords": ["Integration", "Synthesis", "BLACKBRIAR"],
-      "mnemonic": "Dominance + Surveillance + Memory = BLACKBRIAR",
-      "anchor": "Say BLACKBRIAR. Feel all protocols integrate into one unified system.",
-      "narration": "All systems converge. Psychological dominance, counter-surveillance, memory palace - unified in BLACKBRIAR protocol.",
+      "keywords": ["Integration", "Synthesis", "SHADOWFANG"],
+      "mnemonic": "Dominance + Surveillance + Memory = SHADOWFANG",
+      "anchor": "Say SHADOWFANG. Feel all protocols integrate into one unified system."
+      "narration": "All systems converge. Psychological dominance, counter-surveillance, memory palace - unified in ShadowFang protocol."
       "frequency": "3 Hz Delta",
       "duration": 10,
       "glyph": "◈",
       "timing": [
-        { "time": 0, "text": "BLACKBRIAR", "cue": "full_integration", "type": "anchor" },
-        { "time": 3, "text": "Dominance + Surveillance + Memory = BLACKBRIAR", "type": "compression" },
+        { "time": 0, "text": "SHADOWFANG", "cue": "full_integration", "type": "anchor" },
+        { "time": 3, "text": "Dominance + Surveillance + Memory = SHADOWFANG", "type": "compression" },
         { "time": 6, "text": "Feel the unified protocol activate in your consciousness.", "type": "visualization" }
       ]
     }

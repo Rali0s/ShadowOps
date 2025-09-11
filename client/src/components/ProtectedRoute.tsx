@@ -246,7 +246,7 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
             </h1>
             
             <p className="text-xl sm:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              The <strong className="text-red-400">Blackbriar Neural Matrix</strong> requires active membership. 
+              The <strong className="text-red-400">ShadowFang Neural Matrix</strong> requires active membership. 
               Join <strong className="text-cyan-400">2,847 neurohackers</strong> unlocking advanced cognitive protocols.
             </p>
 

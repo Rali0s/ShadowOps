@@ -28,7 +28,7 @@ export function HamburgerMenu({ userCount = "2,847", showAuthButton = true }: Ha
 
   const menuItems = [
     { href: '/', label: 'Home', icon: Home, description: 'Landing page' },
-    { href: '/blackbriar-training', label: 'Blackbriar Training', icon: Target, description: 'HUMINT protocols' },
+    { href: '/shadowfang-training', label: 'ShadowFang Training', icon: Target, description: 'HUMINT protocols' },
     { href: '/ops-manual', label: 'Ops Manual', icon: BookOpen, description: 'Operational guides' },
     { href: '/neural-matrix', label: 'Neural Matrix', icon: Brain, description: 'Core system' },
     { href: '/frequency-generator', label: 'Frequency Generator', icon: Zap, description: 'Binaural beats' },

@@ -16,7 +16,7 @@ import {
   Target
 } from 'lucide-react';
 
-export default function BlackbriarTrainingPage() {
+export default function ShadowFangTrainingPage() {
   const [securityClearance, setSecurityClearance] = useState(false);
 
   const handleClearanceAccept = () => {
@@ -35,7 +35,7 @@ export default function BlackbriarTrainingPage() {
                   <Lock className="w-8 h-8 text-red-400" />
                   <div>
                     <CardTitle className="text-2xl text-red-400">CLASSIFIED ACCESS</CardTitle>
-                    <p className="text-red-300">Blackbriar Training Enhancement Protocol</p>
+                    <p className="text-red-300">ShadowFang Training Enhancement Protocol</p>
                   </div>
                 </div>
               </CardHeader>
