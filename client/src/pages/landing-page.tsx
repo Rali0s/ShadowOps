@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CountdownTimer } from '@/components/countdown-timer';
+import { Mobile, Desktop, ShowAbove, ShowBelow } from '@/hooks/use-responsive';
 import { 
   Brain, 
   Shield, 
@@ -127,24 +128,24 @@ export default function LandingPage() {
         <div className="container mx-auto text-center max-w-6xl">
           {/* Beta Badge */}
           <Badge className="mb-4 sm:mb-6 bg-yellow-600/20 border-yellow-500 text-yellow-400 text-sm sm:text-lg px-3 sm:px-4 py-1 sm:py-2">
-            <span className="hidden min-[375px]:inline">⚡ BETA PRE-RELEASE • PHASE ONE ⚡</span>
-            <span className="min-[375px]:hidden">⚡ BETA PHASE ONE ⚡</span>
+            <ShowAbove breakpoint="sm">⚡ BETA PRE-RELEASE • PHASE ONE ⚡</ShowAbove>
+            <ShowBelow breakpoint="sm">⚡ BETA PHASE ONE ⚡</ShowBelow>
           </Badge>
           
           {/* Main Headline */}
-          <h1 className="text-2xl min-[375px]:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 leading-tight px-2">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold mb-4 sm:mb-6 leading-tight px-2">
             <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent block">
-              <span className="hidden min-[375px]:inline">Transform Your Mind With</span>
-              <span className="min-[375px]:hidden">Transform Your Mind</span>
+              <ShowAbove breakpoint="sm">Transform Your Mind With</ShowAbove>
+              <ShowBelow breakpoint="sm">Transform Your Mind</ShowBelow>
             </span>
             <span className="block text-red-400 mt-1 sm:mt-2">ShadowFang Training</span>
           </h1>
           
           {/* Subheadline with Main Goals */}
-          <p className="text-base min-[375px]:text-lg sm:text-xl md:text-2xl text-gray-300 mb-6 sm:mb-8 max-w-4xl mx-auto px-2 leading-relaxed">
-            <span className="hidden min-[390px]:inline">The world's first </span><strong className="text-cyan-400">neurohacker membership platform</strong>
-            <span className="hidden min-[375px]:inline"> combining experimental relaxation research with declassified training protocols to</span>
-            <span className="min-[375px]:hidden"> to</span>
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 mb-6 sm:mb-8 max-w-4xl mx-auto px-2 leading-relaxed">
+            <ShowAbove breakpoint="md">The world's first </ShowAbove><strong className="text-cyan-400">neurohacker membership platform</strong>
+            <ShowAbove breakpoint="sm"> combining experimental relaxation research with declassified training protocols to</ShowAbove>
+            <ShowBelow breakpoint="sm"> to</ShowBelow>
             <strong className="text-green-400"> help you study, focus, and evolve</strong>.
           </p>
 
@@ -156,18 +157,18 @@ export default function LandingPage() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-6 sm:mb-8 px-2">
             <Link href="#beta-access">
-              <Button size="lg" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-sm min-[375px]:text-base sm:text-lg px-4 min-[375px]:px-6 sm:px-8 py-3 sm:py-6 w-full sm:w-auto">
+              <Button size="lg" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-6 w-full sm:w-auto">
                 <Lock className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                <span className="hidden min-[375px]:inline">Lock In Beta Price ($5.89/mo)</span>
-                <span className="min-[375px]:hidden">Beta $5.89/mo</span>
+                <ShowAbove breakpoint="sm">Lock In Beta Price ($5.89/mo)</ShowAbove>
+                <ShowBelow breakpoint="sm">Beta $5.89/mo</ShowBelow>
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
               </Button>
             </Link>
             <a href="https://discord.gg/neurohacker" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-              <Button size="lg" variant="outline" className="border-cyan-500 text-cyan-400 hover:bg-cyan-600/20 text-sm min-[375px]:text-base sm:text-lg px-4 min-[375px]:px-6 sm:px-8 py-3 sm:py-6 w-full">
+              <Button size="lg" variant="outline" className="border-cyan-500 text-cyan-400 hover:bg-cyan-600/20 text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-6 w-full">
                 <SiDiscord className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                <span className="hidden min-[375px]:inline">Join Private Discord</span>
-                <span className="min-[375px]:hidden">Join Discord</span>
+                <ShowAbove breakpoint="sm">Join Private Discord</ShowAbove>
+                <ShowBelow breakpoint="sm">Join Discord</ShowBelow>
               </Button>
             </a>
           </div>
@@ -175,9 +176,9 @@ export default function LandingPage() {
           {/* Price Warning */}
           <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-3 sm:p-4 max-w-2xl mx-auto">
             <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 inline mr-2" />
-            <span className="text-yellow-200 text-xs min-[375px]:text-sm leading-tight">
-              <span className="hidden min-[390px]:inline">Beta members lock in <strong>$5.89/mo forever</strong>. Post-beta pricing will be <strong className="text-red-400">$20/mo</strong> (Year One)</span>
-              <span className="min-[390px]:hidden">Beta: <strong>$5.89/mo forever</strong>. Later: <strong className="text-red-400">$20/mo</strong></span>
+            <span className="text-yellow-200 text-xs sm:text-sm leading-tight">
+              <ShowAbove breakpoint="md">Beta members lock in <strong>$5.89/mo forever</strong>. Post-beta pricing will be <strong className="text-red-400">$20/mo</strong> (Year One)</ShowAbove>
+              <ShowBelow breakpoint="md">Beta: <strong>$5.89/mo forever</strong>. Later: <strong className="text-red-400">$20/mo</strong></ShowBelow>
             </span>
           </div>
         </div>

@@ -25,13 +25,8 @@ export function Navigation() {
             </div>
           </Link>
 
-          {/* Simplified Navigation - Just Status */}
+          {/* Navigation */}
           <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2 text-sm">
-              <Users className="w-4 h-4 text-green-400" />
-              <span className="text-green-400 font-mono">2,847</span>
-              <span className="text-gray-400">neurohackers</span>
-            </div>
             
             <Link href="/shadowfang-training">
               <Button 
