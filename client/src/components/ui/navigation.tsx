@@ -33,13 +33,13 @@ export function Navigation() {
               <span className="text-gray-400">neurohackers</span>
             </div>
             
-            <Link href="/blackbriar-training">
+            <Link href="/shadowfang-training">
               <Button 
                 size="sm"
                 variant="outline"
                 className="border-red-500 text-red-400 hover:bg-red-500/10"
               >
-                BLACKBRIAR
+                SHADOWFANG
               </Button>
             </Link>
             

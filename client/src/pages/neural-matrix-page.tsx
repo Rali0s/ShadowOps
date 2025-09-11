@@ -324,7 +324,7 @@ export default function NeuralMatrixPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-terminal-red-secondary">
           <div className="text-center">
             <h4 className="font-semibold text-terminal-red-bright mb-2">Phase 1: False Documentation</h4>
-            <p>Age falsification enabled access to restricted Blackbriar training facility. Identity bypass successful.</p>
+            <p>Age falsification enabled access to restricted ShadowFang training facility. Identity bypass successful.</p>
           </div>
           <div className="text-center">
             <h4 className="font-semibold text-terminal-red-bright mb-2">Phase 2: Deep Learning</h4>
