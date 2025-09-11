@@ -3,7 +3,6 @@ import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { HamburgerMenu } from '@/components/ui/hamburger-menu';
 import { 
   Brain, 
   Shield, 
@@ -80,9 +79,24 @@ export default function LandingPage() {
               </div>
             </div>
             
-            {/* Hamburger Menu - Mobile First Navigation */}
+            {/* Simple Navigation Menu */}
             <div className="flex items-center space-x-3">
-              <HamburgerMenu userCount="2,847" showAuthButton={true} />
+              <div className="flex items-center space-x-2 text-sm">
+                <Users className="w-4 h-4 text-green-400" />
+                <span className="text-green-400 font-mono text-sm">2,847</span>
+                <span className="text-gray-400 text-xs hidden sm:inline">users</span>
+              </div>
+              <Link href="/blackbriar-training">
+                <Button size="sm" variant="outline" className="border-red-500 text-red-400 hover:bg-red-600/20">
+                  Training
+                </Button>
+              </Link>
+              <Link href="/subscribe">
+                <Button size="sm" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800">
+                  <Lock className="w-4 h-4 mr-1" />
+                  Access
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
