@@ -106,12 +106,7 @@ export default function LandingPage() {
             </div>
             
             <div className="flex items-center space-x-2 sm:space-x-3">
-              <div className="hidden sm:flex items-center space-x-2 text-sm">
-                <Users className="w-4 h-4 text-green-400" />
-                <span className="text-green-400 font-mono">347</span>
-                <span className="text-gray-400 text-xs">beta waitlist</span>
-              </div>
-              <Link href="#beta-access">
+              <Link href="/subscribe">
                 <Button size="sm" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 px-3 py-2 text-xs sm:text-sm">
                   <Timer className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                   <span className="hidden xs:inline">Join Beta</span>
@@ -156,7 +151,7 @@ export default function LandingPage() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-6 sm:mb-8 px-2">
-            <Link href="#beta-access">
+            <Link href="/subscribe">
               <Button size="lg" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-6 w-full sm:w-auto">
                 <Lock className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 <ShowAbove breakpoint="sm">Lock In Beta Price ($5.89/mo)</ShowAbove>

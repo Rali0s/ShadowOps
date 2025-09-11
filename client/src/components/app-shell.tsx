@@ -34,13 +34,8 @@ export function AppShell({ children }: AppShellProps) {
             <div className="flex items-center space-x-3">
               {/* Desktop Navigation (hidden on mobile) */}
               <div className="hidden md:flex items-center space-x-4">
-                <div className="flex items-center space-x-2 text-sm">
-                  <Users className="w-4 h-4 text-green-400" />
-                  <span className="text-green-400 font-mono">2,847</span>
-                  <span className="text-gray-400">users</span>
-                </div>
                 
-                <Link href="/blackbriar-training">
+                <Link href="/shadowfang-training">
                   <Button size="sm" variant="outline" className="border-red-500 text-red-400 hover:bg-red-600/20">
                     Training
                   </Button>
@@ -54,7 +49,7 @@ export function AppShell({ children }: AppShellProps) {
               </div>
               
               {/* Mobile Navigation */}
-              <MobileNav userCount="2,847" showAuthButton={true} />
+              <MobileNav showAuthButton={true} />
             </div>
           </div>
         </div>

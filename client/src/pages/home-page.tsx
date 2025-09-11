@@ -11,19 +11,8 @@ import { BrainwaveSynchronizedWheel } from "@/components/brainwave-synchronized-
 
 export default function HomePage() {
   const [wheelSize, setWheelSize] = useState(350);
-  const [currentUserCount, setCurrentUserCount] = useState(89);
   const [timeLeft, setTimeLeft] = useState({ hours: 23, minutes: 47, seconds: 12 });
   
-  // Psychological trigger: Real-time user count simulation
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentUserCount(prev => {
-        const change = Math.random() > 0.5 ? 1 : -1;
-        return Math.max(67, Math.min(156, prev + change));
-      });
-    }, 8000);
-    return () => clearInterval(interval);
-  }, []);
   
   // Scarcity timer for early access pricing
   useEffect(() => {
@@ -87,7 +76,7 @@ export default function HomePage() {
           </h2>
           
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join <strong className="text-red-400">{currentUserCount} neurohackers</strong> optimizing cognitive performance
+            Join <strong className="text-red-400">neurohackers worldwide</strong> optimizing cognitive performance
           </p>
 
           {/* Simple CTA */}
@@ -323,7 +312,7 @@ export default function HomePage() {
                   <div className="mt-4 text-center">
                     <div className="text-xs font-mono text-gray-500 mb-2">
                       Status: <span className="text-yellow-400">Demo Mode</span> • 
-                      Users: <span className="text-green-400">{currentUserCount}</span>
+                      Users: <span className="text-green-400">Online</span>
                     </div>
                     <Link href="/subscribe" className="text-red-400 hover:text-red-300 underline text-sm font-semibold">
                       → Unlock Full Neural Matrix Access

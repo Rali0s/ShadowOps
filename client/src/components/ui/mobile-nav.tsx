@@ -8,18 +8,16 @@ import { navigationConfig } from '@/components/navigation/nav-config';
 import { 
   Menu, 
   Brain, 
-  Users,
   Lock,
   X,
   ChevronRight
 } from 'lucide-react';
 
 interface MobileNavProps {
-  userCount?: string;
   showAuthButton?: boolean;
 }
 
-export function MobileNav({ userCount = "2,847", showAuthButton = true }: MobileNavProps) {
+export function MobileNav({ showAuthButton = true }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const [location] = useLocation();
 
@@ -58,23 +56,6 @@ export function MobileNav({ userCount = "2,847", showAuthButton = true }: Mobile
 
           <div className="px-6">
             <Separator className="bg-red-500/20" />
-          </div>
-
-          {/* Status */}
-          <div className="p-6 py-4">
-            <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-3">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-red-400 text-sm font-mono">Status:</span>
-                <Badge className="bg-green-600/20 border-green-500 text-green-400 text-xs">
-                  ONLINE
-                </Badge>
-              </div>
-              <div className="flex items-center space-x-2 text-xs">
-                <Users className="w-3 h-3 text-green-400" />
-                <span className="text-green-400 font-mono">{userCount}</span>
-                <span className="text-gray-400">active users</span>
-              </div>
-            </div>
           </div>
 
           {/* Navigation */}
