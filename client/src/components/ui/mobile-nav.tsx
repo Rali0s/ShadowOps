@@ -22,7 +22,7 @@ export function MobileNav({ showAuthButton = true }: MobileNavProps) {
   const [location] = useLocation();
 
   return (
-    <div className="md:hidden">
+    <div>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button
