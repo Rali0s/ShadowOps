@@ -467,6 +467,9 @@ export default function LandingPage() {
           <p className="text-gray-600 text-xs mt-2">
             Is This A Simulation?
           </p>
+          <p className="text-gray-500 text-xs mt-2">
+            Email: directive@ghz.life
+          </p>
         </div>
       </footer>
     </div>
