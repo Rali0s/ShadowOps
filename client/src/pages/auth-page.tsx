@@ -18,6 +18,7 @@ import {
   LogIn,
   Shield
 } from 'lucide-react';
+import { DiscordLoginButton, DiscordStatus } from '@/components/DiscordLoginButton';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -221,6 +222,22 @@ export default function AuthPage() {
                         </>
                       )}
                     </Button>
+
+                    {/* Discord Login Section */}
+                    <div className="relative my-6">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-600"></div>
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-gray-900 text-gray-400">Or continue with</span>
+                      </div>
+                    </div>
+                    
+                    <DiscordLoginButton 
+                      variant="outline" 
+                      className="w-full text-lg py-3 border-[#5865F2] text-[#5865F2] hover:bg-[#5865F2] hover:text-white"
+                      size="lg"
+                    />
 
                     {/* Toggle Mode */}
                     <div className="text-center">

@@ -4,6 +4,8 @@ import Stripe from "stripe";
 import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
+import fetch from "node-fetch";
+import { storage } from "./storage";
 
 const scryptAsync = promisify(scrypt);
 
@@ -48,6 +50,7 @@ async function comparePasswords(supplied: string, stored: string): Promise<boole
 declare module 'express-session' {
   interface SessionData {
     userId?: number;
+    discordState?: string;
   }
 }
 
@@ -141,11 +144,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get current user
-  app.get("/api/user", (req, res) => {
+  app.get("/api/user", async (req, res) => {
     if (!req.session.userId) {
       return res.status(401).json({ message: 'Not authenticated' });
     }
 
+    // Try to get user from database first (for Discord users)
+    try {
+      const dbUser = await storage.getUser(req.session.userId.toString());
+      if (dbUser) {
+        // Return database user with Discord fields
+        const { password: _, ...userResponse } = dbUser;
+        return res.json({
+          ...userResponse,
+          // Map database user to match expected format
+          subscriptionStatus: dbUser.subscriptionTier === 'none' ? 'inactive' : 'active',
+          discordId: dbUser.discordId,
+          discordUsername: dbUser.discordUsername,
+          discordAvatar: dbUser.discordAvatar,
+          discordVerified: dbUser.discordVerified
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching database user:', error);
+    }
+
+    // Fallback to in-memory user system
     const user = findUser(req.session.userId);
     if (!user) {
       req.session.userId = undefined;
@@ -157,9 +181,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       user.subscriptionStatus = 'inactive';
     }
 
-    // Return user without password
+    // Return user without password, but include Discord fields (will be null for non-Discord users)
     const { password: _, ...userResponse } = user;
-    res.json(userResponse);
+    res.json({
+      ...userResponse,
+      discordId: null,
+      discordUsername: null,
+      discordAvatar: null,
+      discordVerified: false
+    });
   });
 
   // Logout endpoint
@@ -186,11 +216,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const subscription = await stripe.subscriptions.retrieve(user.subscriptionId);
         const invoice = await stripe.invoices.retrieve(subscription.latest_invoice as string, {
           expand: ['payment_intent']
-        });
+        }) as Stripe.Invoice & {
+          payment_intent?: Stripe.PaymentIntent;
+        };
         
         return res.json({
           subscriptionId: subscription.id,
-          clientSecret: (invoice.payment_intent as any)?.client_secret,
+          clientSecret: invoice.payment_intent?.client_secret,
         });
       }
 
@@ -219,7 +251,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({
         subscriptionId: subscription.id,
-        clientSecret: (subscription.latest_invoice as any)?.payment_intent?.client_secret,
+        clientSecret: ((subscription.latest_invoice as any)?.payment_intent as Stripe.PaymentIntent)?.client_secret,
       });
     } catch (error: any) {
       console.error('Subscription creation error:', error);
@@ -242,10 +274,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     // Handle subscription events
     switch (event.type) {
       case 'invoice.payment_succeeded':
-        const invoice = event.data.object;
+        const invoice = event.data.object as Stripe.Invoice & { subscription?: string | Stripe.Subscription };
         if (invoice.subscription) {
           // Find user by subscription ID and update status
-          const user = users.find(u => u.subscriptionId === invoice.subscription);
+          const subscriptionId = typeof invoice.subscription === 'string' ? invoice.subscription : invoice.subscription.id;
+          const user = users.find(u => u.subscriptionId === subscriptionId);
           if (user) {
             user.subscriptionStatus = 'active';
           }
@@ -253,9 +286,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         break;
       
       case 'invoice.payment_failed':
-        const failedInvoice = event.data.object;
+        const failedInvoice = event.data.object as Stripe.Invoice & { subscription?: string | Stripe.Subscription };
         if (failedInvoice.subscription) {
-          const user = users.find(u => u.subscriptionId === failedInvoice.subscription);
+          const subscriptionId = typeof failedInvoice.subscription === 'string' ? failedInvoice.subscription : failedInvoice.subscription.id;
+          const user = users.find(u => u.subscriptionId === subscriptionId);
           if (user) {
             user.subscriptionStatus = 'inactive';
           }
@@ -263,7 +297,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         break;
 
       case 'customer.subscription.deleted':
-        const cancelledSubscription = event.data.object;
+        const cancelledSubscription = event.data.object as Stripe.Subscription;
         const user = users.find(u => u.subscriptionId === cancelledSubscription.id);
         if (user) {
           user.subscriptionStatus = 'cancelled';
@@ -272,6 +306,201 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
 
     res.json({ received: true });
+  });
+
+  // Discord OAuth environment variables check
+  const getDiscordConfig = () => {
+    return {
+      clientId: process.env.DISCORD_CLIENT_ID,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET,
+      redirectUri: process.env.DISCORD_REDIRECT_URI,
+      guildId: process.env.DISCORD_GUILD_ID,
+      betaEndAt: process.env.BETA_END_AT
+    };
+  };
+
+  // Helper function to check Discord guild membership
+  const checkGuildMembership = async (accessToken: string, guildId: string): Promise<boolean> => {
+    try {
+      const response = await fetch(`https://discord.com/api/users/@me/guilds`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+
+      if (!response.ok) {
+        console.error('Failed to fetch Discord guilds:', response.status, response.statusText);
+        return false;
+      }
+
+      const guilds = await response.json() as Array<{ id: string }>;
+      return guilds.some(guild => guild.id === guildId);
+    } catch (error) {
+      console.error('Error checking guild membership:', error);
+      return false;
+    }
+  };
+
+  // Beta status endpoint
+  app.get("/api/beta-status", (req, res) => {
+    const config = getDiscordConfig();
+    
+    if (!config.betaEndAt) {
+      return res.json({ 
+        endsAt: null, 
+        expired: false,
+        message: 'Beta end date not configured' 
+      });
+    }
+
+    const betaEndDate = new Date(config.betaEndAt);
+    const now = new Date();
+    const expired = now > betaEndDate;
+
+    res.json({
+      endsAt: betaEndDate.toISOString(),
+      expired,
+      message: expired ? 'Beta period has ended' : 'Beta period is active'
+    });
+  });
+
+  // Discord OAuth login endpoint
+  app.get("/api/auth/discord/login", (req, res) => {
+    const config = getDiscordConfig();
+    
+    if (!config.clientId || !config.redirectUri) {
+      return res.status(500).json({ 
+        message: 'Discord OAuth not configured. Missing CLIENT_ID or REDIRECT_URI.' 
+      });
+    }
+
+    const state = randomBytes(32).toString('hex');
+    req.session.discordState = state;
+
+    const discordAuthUrl = new URL('https://discord.com/api/oauth2/authorize');
+    discordAuthUrl.searchParams.set('client_id', config.clientId);
+    discordAuthUrl.searchParams.set('redirect_uri', config.redirectUri);
+    discordAuthUrl.searchParams.set('response_type', 'code');
+    discordAuthUrl.searchParams.set('scope', 'identify guilds');
+    discordAuthUrl.searchParams.set('state', state);
+
+    res.redirect(discordAuthUrl.toString());
+  });
+
+  // Discord OAuth callback endpoint
+  app.get("/api/auth/discord/callback", async (req, res) => {
+    try {
+      const config = getDiscordConfig();
+      const { code, state } = req.query;
+
+      if (!config.clientId || !config.clientSecret || !config.redirectUri) {
+        return res.status(500).json({ 
+          message: 'Discord OAuth not configured properly' 
+        });
+      }
+
+      // Verify state parameter
+      if (!state || state !== req.session.discordState) {
+        return res.status(400).json({ message: 'Invalid state parameter' });
+      }
+
+      if (!code) {
+        return res.status(400).json({ message: 'Authorization code not provided' });
+      }
+
+      // Exchange code for access token
+      const tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+          client_id: config.clientId,
+          client_secret: config.clientSecret,
+          grant_type: 'authorization_code',
+          code: code as string,
+          redirect_uri: config.redirectUri
+        })
+      });
+
+      if (!tokenResponse.ok) {
+        console.error('Discord token exchange failed:', tokenResponse.status, tokenResponse.statusText);
+        return res.status(400).json({ message: 'Failed to exchange authorization code' });
+      }
+
+      const tokenData = await tokenResponse.json() as { access_token: string };
+
+      // Get user info
+      const userResponse = await fetch('https://discord.com/api/users/@me', {
+        headers: {
+          'Authorization': `Bearer ${tokenData.access_token}`
+        }
+      });
+
+      if (!userResponse.ok) {
+        console.error('Failed to fetch Discord user info:', userResponse.status, userResponse.statusText);
+        return res.status(400).json({ message: 'Failed to get user information' });
+      }
+
+      const discordUser = await userResponse.json() as {
+        id: string;
+        username: string;
+        avatar: string | null;
+        email?: string;
+      };
+
+      // Check guild membership if guild ID is configured
+      let discordVerified = true; // Default to true if no guild check is configured
+      if (config.guildId) {
+        discordVerified = await checkGuildMembership(tokenData.access_token, config.guildId);
+      }
+
+      // Upsert user in database
+      const user = await storage.upsertUserByDiscord(
+        discordUser.id,
+        discordUser.username,
+        discordUser.avatar ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png` : '',
+        discordVerified,
+        discordUser.email
+      );
+
+      // Set session for traditional auth system (using user ID as number for compatibility)
+      req.session.userId = parseInt(user.id) || 1; // Fallback for compatibility with current system
+      req.session.discordState = undefined; // Clear state
+
+      // Redirect to frontend
+      res.redirect('/'); // or wherever you want users to land after OAuth
+    } catch (error) {
+      console.error('Discord OAuth callback error:', error);
+      res.status(500).json({ message: 'Internal server error during Discord authentication' });
+    }
+  });
+
+  // Recheck Discord verification endpoint
+  app.post("/api/recheck-discord", requireAuth, async (req, res) => {
+    try {
+      const user = findUser(req.session.userId!);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      const config = getDiscordConfig();
+      if (!config.guildId) {
+        return res.status(400).json({ message: 'Guild verification not configured' });
+      }
+
+      // For recheck, we'd need the user to go through OAuth again to get a fresh token
+      // This is a simplified version that just returns current status
+      // In a real implementation, you might store refresh tokens or require re-authentication
+
+      res.json({ 
+        message: 'To recheck Discord verification, please use the Discord login flow again',
+        discordLoginUrl: '/api/auth/discord/login'
+      });
+    } catch (error) {
+      console.error('Discord recheck error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
   });
 
   // Health check

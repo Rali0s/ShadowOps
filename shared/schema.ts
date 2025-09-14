@@ -12,6 +12,10 @@ export const users = pgTable("users", {
   subscriptionTier: text("subscription_tier").default("none"), // none, alpha, beta, theta, gamma
   stripeCustomerId: text("stripe_customer_id"),
   stripeSubscriptionId: text("stripe_subscription_id"),
+  discordId: text("discord_id"),
+  discordUsername: text("discord_username"),
+  discordAvatar: text("discord_avatar"),
+  discordVerified: boolean("discord_verified").default(false),
   isActive: boolean("is_active").default(true),
   isAdmin: boolean("is_admin").default(false),
   createdAt: timestamp("created_at").defaultNow(),
@@ -56,6 +60,10 @@ export const insertUserSchema = createInsertSchema(users).omit({
   createdAt: true,
   stripeCustomerId: true,
   stripeSubscriptionId: true,
+  discordId: true,
+  discordUsername: true,
+  discordAvatar: true,
+  discordVerified: true,
   isActive: true,
   isAdmin: true,
 });
