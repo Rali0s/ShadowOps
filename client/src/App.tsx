@@ -10,6 +10,9 @@ import { AuthProvider } from "@/hooks/use-auth";
 // Public pages (no authentication required)
 import LandingPage from "@/pages/landing-page";
 import SubscribePage from "@/pages/subscribe-page";
+import DiscordLinkedRolesPage from "@/pages/discord-linked-roles";
+import TermsOfServicePage from "@/pages/terms-of-service";
+import PrivacyPolicyPage from "@/pages/privacy-policy";
 import NotFound from "@/pages/not-found";
 
 // Protected pages (require Discord verification + beta access OR subscription)
@@ -28,6 +31,9 @@ function Router() {
       {/* Public Routes - No Authentication Required */}
       <Route path="/" component={LandingPage} />
       <Route path="/subscribe" component={SubscribePage} />
+      <Route path="/discord/linked-roles" component={DiscordLinkedRolesPage} />
+      <Route path="/terms-of-service" component={TermsOfServicePage} />
+      <Route path="/privacy-policy" component={PrivacyPolicyPage} />
       
       {/* Protected Routes - Require Discord Verification OR Active Subscription */}
       <ProtectedRoute path="/shadowfang-training" component={ShadowFangTrainingPage} />
