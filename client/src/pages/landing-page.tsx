@@ -159,7 +159,7 @@ export default function LandingPage() {
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
               </Button>
             </Link>
-            <a href="https://discord.gg/neurohacker" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+            <a href="https://discord.gg/3PfFZ6aC" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
               <Button size="lg" variant="outline" className="border-cyan-500 text-cyan-400 hover:bg-cyan-600/20 text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-6 w-full">
                 <SiDiscord className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 <ShowAbove breakpoint="sm">Join Private Discord</ShowAbove>
