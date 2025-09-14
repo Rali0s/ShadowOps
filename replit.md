@@ -5,7 +5,7 @@ _Fq is a neurohacker membership platform launching with beta pricing ($5.89/mo l
 Preferred communication style: Simple, everyday language.
 Navigation preferences: Removed courses tab from navigation system per user request.
 System architecture: Completely removed course system - platform now uses pure tier-based access only with brainwave frequency training (Alpha, Beta, Theta, Gamma).
-Authentication system: REMOVED - User requested "repair auth section - no auth or logins needed" - Platform now operates as open access system without user authentication or login requirements.
+Authentication system: IMPLEMENTED - Discord OAuth tiered beta access system with community verification. Users must join Discord community first, then get beta access until December 6, 2025, followed by $5.89/mo subscription for continued access. Full production-ready implementation with secure session management.
 Self-reporting system: REMOVED - User requested removal of self-reporting and input fields as "it will scare people on the public" and noted this is not a real psychological study under APA guidelines that cannot collect data.
 Admin system: REMOVED - User requested removal of admin tab from navigation.
 Terminal integration: UPDATED - Terminal functionality moved from separate pages to main homepage integration for streamlined user experience.
@@ -35,7 +35,7 @@ Education Materials: ADDED - Comprehensive mentalist training guide featuring Mi
 - **Database**: PostgreSQL (Neon serverless) with Drizzle ORM and Drizzle Kit for migrations.
 
 ## Key Architectural Decisions & Features
-- **Open Access Platform**: No user authentication, login, or registration required. All functionality is freely accessible.
+- **Tiered Beta Access Platform**: Discord OAuth authentication required for site access. Users must join Discord community, get beta access until December 2025, then upgrade to $5.89/mo subscription. Complete authorization flow with secure session management.
 - **Brainwave Frequency Training**: Core functionality provided across Alpha, Beta, Theta, and Gamma frequencies.
 - **Terminal Emulator**: React-based interactive terminal integrated into homepage with command processing, custom red theme, SVG symbol rendering for accessibility, and commands for brainwave training, sacred geometry, psychological programming, and Neural Matrix narrative access.
 - **Sacred Geometry Auto-Wheel**: Red-based, animated visualization with 13 alternating circles in elliptical patterns, complex triangles, and cross-sectional elements. Synchronizes speed and intensity with current brainwave frequency.
