@@ -13,6 +13,16 @@ interface User {
   subscriptionStatus: 'active' | 'inactive' | 'trial' | 'cancelled';
   subscriptionId?: string;
   trialEndsAt?: string;
+  discordId?: string | null;
+  discordUsername?: string | null;
+  discordAvatar?: string | null;
+  discordVerified?: boolean;
+}
+
+interface BetaStatus {
+  endsAt: string | null;
+  expired: boolean;
+  message: string;
 }
 
 type AuthContextType = {
@@ -20,9 +30,14 @@ type AuthContextType = {
   isLoading: boolean;
   error: Error | null;
   isSubscribed: boolean;
+  isAuthorized: boolean;
+  betaStatus: BetaStatus | null;
+  isBetaLoading: boolean;
   loginMutation: UseMutationResult<User, Error, LoginData>;
   logoutMutation: UseMutationResult<void, Error, void>;
   registerMutation: UseMutationResult<User, Error, RegisterData>;
+  recheckDiscordMutation: UseMutationResult<any, Error, void>;
+  loginWithDiscord: () => void;
 };
 
 type LoginData = {
@@ -62,7 +77,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     retry: false,
   });
 
+  // Beta status query
+  const {
+    data: betaStatus,
+    isLoading: isBetaLoading,
+  } = useQuery<BetaStatus>({
+    queryKey: ["/api/beta-status"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/beta-status");
+      if (!response.ok) {
+        throw new Error('Failed to fetch beta status');
+      }
+      return await response.json();
+    },
+    retry: false,
+  });
+
   const isSubscribed = user?.subscriptionStatus === 'active' || user?.subscriptionStatus === 'trial';
+  
+  // Combined authorization logic: user is authorized if they have Discord verification and beta hasn't expired, OR they have an active subscription
+  const isAuthorized = Boolean(
+    (user?.discordVerified && !betaStatus?.expired) || 
+    (user?.subscriptionStatus === 'active')
+  );
+
+  // Discord login function
+  const loginWithDiscord = () => {
+    window.location.href = '/api/auth/discord/login';
+  };
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginData) => {
@@ -133,6 +175,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
   });
 
+  const recheckDiscordMutation = useMutation({
+    mutationFn: async () => {
+      const response = await apiRequest("POST", "/api/recheck-discord");
+      if (!response.ok) {
+        throw new Error('Failed to recheck Discord verification');
+      }
+      return await response.json();
+    },
+    onSuccess: () => {
+      // Invalidate user query to refetch updated Discord status
+      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      toast({
+        title: "Discord Status Updated",
+        description: "Your Discord verification status has been rechecked.",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Discord Recheck Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   return (
     <AuthContext.Provider
       value={{
@@ -140,9 +207,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         error,
         isSubscribed,
+        isAuthorized,
+        betaStatus: betaStatus ?? null,
+        isBetaLoading,
         loginMutation,
         logoutMutation,
         registerMutation,
+        recheckDiscordMutation,
+        loginWithDiscord,
       }}
     >
       {children}

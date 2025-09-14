@@ -22,10 +22,13 @@ export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
+  getUserByDiscordId(discordId: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUserStripeInfo(id: string, stripeCustomerId: string, stripeSubscriptionId?: string): Promise<User>;
   updateUserSubscriptionTier(id: string, tier: string): Promise<User>;
   updateUserPassword(id: string, password: string): Promise<User>;
+  updateUserDiscordInfo(id: string, discordId: string, discordUsername: string, discordAvatar: string, discordVerified: boolean): Promise<User>;
+  upsertUserByDiscord(discordId: string, discordUsername: string, discordAvatar: string, discordVerified: boolean, email?: string): Promise<User>;
   
   // Password reset functionality
   createPasswordResetToken(token: InsertPasswordResetToken): Promise<PasswordResetToken>;
@@ -110,6 +113,61 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, id))
       .returning();
     return user;
+  }
+
+  async getUserByDiscordId(discordId: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.discordId, discordId));
+    return user || undefined;
+  }
+
+  async updateUserDiscordInfo(id: string, discordId: string, discordUsername: string, discordAvatar: string, discordVerified: boolean): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ 
+        discordId,
+        discordUsername,
+        discordAvatar,
+        discordVerified
+      })
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+
+  async upsertUserByDiscord(discordId: string, discordUsername: string, discordAvatar: string, discordVerified: boolean, email?: string): Promise<User> {
+    // First try to find existing user by Discord ID
+    const existingUser = await this.getUserByDiscordId(discordId);
+    
+    if (existingUser) {
+      // Update existing user
+      return await this.updateUserDiscordInfo(
+        existingUser.id, 
+        discordId, 
+        discordUsername, 
+        discordAvatar, 
+        discordVerified
+      );
+    } else {
+      // Create new user - for Discord-only users, we'll use Discord username as both username and email if no email provided
+      const userEmail = email || `${discordUsername}@discord.local`;
+      const username = discordUsername || `discord_${discordId}`;
+      
+      const [user] = await db
+        .insert(users)
+        .values({
+          username,
+          email: userEmail,
+          password: 'discord_oauth', // Placeholder password for Discord users
+          discordId,
+          discordUsername,
+          discordAvatar,
+          discordVerified,
+          subscriptionTier: discordVerified ? 'beta' : 'none' // Auto-grant beta if Discord verified
+        })
+        .returning();
+      
+      return user;
+    }
   }
 
   // Password reset functionality
