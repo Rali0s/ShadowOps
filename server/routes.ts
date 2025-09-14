@@ -538,6 +538,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       if (!config.clientId || !config.clientSecret || !config.redirectUri) {
+        console.error('❌ Discord OAuth configuration missing:', {
+          hasClientId: !!config.clientId,
+          hasClientSecret: !!config.clientSecret,
+          hasRedirectUri: !!config.redirectUri
+        });
         return res.status(500).json({ 
           message: 'Discord OAuth not configured properly' 
         });
@@ -565,74 +570,167 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log('✅ State parameter validation passed');
 
       if (!code) {
+        console.error('❌ Authorization code not provided');
         return res.status(400).json({ message: 'Authorization code not provided' });
       }
 
       // Exchange code for access token
-      const tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-          client_id: config.clientId,
-          client_secret: config.clientSecret,
-          grant_type: 'authorization_code',
-          code: code as string,
-          redirect_uri: config.redirectUri
-        })
-      });
+      console.log('🟡 Exchanging code for access token...');
+      let tokenResponse;
+      try {
+        tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams({
+            client_id: config.clientId,
+            client_secret: config.clientSecret,
+            grant_type: 'authorization_code',
+            code: code as string,
+            redirect_uri: config.redirectUri
+          })
+        });
 
-      if (!tokenResponse.ok) {
-        console.error('Discord token exchange failed:', tokenResponse.status, tokenResponse.statusText);
-        return res.status(400).json({ message: 'Failed to exchange authorization code' });
+        if (!tokenResponse.ok) {
+          const errorText = await tokenResponse.text();
+          console.error('❌ Discord token exchange failed:', {
+            status: tokenResponse.status,
+            statusText: tokenResponse.statusText,
+            error: errorText
+          });
+          return res.status(400).json({ message: 'Failed to exchange authorization code' });
+        }
+      } catch (error) {
+        console.error('❌ Error during token exchange request:', error);
+        return res.status(500).json({ message: 'Network error during token exchange' });
       }
 
-      const tokenData = await tokenResponse.json() as { access_token: string };
+      let tokenData;
+      try {
+        tokenData = await tokenResponse.json() as { access_token: string };
+        console.log('✅ Token exchange successful');
+      } catch (error) {
+        console.error('❌ Error parsing token response:', error);
+        return res.status(500).json({ message: 'Invalid token response from Discord' });
+      }
 
       // Get user info
-      const userResponse = await fetch('https://discord.com/api/users/@me', {
-        headers: {
-          'Authorization': `Bearer ${tokenData.access_token}`
-        }
-      });
+      console.log('🟡 Fetching Discord user info...');
+      let userResponse;
+      try {
+        userResponse = await fetch('https://discord.com/api/users/@me', {
+          headers: {
+            'Authorization': `Bearer ${tokenData.access_token}`
+          }
+        });
 
-      if (!userResponse.ok) {
-        console.error('Failed to fetch Discord user info:', userResponse.status, userResponse.statusText);
-        return res.status(400).json({ message: 'Failed to get user information' });
+        if (!userResponse.ok) {
+          const errorText = await userResponse.text();
+          console.error('❌ Failed to fetch Discord user info:', {
+            status: userResponse.status,
+            statusText: userResponse.statusText,
+            error: errorText
+          });
+          return res.status(400).json({ message: 'Failed to get user information' });
+        }
+      } catch (error) {
+        console.error('❌ Error during user info request:', error);
+        return res.status(500).json({ message: 'Network error during user info fetch' });
       }
 
-      const discordUser = await userResponse.json() as {
-        id: string;
-        username: string;
-        avatar: string | null;
-        email?: string;
-      };
+      let discordUser;
+      try {
+        discordUser = await userResponse.json() as {
+          id: string;
+          username: string;
+          avatar: string | null;
+          email?: string;
+        };
+        console.log('✅ Discord user info fetched:', {
+          id: discordUser.id,
+          username: discordUser.username,
+          hasEmail: !!discordUser.email
+        });
+      } catch (error) {
+        console.error('❌ Error parsing user info response:', error);
+        return res.status(500).json({ message: 'Invalid user info response from Discord' });
+      }
 
       // Check guild membership if guild ID is configured
+      console.log('🟡 Checking guild membership...');
       let discordVerified = true; // Default to true if no guild check is configured
       if (config.guildId) {
-        discordVerified = await checkGuildMembership(tokenData.access_token, config.guildId);
+        try {
+          discordVerified = await checkGuildMembership(tokenData.access_token, config.guildId);
+          console.log('✅ Guild membership check completed:', { discordVerified });
+        } catch (error) {
+          console.error('❌ Error checking guild membership:', error);
+          // Don't fail the entire flow, just set as unverified
+          discordVerified = false;
+        }
+      } else {
+        console.log('ℹ️ No guild ID configured, skipping guild check');
       }
 
       // Upsert user in database
-      const user = await storage.upsertUserByDiscord(
-        discordUser.id,
-        discordUser.username,
-        discordUser.avatar ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png` : '',
-        discordVerified,
-        discordUser.email
-      );
+      console.log('🟡 Upserting user in database...');
+      let user;
+      try {
+        user = await storage.upsertUserByDiscord(
+          discordUser.id,
+          discordUser.username,
+          discordUser.avatar ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png` : '',
+          discordVerified,
+          discordUser.email
+        );
+        console.log('✅ User upserted successfully:', { userId: user.id, username: user.username });
+      } catch (error) {
+        console.error('❌ Error upserting user in database:', error);
+        return res.status(500).json({ message: 'Database error during user creation' });
+      }
 
       // Set session for traditional auth system (using user ID as string for database compatibility)
-      req.session.userId = user.id; // Store the actual database user ID
-      req.session.discordState = undefined; // Clear state
+      console.log('🟡 Setting user session...');
+      try {
+        req.session.userId = user.id; // Store the actual database user ID
+        req.session.discordState = undefined; // Clear state
+        
+        // Force session save to ensure it persists
+        await new Promise<void>((resolve, reject) => {
+          req.session.save((err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        });
+        console.log('✅ Session set successfully');
+      } catch (error) {
+        console.error('❌ Error setting session:', error);
+        return res.status(500).json({ message: 'Session error during authentication' });
+      }
 
       // Redirect to frontend
-      res.redirect('/'); // or wherever you want users to land after OAuth
+      console.log('✅ Discord OAuth callback completed successfully, redirecting to /');
+      res.redirect('/');
     } catch (error) {
-      console.error('Discord OAuth callback error:', error);
-      res.status(500).json({ message: 'Internal server error during Discord authentication' });
+      console.error('❌ Unexpected error in Discord OAuth callback:', error);
+      // Log the full error details
+      if (error instanceof Error) {
+        console.error('Error details:', {
+          name: error.name,
+          message: error.message,
+          stack: error.stack
+        });
+      }
+      res.status(500).json({ 
+        message: 'Internal server error during Discord authentication',
+        ...(process.env.NODE_ENV === 'development' && { 
+          error: error instanceof Error ? error.message : 'Unknown error' 
+        })
+      });
     }
   });
 
