@@ -4,13 +4,15 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppShell } from "@/components/app-shell";
+import { ProtectedRoute } from "@/lib/protected-route";
+import { AuthProvider } from "@/hooks/use-auth";
 
-// Public pages
+// Public pages (no authentication required)
 import LandingPage from "@/pages/landing-page";
 import SubscribePage from "@/pages/subscribe-page";
 import NotFound from "@/pages/not-found";
 
-// All pages are now public (no authentication required)
+// Protected pages (require Discord verification + beta access OR subscription)
 import ShadowFangTrainingPage from "@/pages/shadowfang-training-page";
 import OpsManualPage from "@/pages/ops-manual-page";
 import NeuralMatrixPage from "@/pages/neural-matrix-page";
@@ -23,19 +25,19 @@ import FrequencyGeneratorPage from "@/pages/frequency-generator-page";
 function Router() {
   return (
     <Switch>
-      {/* All Routes are Public - No Authentication Required */}
+      {/* Public Routes - No Authentication Required */}
       <Route path="/" component={LandingPage} />
       <Route path="/subscribe" component={SubscribePage} />
       
-      {/* Training and Manual Pages */}
-      <Route path="/shadowfang-training" component={ShadowFangTrainingPage} />
-      <Route path="/ops-manual" component={OpsManualPage} />
-      <Route path="/neural-matrix" component={NeuralMatrixPage} />
-      <Route path="/ksp-dossier" component={KSPDossier} />
-      <Route path="/scientific-method" component={ScientificMethodPage} />
-      <Route path="/education" component={EducationMaterialsPage} />
-      <Route path="/methodology" component={SelfReportMethodologyPage} />
-      <Route path="/frequency-generator" component={FrequencyGeneratorPage} />
+      {/* Protected Routes - Require Discord Verification OR Active Subscription */}
+      <ProtectedRoute path="/shadowfang-training" component={ShadowFangTrainingPage} />
+      <ProtectedRoute path="/ops-manual" component={OpsManualPage} />
+      <ProtectedRoute path="/neural-matrix" component={NeuralMatrixPage} />
+      <ProtectedRoute path="/ksp-dossier" component={KSPDossier} />
+      <ProtectedRoute path="/scientific-method" component={ScientificMethodPage} />
+      <ProtectedRoute path="/education" component={EducationMaterialsPage} />
+      <ProtectedRoute path="/methodology" component={SelfReportMethodologyPage} />
+      <ProtectedRoute path="/frequency-generator" component={FrequencyGeneratorPage} />
       
       <Route component={NotFound} />
     </Switch>
@@ -45,12 +47,14 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <AppShell>
-          <Router />
-          <Toaster />
-        </AppShell>
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <AppShell>
+            <Router />
+            <Toaster />
+          </AppShell>
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

@@ -4,22 +4,32 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Link, useLocation } from 'wouter';
+import { useAuth } from '@/hooks/use-auth';
 import { navigationConfig } from '@/components/navigation/nav-config';
 import { 
   Menu, 
   Brain, 
   Lock,
-  X,
-  ChevronRight
+  Users,
+  CheckCircle,
+  AlertTriangle,
+  User
 } from 'lucide-react';
 
 interface MobileNavProps {
-  showAuthButton?: boolean;
+  // No props needed - auth state is handled internally
 }
 
-export function MobileNav({ showAuthButton = true }: MobileNavProps) {
+export function MobileNav(props: MobileNavProps = {}) {
   const [open, setOpen] = useState(false);
   const [location] = useLocation();
+  const { user, isAuthorized, isLoading, betaStatus } = useAuth();
+
+  // Filter navigation items based on auth status
+  const visibleNavItems = navigationConfig.filter(item => {
+    if (!item.protected) return true; // Show public items
+    return isAuthorized; // Show protected items only if authorized
+  });
 
   return (
     <div>
@@ -60,7 +70,7 @@ export function MobileNav({ showAuthButton = true }: MobileNavProps) {
 
           {/* Navigation */}
           <nav className="flex-1 px-6 space-y-1">
-            {navigationConfig.map((item, index) => {
+            {visibleNavItems.map((item, index) => {
               const isActive = location === item.href;
               return (
                 <Link key={index} href={item.href}>
@@ -98,23 +108,89 @@ export function MobileNav({ showAuthButton = true }: MobileNavProps) {
           </nav>
 
           {/* Bottom Actions */}
-          {showAuthButton && (
-            <div className="p-6 pt-4 border-t border-gray-700 mt-auto">
+          <div className="p-6 pt-4 border-t border-gray-700 mt-auto">
+            {/* Auth Status Display */}
+            {!isLoading && user && (
+              <div className="mb-4">
+                {user.discordVerified && !betaStatus?.expired ? (
+                  <Badge className="bg-green-600/20 text-green-400 border-green-500/50 w-full justify-center">
+                    <CheckCircle className="w-3 h-3 mr-1" />
+                    Beta Access Active
+                  </Badge>
+                ) : user.subscriptionStatus === 'active' ? (
+                  <Badge className="bg-blue-600/20 text-blue-400 border-blue-500/50 w-full justify-center">
+                    <CheckCircle className="w-3 h-3 mr-1" />
+                    Elite Member
+                  </Badge>
+                ) : user.discordVerified && betaStatus?.expired ? (
+                  <Badge className="bg-orange-600/20 text-orange-400 border-orange-500/50 w-full justify-center">
+                    <AlertTriangle className="w-3 h-3 mr-1" />
+                    Beta Ended
+                  </Badge>
+                ) : null}
+                {user.discordUsername && (
+                  <div className="text-xs text-gray-400 text-center mt-2">
+                    Connected as @{user.discordUsername}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Auth Action Button */}
+            {!user ? (
+              <Button 
+                onClick={() => {
+                  setOpen(false);
+                  window.location.href = '/api/auth/discord/login';
+                }}
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+                data-testid="button-discord-login"
+              >
+                <Users className="w-4 h-4 mr-2" />
+                Connect with Discord
+              </Button>
+            ) : !user.discordVerified ? (
+              <Button 
+                onClick={() => {
+                  setOpen(false);
+                  window.location.href = '/api/auth/discord/login';
+                }}
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+                data-testid="button-verify-discord"
+              >
+                <Users className="w-4 h-4 mr-2" />
+                Verify Discord
+              </Button>
+            ) : !isAuthorized ? (
               <Link href="/subscribe">
                 <Button 
                   onClick={() => setOpen(false)}
                   className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
-                  data-testid="button-unlock-access"
+                  data-testid="button-subscribe"
                 >
                   <Lock className="w-4 h-4 mr-2" />
-                  Unlock Full Access
+                  Subscribe for Access
                 </Button>
               </Link>
+            ) : (
+              <div className="text-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-green-600 to-green-700 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <User className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-sm text-green-400 font-medium">
+                  Access Granted
+                </div>
+              </div>
+            )}
+            
+            {!isAuthorized && (
               <p className="text-xs text-gray-500 text-center mt-2">
-                $5.89/month • Cancel anytime
+                {!user ? 'Join Discord community for beta access' : 
+                 !user.discordVerified ? 'Verify Discord account' :
+                 '$5.89/month • Cancel anytime'}
               </p>
-            </div>
-          )}
+            )}
+          </div>
         </SheetContent>
       </Sheet>
     </div>
