@@ -61,15 +61,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     throw new Error('SESSION_SECRET environment variable is required for production');
   }
 
+  // Determine if we're on Replit (check for .replit.app domain)
+  const isReplit = process.env.REPL_URL || (process.env.NODE_ENV === 'production');
+  
   app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    name: 'sessionId', // Give the session cookie a specific name
     cookie: {
-      secure: process.env.NODE_ENV === 'production', // Secure cookies in production
+      secure: false, // Set to false for Replit compatibility
       httpOnly: true, // Prevent XSS attacks
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // For cross-origin requests in production
+      sameSite: 'lax', // Use 'lax' for better compatibility with OAuth flows
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      // Don't set domain explicitly - let the browser handle it
     }
   }));
 
@@ -465,6 +470,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/auth/discord/login", (req, res) => {
     const config = getDiscordConfig();
     
+    console.log('🔵 Discord OAuth Login - Start', {
+      sessionId: req.sessionID,
+      hasSession: !!req.session,
+      userAgent: req.headers['user-agent'],
+      referer: req.headers['referer'],
+      host: req.headers['host']
+    });
+    
     if (!config.clientId || !config.redirectUri) {
       return res.status(500).json({ 
         message: 'Discord OAuth not configured. Missing CLIENT_ID or REDIRECT_URI.' 
@@ -473,6 +486,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     const state = randomBytes(32).toString('hex');
     req.session.discordState = state;
+    
+    // Force session save to ensure it persists
+    req.session.save((err) => {
+      if (err) {
+        console.error('❌ Session save error:', err);
+      } else {
+        console.log('✅ Session saved successfully');
+      }
+    });
+
+    console.log('🔵 Discord OAuth Login - Generated State', {
+      state: state,
+      sessionDiscordState: req.session.discordState,
+      sessionId: req.sessionID,
+      redirectUri: config.redirectUri
+    });
 
     const discordAuthUrl = new URL('https://discord.com/api/oauth2/authorize');
     discordAuthUrl.searchParams.set('client_id', config.clientId);
@@ -481,14 +510,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     discordAuthUrl.searchParams.set('scope', 'identify guilds');
     discordAuthUrl.searchParams.set('state', state);
 
+    console.log('🔵 Redirecting to Discord:', discordAuthUrl.toString());
     res.redirect(discordAuthUrl.toString());
   });
 
   // Discord OAuth callback endpoint
   app.get("/api/auth/discord/callback", async (req, res) => {
     try {
+      console.log('🟢 Discord OAuth Callback - Start', {
+        sessionId: req.sessionID,
+        hasSession: !!req.session,
+        sessionDiscordState: req.session?.discordState,
+        userAgent: req.headers['user-agent'],
+        referer: req.headers['referer'],
+        host: req.headers['host'],
+        cookies: req.headers.cookie
+      });
+      
       const config = getDiscordConfig();
       const { code, state } = req.query;
+
+      console.log('🟢 Discord OAuth Callback - Parameters', {
+        code: code ? 'present' : 'missing',
+        state: state,
+        sessionState: req.session?.discordState,
+        stateMatch: state === req.session?.discordState
+      });
 
       if (!config.clientId || !config.clientSecret || !config.redirectUri) {
         return res.status(500).json({ 
@@ -498,8 +545,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Verify state parameter
       if (!state || state !== req.session.discordState) {
-        return res.status(400).json({ message: 'Invalid state parameter' });
+        console.error('❌ State parameter validation failed', {
+          providedState: state,
+          sessionState: req.session?.discordState,
+          hasSession: !!req.session,
+          sessionId: req.sessionID,
+          sessionKeys: req.session ? Object.keys(req.session) : 'no session'
+        });
+        return res.status(400).json({ 
+          message: 'Invalid state parameter',
+          debug: process.env.NODE_ENV === 'development' ? {
+            providedState: state,
+            sessionState: req.session?.discordState,
+            sessionId: req.sessionID
+          } : undefined
+        });
       }
+
+      console.log('✅ State parameter validation passed');
 
       if (!code) {
         return res.status(400).json({ message: 'Authorization code not provided' });
