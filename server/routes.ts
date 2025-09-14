@@ -9,6 +9,52 @@ import { storage } from "./storage";
 
 const scryptAsync = promisify(scrypt);
 
+// Discord signature verification function
+async function verifyDiscordSignature(
+  signature: string,
+  timestamp: string,
+  body: string,
+  publicKey: string
+): Promise<boolean> {
+  try {
+    const { webcrypto } = require('node:crypto');
+    
+    // Convert signature from hex to Uint8Array
+    const sig = new Uint8Array(Buffer.from(signature, 'hex'));
+    
+    // Convert public key from hex to Uint8Array
+    const key = new Uint8Array(Buffer.from(publicKey, 'hex'));
+    
+    // Create message to verify (timestamp + body)
+    const message = new TextEncoder().encode(timestamp + body);
+    
+    // Import the public key
+    const cryptoKey = await webcrypto.subtle.importKey(
+      'raw',
+      key,
+      {
+        name: 'Ed25519',
+        namedCurve: 'Ed25519',
+      },
+      false,
+      ['verify']
+    );
+    
+    // Verify the signature
+    const isValid = await webcrypto.subtle.verify(
+      'Ed25519',
+      cryptoKey,
+      sig,
+      message
+    );
+    
+    return isValid;
+  } catch (error) {
+    console.error('Discord signature verification error:', error);
+    return false;
+  }
+}
+
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
 }
@@ -763,6 +809,89 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Discord recheck error:', error);
       res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+
+  // Discord Interactions endpoint for slash commands and other Discord interactions
+  app.post("/api/discord/interactions", async (req, res) => {
+    try {
+      console.log('🟣 Discord interaction received:', {
+        headers: req.headers,
+        body: req.body
+      });
+
+      // Verify Discord signature
+      const signature = req.headers['x-signature-ed25519'] as string;
+      const timestamp = req.headers['x-signature-timestamp'] as string;
+      const publicKey = process.env.DISCORD_PUBLIC_KEY;
+
+      if (!publicKey) {
+        console.error('❌ Discord public key not configured');
+        return res.status(500).json({ error: 'Discord public key not configured' });
+      }
+
+      if (!signature || !timestamp) {
+        console.error('❌ Missing Discord signature or timestamp headers');
+        return res.status(401).json({ error: 'Missing signature headers' });
+      }
+
+      // For signature verification, we need the raw body
+      const rawBody = JSON.stringify(req.body);
+      const isValidRequest = await verifyDiscordSignature(
+        signature,
+        timestamp,
+        rawBody,
+        publicKey
+      );
+
+      if (!isValidRequest) {
+        console.error('❌ Invalid Discord signature');
+        return res.status(401).json({ error: 'Invalid request signature' });
+      }
+
+      console.log('✅ Discord signature verified');
+
+      const interaction = req.body;
+
+      // Handle different interaction types
+      switch (interaction.type) {
+        case 1: // PING
+          console.log('🏓 Discord PING interaction');
+          return res.json({ type: 1 }); // PONG
+
+        case 2: // APPLICATION_COMMAND
+          console.log('🎯 Discord application command:', interaction.data?.name);
+          return res.json({
+            type: 4, // CHANNEL_MESSAGE_WITH_SOURCE
+            data: {
+              content: `Hello from _Fq neurohacker! Command: ${interaction.data?.name || 'unknown'}`,
+              flags: 64 // EPHEMERAL
+            }
+          });
+
+        case 3: // MESSAGE_COMPONENT
+          console.log('🔘 Discord message component interaction');
+          return res.json({
+            type: 4,
+            data: {
+              content: 'Component interaction received!',
+              flags: 64
+            }
+          });
+
+        default:
+          console.log('❓ Unknown Discord interaction type:', interaction.type);
+          return res.json({
+            type: 4,
+            data: {
+              content: 'Unknown interaction type',
+              flags: 64
+            }
+          });
+      }
+    } catch (error) {
+      console.error('❌ Discord interactions error:', error);
+      return res.status(500).json({ error: 'Internal server error' });
     }
   });
 
