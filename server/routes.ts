@@ -14,7 +14,7 @@ if (!process.env.STRIPE_SECRET_KEY) {
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2025-07-30.basil" as any,
+  apiVersion: "2025-07-30.basil",
 });
 
 // In-memory user storage for this demo
@@ -49,7 +49,7 @@ async function comparePasswords(supplied: string, stored: string): Promise<boole
 // Extend Express session types
 declare module 'express-session' {
   interface SessionData {
-    userId?: number;
+    userId?: number | string; // Support both in-memory (number) and database (string) IDs
     discordState?: string;
   }
 }
@@ -71,11 +71,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const findUser = (id: number): User | undefined => users.find(u => u.id === id);
   const findUserByEmail = (email: string): User | undefined => users.find(u => u.email === email);
 
-  // Auth middleware
-  const requireAuth = (req: any, res: any, next: any) => {
-    if (!req.session.userId || !findUser(req.session.userId)) {
+  // Auth middleware - supports both in-memory (number) and database (string) user IDs
+  const requireAuth = async (req: any, res: any, next: any) => {
+    if (!req.session.userId) {
       return res.status(401).json({ message: 'Authentication required' });
     }
+
+    // Check if user exists in either system
+    if (typeof req.session.userId === 'number') {
+      // In-memory user system
+      if (!findUser(req.session.userId)) {
+        return res.status(401).json({ message: 'Authentication required' });
+      }
+    } else {
+      // Database user system (Discord OAuth users)
+      try {
+        const dbUser = await storage.getUser(req.session.userId);
+        if (!dbUser) {
+          return res.status(401).json({ message: 'Authentication required' });
+        }
+      } catch (error) {
+        return res.status(401).json({ message: 'Authentication required' });
+      }
+    }
+    
     next();
   };
   // Register endpoint
@@ -170,7 +189,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
 
     // Fallback to in-memory user system
-    const user = findUser(req.session.userId);
+    const user = typeof req.session.userId === 'number' ? findUser(req.session.userId) : null;
     if (!user) {
       req.session.userId = undefined;
       return res.status(401).json({ message: 'User not found' });
@@ -206,7 +225,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create subscription
   app.post("/api/create-subscription", requireAuth, async (req, res) => {
     try {
-      const user = findUser(req.session.userId!);
+      const user = typeof req.session.userId === 'number' ? findUser(req.session.userId) : null;
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
@@ -313,7 +332,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return {
       clientId: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
-      redirectUri: process.env.DISCORD_REDIRECT_URI,
+      redirectUri: process.env.DISCORD_REDIRECT_URI || `${process.env.REPL_URL || 'http://localhost:5000'}/api/auth/discord/callback`,
       guildId: process.env.DISCORD_GUILD_ID,
       betaEndAt: process.env.BETA_END_AT
     };
@@ -464,8 +483,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         discordUser.email
       );
 
-      // Set session for traditional auth system (using user ID as number for compatibility)
-      req.session.userId = parseInt(user.id) || 1; // Fallback for compatibility with current system
+      // Set session for traditional auth system (using user ID as string for database compatibility)
+      req.session.userId = user.id; // Store the actual database user ID
       req.session.discordState = undefined; // Clear state
 
       // Redirect to frontend
@@ -479,20 +498,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Recheck Discord verification endpoint
   app.post("/api/recheck-discord", requireAuth, async (req, res) => {
     try {
-      const user = findUser(req.session.userId!);
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-
       const config = getDiscordConfig();
       if (!config.guildId) {
         return res.status(400).json({ message: 'Guild verification not configured' });
       }
 
-      // For recheck, we'd need the user to go through OAuth again to get a fresh token
-      // This is a simplified version that just returns current status
-      // In a real implementation, you might store refresh tokens or require re-authentication
+      // Check if user exists in either system
+      let user = null;
+      if (typeof req.session.userId === 'number') {
+        user = findUser(req.session.userId);
+      } else if (req.session.userId) {
+        user = await storage.getUser(req.session.userId);
+      }
 
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // For recheck, we'd need the user to go through OAuth again to get a fresh token
+      // This is a simplified version that redirects to re-authenticate
       res.json({ 
         message: 'To recheck Discord verification, please use the Discord login flow again',
         discordLoginUrl: '/api/auth/discord/login'

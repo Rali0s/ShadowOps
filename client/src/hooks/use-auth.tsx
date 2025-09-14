@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, ReactNode, useContext, useEffect, useRef } from "react";
 import {
   useQuery,
   useMutation,
@@ -53,6 +53,7 @@ type RegisterData = {
 export const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
+  const prevBetaStatus = useRef<BetaStatus | null>(null);
   
   const {
     data: user,
@@ -100,6 +101,49 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     (user?.discordVerified && !betaStatus?.expired) || 
     (user?.subscriptionStatus === 'active')
   );
+
+  // Monitor beta status changes for active session handling
+  useEffect(() => {
+    if (!betaStatus || !prevBetaStatus.current) {
+      prevBetaStatus.current = betaStatus ?? null;
+      return;
+    }
+
+    // Detect beta expiration during active session
+    const betaJustExpired = !prevBetaStatus.current.expired && betaStatus.expired;
+    
+    if (betaJustExpired && user) {
+      if (user.subscriptionStatus === 'active') {
+        toast({
+          title: "Beta Period Ended",
+          description: "Your subscription ensures continued access to all features.",
+        });
+      } else if (user.discordVerified) {
+        toast({
+          title: "Beta Access Expired",
+          description: "Your beta access has ended. Subscribe to continue your neurohacker journey!",
+          variant: "destructive",
+        });
+        
+        // Invalidate user and beta queries to refresh auth state
+        queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+        queryClient.invalidateQueries({ queryKey: ["/api/beta-status"] });
+        
+        // Redirect to subscription page after a short delay
+        setTimeout(() => {
+          window.location.href = '/subscribe';
+        }, 3000);
+      } else {
+        toast({
+          title: "Beta Period Ended",
+          description: "Join Discord and subscribe to unlock full access!",
+          variant: "destructive",
+        });
+      }
+    }
+
+    prevBetaStatus.current = betaStatus;
+  }, [betaStatus, user, toast]);
 
   // Discord login function
   const loginWithDiscord = () => {

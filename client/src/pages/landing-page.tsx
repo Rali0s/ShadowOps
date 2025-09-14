@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CountdownTimer } from '@/components/countdown-timer';
 import { Mobile, Desktop, ShowAbove, ShowBelow } from '@/hooks/use-responsive';
+import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Brain, 
   Shield, 
@@ -21,12 +23,172 @@ import {
   AlertCircle,
   Timer,
   Crown,
-  MessageCircle
+  MessageCircle,
+  Play,
+  Settings
 } from 'lucide-react';
 import { SiDiscord } from 'react-icons/si';
 
 export default function LandingPage() {
+  const { user, isLoading, isSubscribed, isAuthorized, betaStatus, loginWithDiscord } = useAuth();
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
   const betaLaunchDate = new Date(Date.now() + 45 * 24 * 60 * 60 * 1000); // 45 days from now
+
+  // Beta expiration handling
+  const handleBetaComplete = () => {
+    toast({
+      title: "Beta Period Ended",
+      description: "The beta access countdown has reached zero. Time to upgrade!",
+      variant: "destructive",
+    });
+  };
+
+  const handleBetaExpired = () => {
+    if (isSubscribed) {
+      toast({
+        title: "Beta Ended - Premium Access Active",
+        description: "Your subscription ensures continued access to all features.",
+      });
+      return;
+    }
+
+    if (user?.discordVerified) {
+      toast({
+        title: "Beta Access Expired",
+        description: "Subscribe now to continue your neurohacker journey!",
+        variant: "destructive",
+      });
+      
+      // Redirect Discord-verified users to subscription page
+      setTimeout(() => {
+        setLocation("/subscribe");
+      }, 2000);
+    } else {
+      toast({
+        title: "Beta Period Ended",
+        description: "Join Discord and subscribe to unlock full access!",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Helper functions to determine CTA state
+  const getPrimaryCTA = () => {
+    if (isLoading) {
+      return {
+        text: "Loading...",
+        subText: "Please wait",
+        icon: Settings,
+        action: () => {},
+        href: null,
+        variant: "default" as const,
+        disabled: true
+      };
+    }
+
+    // Subscribed users - highest priority
+    if (isSubscribed) {
+      return {
+        text: "Access Dashboard",
+        subText: "Continue Training",
+        icon: Play,
+        action: undefined,
+        href: "/home",
+        variant: "default" as const,
+        disabled: false
+      };
+    }
+
+    // Discord verified but beta expired - upgrade prompt
+    if (user?.discordVerified && betaStatus?.expired) {
+      return {
+        text: "Upgrade to Elite",
+        subText: "Beta Expired - Subscribe",
+        icon: Crown,
+        action: undefined,
+        href: "/subscribe",
+        variant: "default" as const,
+        disabled: false
+      };
+    }
+
+    // Discord verified with active beta - enter platform
+    if (user?.discordVerified && !betaStatus?.expired) {
+      return {
+        text: "Access Training",
+        subText: "Enter Platform",
+        icon: Play,
+        action: undefined,
+        href: "/home",
+        variant: "default" as const,
+        disabled: false
+      };
+    }
+
+    // Not authenticated or no Discord - join community first
+    return {
+      text: "Join Discord Community",
+      subText: "Start Your Journey",
+      icon: SiDiscord,
+      action: loginWithDiscord,
+      href: null,
+      variant: "default" as const,
+      disabled: false
+    };
+  };
+
+  const getSecondaryCTA = () => {
+    if (isLoading) {
+      return null;
+    }
+
+    // For subscribed users - show Discord community
+    if (isSubscribed) {
+      return {
+        text: "Join Discord",
+        subText: "Community Access",
+        icon: SiDiscord,
+        action: () => window.open("https://discord.gg/3PfFZ6aC", "_blank"),
+        href: null,
+        variant: "outline" as const
+      };
+    }
+
+    // For Discord users (verified or beta expired) - show subscription
+    if (user?.discordVerified) {
+      return {
+        text: "Lock In Beta Price",
+        subText: "$5.89/mo Forever",
+        icon: Lock,
+        action: undefined,
+        href: "/subscribe",
+        variant: "outline" as const
+      };
+    }
+
+    // For non-Discord users - show subscription as secondary
+    return {
+      text: "Lock In Beta Price",
+      subText: "$5.89/mo Forever", 
+      icon: Lock,
+      action: null,
+      href: "/subscribe",
+      variant: "outline" as const
+    };
+  };
+
+  const getHeaderCTA = () => {
+    if (isLoading) return { text: "Loading...", href: "/subscribe", disabled: true };
+    if (isSubscribed) return { text: "Dashboard", href: "/home", disabled: false };
+    if (user?.discordVerified && !betaStatus?.expired) return { text: "Enter", href: "/home", disabled: false };
+    if (user?.discordVerified && betaStatus?.expired) return { text: "Subscribe", href: "/subscribe", disabled: false };
+    return { text: "Join Beta", href: "/subscribe", disabled: false };
+  };
+
+  const primaryCTA = getPrimaryCTA();
+  const secondaryCTA = getSecondaryCTA();
+  const headerCTA = getHeaderCTA();
 
   const mainGoals = [
     {
@@ -86,8 +248,27 @@ export default function LandingPage() {
       {/* Beta Launch Alert Bar */}
       <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-2 px-2 text-center animate-pulse">
         <p className="text-xs sm:text-sm font-bold leading-tight">
-          <span className="hidden xs:inline">🚀 BETA LAUNCH APPROACHING • LIMITED SPOTS • EARLY ACCESS 🚀</span>
-          <span className="xs:hidden">🚀 BETA LAUNCH • EARLY ACCESS 🚀</span>
+          {isSubscribed ? (
+            <>
+              <span className="hidden xs:inline">✅ ELITE MEMBER ACTIVE • FULL PLATFORM ACCESS • WELCOME BACK ✅</span>
+              <span className="xs:hidden">✅ ELITE ACTIVE • WELCOME ✅</span>
+            </>
+          ) : user?.discordVerified && !betaStatus?.expired ? (
+            <>
+              <span className="hidden xs:inline">🎯 DISCORD VERIFIED • BETA ACCESS GRANTED • ENTER PLATFORM 🎯</span>
+              <span className="xs:hidden">🎯 VERIFIED • ENTER PLATFORM 🎯</span>
+            </>
+          ) : user?.discordVerified && betaStatus?.expired ? (
+            <>
+              <span className="hidden xs:inline">⏰ BETA EXPIRED • ELITE UPGRADE AVAILABLE • LIMITED TIME ⏰</span>
+              <span className="xs:hidden">⏰ BETA EXPIRED • UPGRADE NOW ⏰</span>
+            </>
+          ) : (
+            <>
+              <span className="hidden xs:inline">🚀 JOIN DISCORD FIRST • GET VERIFIED • UNLOCK BETA ACCESS 🚀</span>
+              <span className="xs:hidden">🚀 DISCORD FIRST • BETA ACCESS 🚀</span>
+            </>
+          )}
         </p>
       </div>
 
@@ -106,11 +287,16 @@ export default function LandingPage() {
             </div>
             
             <div className="flex items-center space-x-2 sm:space-x-3">
-              <Link href="/subscribe">
-                <Button size="sm" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 px-3 py-2 text-xs sm:text-sm">
+              <Link href={headerCTA.href}>
+                <Button 
+                  size="sm" 
+                  disabled={headerCTA.disabled}
+                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 px-3 py-2 text-xs sm:text-sm"
+                  data-testid="button-header-cta"
+                >
                   <Timer className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                  <span className="hidden xs:inline">Join Beta</span>
-                  <span className="xs:hidden">Beta</span>
+                  <span className="hidden xs:inline">{headerCTA.text}</span>
+                  <span className="xs:hidden">{headerCTA.text.split(' ')[0]}</span>
                 </Button>
               </Link>
             </div>
@@ -146,34 +332,123 @@ export default function LandingPage() {
 
           {/* Countdown Timer */}
           <div className="max-w-2xl mx-auto mb-12">
-            <CountdownTimer targetDate={betaLaunchDate} />
+            <CountdownTimer 
+              targetDate={betaLaunchDate}
+              onComplete={handleBetaComplete}
+              onExpired={handleBetaExpired}
+            />
           </div>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-6 sm:mb-8 px-2">
-            <Link href="/subscribe">
-              <Button size="lg" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-6 w-full sm:w-auto">
-                <Lock className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                <ShowAbove breakpoint="sm">Lock In Beta Price ($5.89/mo)</ShowAbove>
-                <ShowBelow breakpoint="sm">Beta $5.89/mo</ShowBelow>
+            {/* Primary CTA */}
+            {primaryCTA.href ? (
+              <Link href={primaryCTA.href}>
+                <Button 
+                  size="lg" 
+                  variant={primaryCTA.variant}
+                  disabled={primaryCTA.disabled}
+                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-6 w-full sm:w-auto data-testid-button-primary"
+                  data-testid="button-primary-cta"
+                >
+                  <primaryCTA.icon className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                  <span className="flex flex-col items-center sm:block">
+                    <ShowAbove breakpoint="sm">{primaryCTA.text}</ShowAbove>
+                    <ShowBelow breakpoint="sm">{primaryCTA.text.split(' ')[0]} {primaryCTA.text.split(' ')[1] || ''}</ShowBelow>
+                    {primaryCTA.subText && (
+                      <span className="text-xs opacity-75 hidden sm:inline">• {primaryCTA.subText}</span>
+                    )}
+                  </span>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
+                </Button>
+              </Link>
+            ) : (
+              <Button 
+                size="lg" 
+                variant={primaryCTA.variant}
+                onClick={primaryCTA.action || undefined}
+                disabled={primaryCTA.disabled}
+                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-6 w-full sm:w-auto"
+                data-testid="button-primary-cta"
+              >
+                <primaryCTA.icon className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                <span className="flex flex-col items-center sm:block">
+                  <ShowAbove breakpoint="sm">{primaryCTA.text}</ShowAbove>
+                  <ShowBelow breakpoint="sm">{primaryCTA.text.split(' ')[0]} {primaryCTA.text.split(' ')[1] || ''}</ShowBelow>
+                  {primaryCTA.subText && (
+                    <span className="text-xs opacity-75 hidden sm:inline">• {primaryCTA.subText}</span>
+                  )}
+                </span>
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
               </Button>
-            </Link>
-            <a href="https://discord.gg/3PfFZ6aC" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-              <Button size="lg" variant="outline" className="border-cyan-500 text-cyan-400 hover:bg-cyan-600/20 text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-6 w-full">
-                <SiDiscord className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                <ShowAbove breakpoint="sm">Join Private Discord</ShowAbove>
-                <ShowBelow breakpoint="sm">Join Discord</ShowBelow>
-              </Button>
-            </a>
+            )}
+
+            {/* Secondary CTA */}
+            {secondaryCTA && (
+              secondaryCTA.href ? (
+                <Link href={secondaryCTA.href}>
+                  <Button 
+                    size="lg" 
+                    variant={secondaryCTA.variant}
+                    className="border-cyan-500 text-cyan-400 hover:bg-cyan-600/20 text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-6 w-full sm:w-auto"
+                    data-testid="button-secondary-cta"
+                  >
+                    <secondaryCTA.icon className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                    <span className="flex flex-col items-center sm:block">
+                      <ShowAbove breakpoint="sm">{secondaryCTA.text}</ShowAbove>
+                      <ShowBelow breakpoint="sm">{secondaryCTA.text.split(' ')[0]} {secondaryCTA.text.split(' ')[1] || ''}</ShowBelow>
+                      {secondaryCTA.subText && (
+                        <span className="text-xs opacity-75 hidden sm:inline">• {secondaryCTA.subText}</span>
+                      )}
+                    </span>
+                  </Button>
+                </Link>
+              ) : (
+                <Button 
+                  size="lg" 
+                  variant={secondaryCTA.variant}
+                  onClick={secondaryCTA.action || undefined}
+                  className="border-cyan-500 text-cyan-400 hover:bg-cyan-600/20 text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-6 w-full sm:w-auto"
+                  data-testid="button-secondary-cta"
+                >
+                  <secondaryCTA.icon className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                  <span className="flex flex-col items-center sm:block">
+                    <ShowAbove breakpoint="sm">{secondaryCTA.text}</ShowAbove>
+                    <ShowBelow breakpoint="sm">{secondaryCTA.text.split(' ')[0]} {secondaryCTA.text.split(' ')[1] || ''}</ShowBelow>
+                    {secondaryCTA.subText && (
+                      <span className="text-xs opacity-75 hidden sm:inline">• {secondaryCTA.subText}</span>
+                    )}
+                  </span>
+                </Button>
+              )
+            )}
           </div>
 
-          {/* Price Warning */}
-          <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-3 sm:p-4 max-w-2xl mx-auto">
+          {/* Conditional Status Message */}
+          <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-3 sm:p-4 max-w-2xl mx-auto" data-testid="status-message">
             <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 inline mr-2" />
             <span className="text-yellow-200 text-xs sm:text-sm leading-tight">
-              <ShowAbove breakpoint="md">Beta members lock in <strong>$5.89/mo forever</strong>. Post-beta pricing will be <strong className="text-red-400">$20/mo</strong> (Year One)</ShowAbove>
-              <ShowBelow breakpoint="md">Beta: <strong>$5.89/mo forever</strong>. Later: <strong className="text-red-400">$20/mo</strong></ShowBelow>
+              {isSubscribed ? (
+                <>
+                  <ShowAbove breakpoint="md">✅ <strong className="text-green-400">Elite Member Active</strong> • Access all training modules and premium features</ShowAbove>
+                  <ShowBelow breakpoint="md">✅ <strong className="text-green-400">Elite Active</strong> • Full Access</ShowBelow>
+                </>
+              ) : user?.discordVerified && !betaStatus?.expired ? (
+                <>
+                  <ShowAbove breakpoint="md">🎯 <strong className="text-cyan-400">Discord Beta Access</strong> • Community verified • Platform access granted</ShowAbove>
+                  <ShowBelow breakpoint="md">🎯 <strong className="text-cyan-400">Beta Access</strong> • Verified</ShowBelow>
+                </>
+              ) : user?.discordVerified && betaStatus?.expired ? (
+                <>
+                  <ShowAbove breakpoint="md">⏰ <strong className="text-yellow-400">Beta Expired</strong> • Upgrade to Elite for <strong className="text-red-400">$5.89/mo</strong> (limited time)</ShowAbove>
+                  <ShowBelow breakpoint="md">⏰ <strong className="text-yellow-400">Beta Expired</strong> • Upgrade Available</ShowBelow>
+                </>
+              ) : (
+                <>
+                  <ShowAbove breakpoint="md">🚀 <strong className="text-cyan-400">Join Discord First</strong> • Get verified → Beta access → Lock in <strong className="text-green-400">$5.89/mo forever</strong></ShowAbove>
+                  <ShowBelow breakpoint="md">🚀 <strong className="text-cyan-400">Discord First</strong> • Then Beta</ShowBelow>
+                </>
+              )}
             </span>
           </div>
         </div>
