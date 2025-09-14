@@ -1,8 +1,8 @@
-import type { Express } from "express";
+import express, { type Express } from "express";
 import { createServer, type Server } from "http";
 import Stripe from "stripe";
 import session from "express-session";
-import { scrypt, randomBytes, timingSafeEqual } from "crypto";
+import { scrypt, randomBytes, timingSafeEqual, webcrypto } from "crypto";
 import { promisify } from "util";
 import fetch from "node-fetch";
 import { storage } from "./storage";
@@ -17,7 +17,6 @@ async function verifyDiscordSignature(
   publicKey: string
 ): Promise<boolean> {
   try {
-    const { webcrypto } = require('node:crypto');
     
     // Convert signature from hex to Uint8Array
     const sig = new Uint8Array(Buffer.from(signature, 'hex'));
@@ -58,6 +57,13 @@ async function verifyDiscordSignature(
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
 }
+
+// Discord environment variable validation
+const DISCORD_PUBLIC_KEY = process.env.DISCORD_PUBLIC_KEY?.trim();
+if (!DISCORD_PUBLIC_KEY) {
+  throw new Error('Missing required: DISCORD_PUBLIC_KEY');
+}
+console.log('✅ Discord public key loaded:', DISCORD_PUBLIC_KEY.length, 'characters');
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2025-07-30.basil",
@@ -813,35 +819,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Discord Interactions endpoint for slash commands and other Discord interactions
-  app.post("/api/discord/interactions", async (req, res) => {
+  // Use raw body middleware specifically for Discord interactions to preserve exact body for signature verification
+  app.post("/api/discord/interactions", express.raw({ type: 'application/json' }), async (req, res) => {
     try {
+      // Parse the raw body for logging and processing
+      let parsedBody;
+      try {
+        parsedBody = JSON.parse(req.body.toString());
+      } catch (parseError) {
+        console.error('❌ Failed to parse Discord interaction body:', parseError);
+        return res.status(400).json({ error: 'Invalid JSON body' });
+      }
+
       console.log('🟣 Discord interaction received:', {
         headers: req.headers,
-        body: req.body
+        body: parsedBody
       });
 
       // Verify Discord signature
       const signature = req.headers['x-signature-ed25519'] as string;
       const timestamp = req.headers['x-signature-timestamp'] as string;
-      const publicKey = process.env.DISCORD_PUBLIC_KEY;
-
-      if (!publicKey) {
-        console.error('❌ Discord public key not configured');
-        return res.status(500).json({ error: 'Discord public key not configured' });
-      }
 
       if (!signature || !timestamp) {
         console.error('❌ Missing Discord signature or timestamp headers');
         return res.status(401).json({ error: 'Missing signature headers' });
       }
 
-      // For signature verification, we need the raw body
-      const rawBody = JSON.stringify(req.body);
+      // Use the raw body string for signature verification (exactly as Discord sent it)
+      const rawBodyString = req.body.toString();
       const isValidRequest = await verifyDiscordSignature(
         signature,
         timestamp,
-        rawBody,
-        publicKey
+        rawBodyString,
+        DISCORD_PUBLIC_KEY
       );
 
       if (!isValidRequest) {
@@ -851,7 +861,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log('✅ Discord signature verified');
 
-      const interaction = req.body;
+      const interaction = parsedBody;
 
       // Handle different interaction types
       switch (interaction.type) {
