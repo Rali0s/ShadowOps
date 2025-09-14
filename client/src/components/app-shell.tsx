@@ -9,8 +9,8 @@ interface AppShellProps {
   children: React.ReactNode;
 }
 
-// Separate component for navigation content to use auth
-function NavigationContent() {
+// Navigation content component
+const NavigationContent = () => {
   const { user, isAuthorized, isLoading, betaStatus } = useAuth();
 
   return (
@@ -104,7 +104,7 @@ export function AppShell({ children }: AppShellProps) {
             {/* Brand */}
             <Link href="/">
               <div className="flex items-center space-x-3 cursor-pointer">
-                <div className="w-8 h-8 bg-gradient-to-r from-red-600 to-red-700 rounded-lg flex items-center justify-center admin-tap-trigger" title="Triple tap for admin access">
+                <div className="w-8 h-8 bg-gradient-to-r from-red-600 to-red-700 rounded-lg flex items-center justify-center">
                   <Brain className="text-white w-5 h-5" />
                 </div>
                 <div className="hidden sm:block">
