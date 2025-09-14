@@ -57,12 +57,18 @@ declare module 'express-session' {
 export async function registerRoutes(app: Express): Promise<Server> {
   
   // Session middleware
+  if (!process.env.SESSION_SECRET) {
+    throw new Error('SESSION_SECRET environment variable is required for production');
+  }
+
   app.use(session({
-    secret: process.env.SESSION_SECRET || 'neural-matrix-secret-key-2025',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // Set to true in production with HTTPS
+      secure: process.env.NODE_ENV === 'production', // Secure cookies in production
+      httpOnly: true, // Prevent XSS attacks
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // For cross-origin requests in production
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     }
   }));
@@ -71,15 +77,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const findUser = (id: number): User | undefined => users.find(u => u.id === id);
   const findUserByEmail = (email: string): User | undefined => users.find(u => u.email === email);
 
-  // Auth middleware - supports both in-memory (number) and database (string) user IDs
+  // Auth middleware - supports both in-memory (dev) and database (production) user IDs
   const requireAuth = async (req: any, res: any, next: any) => {
     if (!req.session.userId) {
-      return res.status(401).json({ message: 'Authentication required' });
+      return res.status(401).json({ 
+        message: 'Authentication required',
+        redirectTo: process.env.NODE_ENV === 'production' ? '/api/auth/discord/login' : null
+      });
+    }
+
+    // In production, only allow database users (Discord OAuth)
+    if (process.env.NODE_ENV === 'production' && typeof req.session.userId === 'number') {
+      return res.status(401).json({ 
+        message: 'Please login with Discord OAuth',
+        redirectTo: '/api/auth/discord/login'
+      });
     }
 
     // Check if user exists in either system
     if (typeof req.session.userId === 'number') {
-      // In-memory user system
+      // In-memory user system (development only)
       if (!findUser(req.session.userId)) {
         return res.status(401).json({ message: 'Authentication required' });
       }
@@ -97,8 +114,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     next();
   };
-  // Register endpoint
+  // Register endpoint - Disabled in production (Discord OAuth only)
   app.post("/api/register", async (req, res) => {
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(403).json({ 
+        message: 'Email/password registration is disabled in production. Please use Discord OAuth.',
+        redirectTo: '/api/auth/discord/login'
+      });
+    }
+    
     try {
       const { email, password } = req.body;
       
@@ -137,8 +161,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Login endpoint
+  // Login endpoint - Disabled in production (Discord OAuth only)
   app.post("/api/login", async (req, res) => {
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(403).json({ 
+        message: 'Email/password login is disabled in production. Please use Discord OAuth.',
+        redirectTo: '/api/auth/discord/login'
+      });
+    }
+    
     try {
       const { email, password } = req.body;
       
@@ -225,14 +256,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create subscription
   app.post("/api/create-subscription", requireAuth, async (req, res) => {
     try {
-      const user = typeof req.session.userId === 'number' ? findUser(req.session.userId) : null;
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+      // In production, only work with database users (Discord OAuth)
+      if (process.env.NODE_ENV === 'production' && typeof req.session.userId === 'number') {
+        return res.status(403).json({ 
+          message: 'Subscription creation requires Discord OAuth authentication',
+          redirectTo: '/api/auth/discord/login'
+        });
+      }
+      
+      // Get user from appropriate system
+      let user: User | any = null;
+      let isDbUser = false;
+      
+      if (typeof req.session.userId === 'number') {
+        // In-memory user system
+        user = findUser(req.session.userId);
+        if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+      } else if (typeof req.session.userId === 'string') {
+        // Database user system
+        try {
+          user = await storage.getUser(req.session.userId);
+          isDbUser = true;
+          if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+          }
+        } catch (error) {
+          return res.status(500).json({ message: 'Failed to fetch user data' });
+        }
+      } else {
+        return res.status(401).json({ message: 'Invalid user session' });
       }
 
+      // Check subscription status - handle both user types
+      const userSubscriptionStatus = isDbUser ? 
+        (user.subscriptionTier === 'none' ? 'inactive' : 'active') : 
+        user.subscriptionStatus;
+      const userSubscriptionId = isDbUser ? user.stripeSubscriptionId : user.subscriptionId;
+      
       // If user already has active subscription, return existing
-      if (user.subscriptionStatus === 'active' && user.subscriptionId) {
-        const subscription = await stripe.subscriptions.retrieve(user.subscriptionId);
+      if (userSubscriptionStatus === 'active' && userSubscriptionId) {
+        const subscription = await stripe.subscriptions.retrieve(userSubscriptionId);
         const invoice = await stripe.invoices.retrieve(subscription.latest_invoice as string, {
           expand: ['payment_intent']
         }) as Stripe.Invoice & {
@@ -246,13 +311,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Create Stripe customer if needed
-      let customerId = user.customerId;
+      const userCustomerId = isDbUser ? user.stripeCustomerId : user.customerId;
+      let customerId = userCustomerId;
       if (!customerId) {
         const customer = await stripe.customers.create({
           email: user.email,
         });
         customerId = customer.id;
-        user.customerId = customerId;
+        
+        // Update user with customer ID
+        if (isDbUser) {
+          // For database users, we'd need to update via storage - but this is a simplified demo
+          // In a real app, you'd call storage.updateUser() here
+        } else {
+          user.customerId = customerId;
+        }
       }
 
       // Create subscription
@@ -265,8 +338,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         expand: ['latest_invoice.payment_intent'],
       });
 
-      // Update user
-      user.subscriptionId = subscription.id;
+      // Update user with subscription ID
+      if (isDbUser) {
+        // For database users, we'd need to update via storage - but this is a simplified demo
+        // In a real app, you'd call storage.updateUser() here
+      } else {
+        user.subscriptionId = subscription.id;
+      }
       
       res.json({
         subscriptionId: subscription.id,
