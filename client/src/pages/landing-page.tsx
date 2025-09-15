@@ -129,9 +129,9 @@ export default function LandingPage() {
     // Not authenticated or no Discord - join community first
     return {
       text: "Join Discord Community",
-      subText: "Start Your Journey",
+      subText: "Required for Access",
       icon: SiDiscord,
-      action: loginWithDiscord,
+      action: () => window.open("https://discord.gg/3PfFZ6aC", "_blank"),
       href: null,
       variant: "default" as const,
       disabled: false
@@ -167,13 +167,13 @@ export default function LandingPage() {
       };
     }
 
-    // For non-Discord users - show subscription as secondary
+    // For non-Discord users - show Discord login as secondary
     return {
-      text: "Lock In Beta Price",
-      subText: "$5.89/mo Forever", 
-      icon: Lock,
-      action: null,
-      href: "/subscribe",
+      text: "Discord Login",
+      subText: "After Joining Server", 
+      icon: SiDiscord,
+      action: loginWithDiscord,
+      href: null,
       variant: "outline" as const
     };
   };
