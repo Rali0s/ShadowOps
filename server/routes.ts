@@ -818,9 +818,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Discord Interactions endpoint for slash commands and other Discord interactions
-  // Use raw body middleware specifically for Discord interactions to preserve exact body for signature verification
-  app.post("/api/discord/interactions", express.raw({ type: 'application/json' }), async (req, res) => {
+  // Discord Interactions endpoint handler (shared logic)
+  const discordInteractionsHandler = async (req: any, res: any) => {
     try {
       // Parse the raw body for logging and processing
       let parsedBody;
@@ -851,7 +850,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         signature,
         timestamp,
         rawBodyString,
-        DISCORD_PUBLIC_KEY
+        DISCORD_PUBLIC_KEY! // Non-null assertion since we validated it exists at startup
       );
 
       if (!isValidRequest) {
@@ -903,6 +902,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('❌ Discord interactions error:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }
+  };
+
+  // Discord Interactions endpoint routes (both /api/discord/interactions and /discord/interactions)
+  // Use raw body middleware specifically for Discord interactions to preserve exact body for signature verification
+  app.post("/api/discord/interactions", express.raw({ type: 'application/json' }), discordInteractionsHandler);
+  app.post("/discord/interactions", express.raw({ type: 'application/json' }), discordInteractionsHandler);
+  
+  // Add GET handlers to return proper 405 Method Not Allowed instead of SPA fallback
+  app.get("/api/discord/interactions", (req, res) => {
+    res.status(405).json({ error: "Method Not Allowed", message: "Use POST for Discord interactions" });
+  });
+  app.get("/discord/interactions", (req, res) => {
+    res.status(405).json({ error: "Method Not Allowed", message: "Use POST for Discord interactions" });
   });
 
   // Health check
