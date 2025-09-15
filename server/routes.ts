@@ -739,7 +739,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log('✅ User upserted successfully:', { userId: user.id, username: user.username });
       } catch (error) {
         console.error('❌ Error upserting user in database:', error);
-        return res.status(500).json({ message: 'Database error during user creation' });
+        console.error('❌ Discord user data:', {
+          id: discordUser.id,
+          username: discordUser.username,
+          email: discordUser.email,
+          discordVerified
+        });
+        // Log specific database error details
+        if (error instanceof Error) {
+          console.error('❌ Database error details:', {
+            name: error.name,
+            message: error.message,
+            stack: error.stack
+          });
+        }
+        return res.status(500).json({ 
+          message: 'Database error during user creation',
+          ...(process.env.NODE_ENV === 'development' && { 
+            error: error instanceof Error ? error.message : 'Unknown database error',
+            discordData: {
+              id: discordUser.id,
+              username: discordUser.username,
+              hasEmail: !!discordUser.email
+            }
+          })
+        });
       }
 
       // Set session for traditional auth system (using user ID as string for database compatibility)
