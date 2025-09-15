@@ -821,21 +821,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Discord Interactions endpoint handler (shared logic)
   const discordInteractionsHandler = async (req: any, res: any) => {
     try {
-      // Parse the raw body for logging and processing
-      let parsedBody;
-      try {
-        parsedBody = JSON.parse(req.body.toString());
-      } catch (parseError) {
-        console.error('❌ Failed to parse Discord interaction body:', parseError);
-        return res.status(400).json({ error: 'Invalid JSON body' });
-      }
-
-      console.log('🟣 Discord interaction received:', {
-        headers: req.headers,
-        body: parsedBody
-      });
-
-      // Verify Discord signature
+      console.log('🟣 Discord interaction request received');
+      
+      // First verify Discord signature before parsing JSON
       const signature = req.headers['x-signature-ed25519'] as string;
       const timestamp = req.headers['x-signature-timestamp'] as string;
 
@@ -859,6 +847,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       console.log('✅ Discord signature verified');
+
+      // Parse the raw body for processing (only after signature verification)
+      let parsedBody;
+      try {
+        parsedBody = JSON.parse(rawBodyString);
+      } catch (parseError) {
+        console.error('❌ Failed to parse Discord interaction body:', parseError);
+        return res.status(400).json({ error: 'Invalid JSON body' });
+      }
+
+      console.log('🟣 Discord interaction received:', {
+        headers: req.headers,
+        body: parsedBody
+      });
 
       const interaction = parsedBody;
 
