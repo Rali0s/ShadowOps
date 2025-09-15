@@ -148,25 +148,67 @@ export class DatabaseStorage implements IStorage {
         discordVerified
       );
     } else {
-      // Create new user - for Discord-only users, we'll use Discord username as both username and email if no email provided
+      // Create new user - handle potential username/email conflicts
       const userEmail = email || `${discordUsername}@discord.local`;
-      const username = discordUsername || `discord_${discordId}`;
+      let username = discordUsername || `discord_${discordId}`;
       
-      const [user] = await db
-        .insert(users)
-        .values({
-          username,
-          email: userEmail,
-          password: 'discord_oauth', // Placeholder password for Discord users
-          discordId,
-          discordUsername,
-          discordAvatar,
-          discordVerified,
-          subscriptionTier: discordVerified ? 'beta' : 'none' // Auto-grant beta if Discord verified
-        })
-        .returning();
+      // Try to create user, handle unique constraint violations
+      let attempts = 0;
+      const maxAttempts = 5;
       
-      return user;
+      while (attempts < maxAttempts) {
+        try {
+          const [user] = await db
+            .insert(users)
+            .values({
+              username: attempts === 0 ? username : `${username}_${attempts}`,
+              email: attempts === 0 ? userEmail : `${discordId}_${attempts}@discord.local`,
+              password: 'discord_oauth', // Placeholder password for Discord users
+              discordId,
+              discordUsername,
+              discordAvatar,
+              discordVerified,
+              subscriptionTier: discordVerified ? 'beta' : 'none' // Auto-grant beta if Discord verified
+            })
+            .returning();
+          
+          return user;
+        } catch (error: any) {
+          attempts++;
+          
+          // Check if it's a unique constraint violation
+          if (error?.code === '23505' || error?.constraint || error?.message?.includes('unique')) {
+            console.log(`🟡 Username/email conflict on attempt ${attempts}, trying with suffix...`);
+            
+            if (attempts >= maxAttempts) {
+              // Last resort: use Discord ID as unique identifier
+              const fallbackUsername = `discord_user_${discordId}`;
+              const fallbackEmail = `discord_${discordId}@local`;
+              
+              const [user] = await db
+                .insert(users)
+                .values({
+                  username: fallbackUsername,
+                  email: fallbackEmail,
+                  password: 'discord_oauth',
+                  discordId,
+                  discordUsername,
+                  discordAvatar,
+                  discordVerified,
+                  subscriptionTier: discordVerified ? 'beta' : 'none'
+                })
+                .returning();
+              
+              return user;
+            }
+          } else {
+            // Re-throw non-constraint errors
+            throw error;
+          }
+        }
+      }
+      
+      throw new Error('Failed to create user after multiple attempts');
     }
   }
 
