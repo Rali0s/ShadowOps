@@ -3,6 +3,10 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
+
+// IMPORTANT: Raw body middleware for Discord interactions BEFORE any JSON parsing
+app.use('/discord/interactions', express.raw({ type: '*/*' }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
