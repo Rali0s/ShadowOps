@@ -518,6 +518,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Guest bypass endpoint - allows direct access without Discord verification
+  app.post("/api/auth/guest-bypass", async (req, res) => {
+    try {
+      console.log('🔓 Guest bypass access initiated');
+      
+      // Create or get guest user
+      const guestId = `guest_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+      
+      // Try to create a guest user in database
+      try {
+        const guestUser = await storage.upsertUserByDiscord(
+          guestId,
+          'Guest User',
+          '', // no avatar
+          true, // mark as verified for beta access
+          `${guestId}@guest.local`
+        );
+        
+        // Set session
+        req.session.userId = guestUser.id;
+        
+        await new Promise<void>((resolve, reject) => {
+          req.session.save((err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        });
+        
+        console.log('✅ Guest bypass successful:', { userId: guestUser.id });
+        res.json({ 
+          success: true, 
+          message: 'Guest access granted',
+          userId: guestUser.id
+        });
+      } catch (error) {
+        console.error('❌ Error creating guest user:', error);
+        res.status(500).json({ message: 'Failed to create guest session' });
+      }
+    } catch (error) {
+      console.error('❌ Guest bypass error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+
   // Discord OAuth login endpoint
   app.get("/api/auth/discord/login", (req, res) => {
     const config = getDiscordConfig();
