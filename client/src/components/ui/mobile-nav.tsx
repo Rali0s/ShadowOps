@@ -13,7 +13,8 @@ import {
   Users,
   CheckCircle,
   AlertTriangle,
-  User
+  User,
+  Unlock
 } from 'lucide-react';
 
 interface MobileNavProps {
@@ -106,6 +107,43 @@ export function MobileNav(props: MobileNavProps = {}) {
               );
             })}
           </nav>
+
+          {/* Guest Bypass Button - Only show when not logged in */}
+          {!user && (
+            <div className="px-6 pb-2">
+              <button
+                onClick={async () => {
+                  try {
+                    const response = await fetch('/api/auth/guest-bypass', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' }
+                    });
+                    
+                    if (response.ok) {
+                      setOpen(false);
+                      window.location.href = '/home';
+                    }
+                  } catch (error) {
+                    console.error('Guest bypass error:', error);
+                  }
+                }}
+                className="w-full flex items-center justify-between p-3 rounded-lg transition-all cursor-pointer hover:bg-gray-600/10 border border-gray-700/50 text-gray-400 hover:text-gray-300"
+                data-testid="button-guest-bypass"
+              >
+                <div className="flex items-center space-x-3">
+                  <Unlock className="w-4 h-4 flex-shrink-0" />
+                  <div>
+                    <span className="text-sm font-medium block">
+                      Guest Access
+                    </span>
+                    <span className="text-xs text-gray-500 block">
+                      Bypass verification
+                    </span>
+                  </div>
+                </div>
+              </button>
+            </div>
+          )}
 
           {/* Bottom Actions */}
           <div className="p-6 pt-4 border-t border-gray-700 mt-auto">
