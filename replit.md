@@ -60,3 +60,27 @@ Education Materials: ADDED - Comprehensive mentalist training guide featuring Mi
 ## Development Tools
 - **Vite**: Fast development server and build tool.
 - **TypeScript**: For full-stack type safety.
+
+# Recent Changes
+
+## Security & Performance Optimization (October 2025)
+**Major Dependency Cleanup**: Removed 171 unused npm packages, reducing total dependencies from 626 to 455 packages.
+
+### Removed Systems & Packages:
+- **Authentication System**: Removed legacy Passport.js authentication system (`passport`, `passport-local`, `server/auth.ts`) - platform now exclusively uses Discord OAuth
+- **Cloud Storage**: Removed unused Google Cloud Storage (`@google-cloud/storage`, `google-auth-library`)
+- **File Upload Libraries**: Removed complete Uppy file upload system (8 packages: `@uppy/core`, `@uppy/dashboard`, `@uppy/aws-s3`, `@uppy/drag-drop`, `@uppy/file-input`, `@uppy/progress-bar`, `@uppy/react`)
+- **Unused UI Components**: Removed `react-console-emulator`, `cmdk`, `input-otp`, `react-day-picker`, `embla-carousel-react`, `react-resizable-panels`, `recharts`, `vaul`
+- **Utilities**: Removed `next-themes`, `date-fns`, `tw-animate-css`, `@jridgewell/trace-mapping`
+
+### Benefits:
+- Reduced attack surface by 27% (171 fewer packages)
+- Smaller bundle size and faster build times
+- Improved security posture
+- Cleaner codebase with only actively used dependencies
+
+### Current Dual Access System:
+- **Free Path**: Discord community membership → Platform access
+- **Paid Path**: Direct $5.89/mo subscription → Platform access
+- Both paths provide beta access until December 6, 2025
+- Hamburger menu clearly presents both options to users
