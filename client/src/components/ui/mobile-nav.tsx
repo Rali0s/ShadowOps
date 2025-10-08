@@ -108,9 +108,32 @@ export function MobileNav(props: MobileNavProps = {}) {
             })}
           </nav>
 
-          {/* Payment Portal Entry - Only show when not logged in */}
+          {/* Access Options - Only show when not logged in */}
           {!user && (
-            <div className="px-6 pb-2">
+            <div className="px-6 pb-2 space-y-2">
+              {/* Free Discord Access */}
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  window.location.href = '/api/auth/discord/login';
+                }}
+                className="w-full flex items-center justify-between p-3 rounded-lg transition-all cursor-pointer hover:bg-indigo-600/10 border border-indigo-700/50 text-indigo-400 hover:text-indigo-300"
+                data-testid="button-discord-free"
+              >
+                <div className="flex items-center space-x-3">
+                  <Users className="w-4 h-4 flex-shrink-0" />
+                  <div>
+                    <span className="text-sm font-medium block">
+                      Discord Access
+                    </span>
+                    <span className="text-xs text-gray-500 block">
+                      Free • Join community
+                    </span>
+                  </div>
+                </div>
+              </button>
+
+              {/* Paid Subscription */}
               <Link href="/subscribe">
                 <button
                   onClick={() => setOpen(false)}
@@ -121,10 +144,10 @@ export function MobileNav(props: MobileNavProps = {}) {
                     <CreditCard className="w-4 h-4 flex-shrink-0" />
                     <div>
                       <span className="text-sm font-medium block">
-                        Subscribe for Access
+                        Direct Subscription
                       </span>
                       <span className="text-xs text-gray-500 block">
-                        $5.89/mo locked in
+                        $5.89/mo • No Discord needed
                       </span>
                     </div>
                   </div>
