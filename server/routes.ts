@@ -518,6 +518,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Payment bypass configuration endpoint
+  app.get("/api/payment-bypass-config", (req, res) => {
+    const config = getDiscordConfig();
+    const betaEndDate = config.betaEndAt ? new Date(config.betaEndAt) : new Date();
+    const now = new Date();
+    const expired = now > betaEndDate;
+    const daysRemaining = expired ? 0 : Math.ceil((betaEndDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    
+    res.json({
+      discord: {
+        enabled: true,
+        requiresGuild: !!config.guildId,
+        betaActive: !expired,
+        betaDaysRemaining: daysRemaining,
+      },
+      pricing: {
+        beta: '$5.89/month (locked forever)',
+        regular: '$20/month',
+        discord: expired ? '$5.89/month (special Discord pricing)' : 'FREE during beta',
+      },
+      bypassTiers: ['beta', 'elite', 'shadow'],
+    });
+  });
+
   // Discord OAuth login endpoint
   app.get("/api/auth/discord/login", (req, res) => {
     const config = getDiscordConfig();

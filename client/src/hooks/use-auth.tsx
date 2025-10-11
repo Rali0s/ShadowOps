@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useEffect, useRef } from "react";
+import { createContext, ReactNode, useContext, useEffect, useRef, useCallback } from "react";
 import {
   useQuery,
   useMutation,
@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "../lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { usePaymentBypass } from "@/hooks/use-payment-bypass";
 
 interface User {
   id: number;
@@ -33,11 +34,13 @@ type AuthContextType = {
   isAuthorized: boolean;
   betaStatus: BetaStatus | null;
   isBetaLoading: boolean;
+  canBypassPayment: boolean;
   loginMutation: UseMutationResult<User, Error, LoginData>;
   logoutMutation: UseMutationResult<void, Error, void>;
   registerMutation: UseMutationResult<User, Error, RegisterData>;
   recheckDiscordMutation: UseMutationResult<any, Error, void>;
   loginWithDiscord: () => void;
+  checkPaymentStatus: () => void;
 };
 
 type LoginData = {
@@ -94,12 +97,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     retry: false,
   });
 
+  const { bypassConfig, isDiscordFree, isBypassTier } = usePaymentBypass();
+  
   const isSubscribed = user?.subscriptionStatus === 'active' || user?.subscriptionStatus === 'trial';
   
-  // Combined authorization logic: user is authorized if they have Discord verification and beta hasn't expired, OR they have an active subscription
+  // Enhanced authorization logic with payment bypass
   const isAuthorized = Boolean(
-    (user?.discordVerified && !betaStatus?.expired) || 
-    (user?.subscriptionStatus === 'active')
+    // Active subscription always grants access
+    (user?.subscriptionStatus === 'active') ||
+    // Discord verified users get access based on bypass rules
+    (user?.discordVerified && (isDiscordFree || !betaStatus?.expired)) ||
+    // Special tier users bypass payment requirements
+    (user && isBypassTier((user as any).subscriptionTier))
   );
 
   // Monitor beta status changes for active session handling
@@ -243,6 +252,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
     },
   });
+  
+  // Check if user can bypass payment
+  const canBypassPayment = Boolean(
+    (user?.discordVerified && isDiscordFree) ||
+    (user && isBypassTier((user as any).subscriptionTier))
+  );
+  
+  // Check payment status function
+  const checkPaymentStatus = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+    queryClient.invalidateQueries({ queryKey: ["/api/payment-bypass-config"] });
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -254,11 +275,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAuthorized,
         betaStatus: betaStatus ?? null,
         isBetaLoading,
+        canBypassPayment,
         loginMutation,
         logoutMutation,
         registerMutation,
         recheckDiscordMutation,
         loginWithDiscord,
+        checkPaymentStatus,
       }}
     >
       {children}
