@@ -1,0 +1,64 @@
+{
+  "app": {
+    "name": "_Fq",
+    "tagline": "これはシミュレーションか",
+    "description": "ニューロハッカー・ベータ会員サイト"
+  },
+  "nav": {
+    "home": "ホーム",
+    "training": "トレーニング",
+    "research": "研究資料",
+    "education": "教育",
+    "frequency": "周波数ジェネレーター",
+    "methodology": "方法論",
+    "subscribe": "登録",
+    "login": "ログイン",
+    "logout": "ログアウト"
+  },
+  "buttons": {
+    "getStarted": "始める",
+    "joinDiscord": "Discordコミュニティに参加",
+    "subscribe": "今すぐ登録",
+    "learnMore": "詳細を見る",
+    "backToHome": "ターミナルに戻る",
+    "tryIt": "今すぐ試す",
+    "close": "閉じる",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "save": "保存",
+    "reset": "リセット"
+  },
+  "pricing": {
+    "beta": "月額$5.89（永久固定）",
+    "regular": "月額$20",
+    "discordFree": "ベータ期間中無料"
+  },
+  "access": {
+    "tiers": {
+      "beta": "ベータアクセス",
+      "elite": "エリートアクセス",
+      "shadow": "シャドウアクセス"
+    },
+    "betaEnds": "ベータ期間終了：2025年12月6日",
+    "daysRemaining": "残り{{days}}日"
+  },
+  "translation": {
+    "disclaimer": {
+      "title": "翻訳品質についてのお知らせ",
+      "aiPhase": "現在、国際的な視聴者を構築するためにAI強化翻訳を使用しています。",
+      "upgradePhase1": "フェーズ1（収益化時）：認定翻訳者によるプロフェッショナルなネイティブ翻訳",
+      "upgradePhase2": "フェーズ2（成長期）：文化的適応とローカライゼーションの改善",
+      "feedback": "翻訳の問題を見つけましたか？Discordコミュニティでご報告ください！",
+      "thankYou": "グローバルな成長に向けてご協力いただきありがとうございます！🌏"
+    }
+  },
+  "errors": {
+    "generic": "問題が発生しました。もう一度お試しください。",
+    "notFound": "ページが見つかりません",
+    "unauthorized": "アクセスが拒否されました。ログインしてください。",
+    "betaExpired": "ベータ期間が終了しました"
+  },
+  "loading": "読み込み中...",
+  "success": "成功！",
+  "welcome": "_Fqへようこそ"
+}
