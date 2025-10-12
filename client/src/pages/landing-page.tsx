@@ -751,8 +751,15 @@ export default function LandingPage() {
             Is This A Simulation?
           </p>
           <p className="text-gray-500 text-xs mt-2">
-            Email: directive@ghz.life
+            Email: premise@directivestyles.com
           </p>
+          <div className="mt-4">
+            <a href="mailto:premise@directivestyles.com?subject=Japanese%20Language%20Support" data-testid="button-email-jp">
+              <Button variant="outline" size="sm" className="text-xs border-red-600 text-red-400 hover:bg-red-950/30">
+                🇯🇵 日本語でお問い合わせ (Contact in Japanese)
+              </Button>
+            </a>
+          </div>
         </div>
       </footer>
     </div>
