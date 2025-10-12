@@ -73,6 +73,7 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
           "  ksp           - Access Knot Solution Programming dossier",
           "  dossier       - View complete KSP documentation",
           "  classify      - Display classification and risk levels",
+          "  research      - View published research foundation",
           "  status        - Show system status",
           "  clear         - Clear terminal screen",
           "  exit          - Terminate session"
@@ -688,6 +689,34 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
         ]);
         break;
 
+      case 'research':
+        addToOutput([
+          `[RESEARCH FOUNDATION] Published Scientific Evidence`,
+          ``,
+          `📚 Peer-reviewed research backing frequency-enhanced learning:`,
+          ``,
+          `1. VISUAL ENTRAINMENT STUDY (n=60)`,
+          `   • Multimodal: 38.2 recall vs Control: 31.5 (p<.001)`,
+          `   • +47% theta power increase with visual+audio`,
+          `   • 7-day retention: 32.1 vs 24.8 (d=1.34)`,
+          ``,
+          `2. FREQUENCY-ENHANCED STUDY METHOD`,
+          `   • Beta (14-18 Hz): Active learning phases`,
+          `   • Alpha (8-12 Hz): Integration & review`,
+          `   • Theta (4-8 Hz): Pre-sleep consolidation`,
+          ``,
+          `3. MENTAL REHEARSAL PROTOCOLS`,
+          `   • Environmental anchoring for state-dependent recall`,
+          `   • Trigger-based cognitive schema activation`,
+          `   • Dual-process optimization (System 1 & 2)`,
+          ``,
+          `🔬 Full research papers: 'navigate /research'`
+        ]);
+        setTimeout(() => {
+          window.location.href = '/research';
+        }, 2000);
+        break;
+
       case 'education':
       case 'study':
       case 'palace':
@@ -852,7 +881,7 @@ export function EnhancedTerminal({}: EnhancedTerminalProps = {}) {
       {/* Frequency Visualizer */}
       {showFrequencyViz && (
         <div className="border-b border-terminal-red-primary bg-terminal-bg p-2">
-          <FrequencyCommandVisualizer frequency={currentFrequency} />
+          <FrequencyCommandVisualizer frequency={currentFrequency} isVisible={showFrequencyViz} />
         </div>
       )}
 
