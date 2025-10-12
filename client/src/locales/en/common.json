@@ -1,0 +1,64 @@
+{
+  "app": {
+    "name": "_Fq",
+    "tagline": "Is This A Simulation",
+    "description": "Neurohacker Beta Membership Site"
+  },
+  "nav": {
+    "home": "Home",
+    "training": "Training",
+    "research": "Research",
+    "education": "Education",
+    "frequency": "Frequency Generator",
+    "methodology": "Methodology",
+    "subscribe": "Subscribe",
+    "login": "Login",
+    "logout": "Logout"
+  },
+  "buttons": {
+    "getStarted": "Get Started",
+    "joinDiscord": "Join Discord Community",
+    "subscribe": "Subscribe Now",
+    "learnMore": "Learn More",
+    "backToHome": "Back to Terminal",
+    "tryIt": "Try It Now",
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "reset": "Reset"
+  },
+  "pricing": {
+    "beta": "$5.89/month (locked forever)",
+    "regular": "$20/month",
+    "discordFree": "FREE during beta"
+  },
+  "access": {
+    "tiers": {
+      "beta": "Beta Access",
+      "elite": "Elite Access",
+      "shadow": "Shadow Access"
+    },
+    "betaEnds": "Beta ends December 6, 2025",
+    "daysRemaining": "{{days}} days remaining"
+  },
+  "translation": {
+    "disclaimer": {
+      "title": "Translation Quality Notice",
+      "aiPhase": "Currently using AI-enhanced translation to build international audience base.",
+      "upgradePhase1": "Phase 1 (At Profit): Professional native translation by certified translators",
+      "upgradePhase2": "Phase 2 (Growth): Cultural adaptation and localization refinement",
+      "feedback": "Found translation issues? Please report in Discord community!",
+      "thankYou": "Thank you for your patience as we grow globally! 🌏"
+    }
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "notFound": "Page not found",
+    "unauthorized": "Access denied. Please login.",
+    "betaExpired": "Beta period has expired"
+  },
+  "loading": "Loading...",
+  "success": "Success!",
+  "welcome": "Welcome to _Fq"
+}

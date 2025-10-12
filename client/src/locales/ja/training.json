@@ -1,0 +1,34 @@
+{
+  "title": "ShadowFang AIOトレーニング",
+  "subtitle": "脳波周波数トレーニングシステム",
+  "frequencies": {
+    "alpha": "アルファ（8-12 Hz）",
+    "beta": "ベータ（12-30 Hz）",
+    "theta": "シータ（4-8 Hz）",
+    "gamma": "ガンマ（30-100+ Hz）"
+  },
+  "benefits": {
+    "title": "トレーニングの利点",
+    "focus": "強化された集中力",
+    "memory": "改善された記憶エンコーディング",
+    "creativity": "創造的なフロー状態",
+    "performance": "ピークパフォーマンス"
+  },
+  "generator": {
+    "title": "周波数ジェネレーター",
+    "selectFrequency": "周波数を選択",
+    "duration": "所要時間（分）",
+    "volume": "音量",
+    "start": "セッション開始",
+    "stop": "セッション停止",
+    "currentFrequency": "現在の周波数：{{freq}} Hz",
+    "timeRemaining": "残り時間：{{time}}"
+  },
+  "sacredGeometry": {
+    "title": "神聖幾何学ホイール",
+    "description": "バイノーラルビートと同期した視覚エントレインメント",
+    "speed": "回転速度",
+    "intensity": "視覚強度",
+    "activate": "ホイールを起動"
+  }
+}
