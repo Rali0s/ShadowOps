@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next'; // TODO: Wire up translations
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -32,7 +32,7 @@ import {
 import { SiDiscord } from 'react-icons/si';
 
 export default function LandingPage() {
-  const { t } = useTranslation();
+  // const { t } = useTranslation(); // TODO: Wire up translations
   const { user, isLoading, isSubscribed, isAuthorized, betaStatus, loginWithDiscord } = useAuth();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
