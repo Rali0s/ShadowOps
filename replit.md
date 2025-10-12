@@ -27,6 +27,7 @@ Scientific Method Training: ADDED - Comprehensive self-study and self-report met
 Music Recommendations: REMOVED - User requested removal of music section.
 Education Materials: ADDED - Comprehensive mentalist training guide featuring Mind Palace (Method of Loci), Rubber Duck Debugging techniques, and combined systems for memory enhancement. Includes interactive palace walkthrough, debugging processes, and advanced tips with "Think for yourself. Question everything. DYOR." philosophy integration.
 Research Foundation: ADDED - Integration of three published research papers on visual augmentation (38.2 vs 31.5 recall, +47% theta power), frequency-enhanced study method (phase-specific protocols), and mental rehearsal (environmental anchoring). Research shows multimodal entrainment significantly outperforms unimodal approaches with large effect sizes (η² = .304, d = 1.34).
+Japanese Language Support: ADDED - Full i18n infrastructure with react-i18next, Japanese translation files (common, terminal, research, training, auth namespaces), language switcher component, translation disclaimer explaining AI→Professional upgrade path, and Noto Sans JP font support. Using free AI translation until profit, then upgrading to professional native translation.
 
 # System Architecture
 

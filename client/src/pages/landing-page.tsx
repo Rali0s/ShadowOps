@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'wouter';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -7,6 +8,7 @@ import { CountdownTimer } from '@/components/countdown-timer';
 import { Mobile, Desktop, ShowAbove, ShowBelow } from '@/hooks/use-responsive';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
+import { TranslationDisclaimer } from '@/components/translation-disclaimer';
 import { 
   Brain, 
   Shield, 
@@ -30,6 +32,7 @@ import {
 import { SiDiscord } from 'react-icons/si';
 
 export default function LandingPage() {
+  const { t } = useTranslation();
   const { user, isLoading, isSubscribed, isAuthorized, betaStatus, loginWithDiscord } = useAuth();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
@@ -422,6 +425,11 @@ export default function LandingPage() {
                 </Button>
               )
             )}
+          </div>
+
+          {/* Translation Disclaimer */}
+          <div className="max-w-3xl mx-auto px-2 mb-6">
+            <TranslationDisclaimer />
           </div>
 
           {/* Conditional Status Message */}

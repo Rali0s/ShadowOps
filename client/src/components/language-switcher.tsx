@@ -16,7 +16,9 @@ export function LanguageSwitcher() {
     { code: 'ja', name: '日本語', flag: '🇯🇵' },
   ];
 
-  const currentLanguage = languages.find((lang) => lang.code === i18n.language) || languages[0];
+  // Normalize language code (handle en-US -> en, ja-JP -> ja)
+  const normalizedLang = i18n.resolvedLanguage || i18n.language.split('-')[0];
+  const currentLanguage = languages.find((lang) => lang.code === normalizedLang) || languages[0];
 
   const changeLanguage = (langCode: string) => {
     i18n.changeLanguage(langCode);
