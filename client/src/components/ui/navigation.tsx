@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Code, Menu, Users, Lock } from "lucide-react";
+import { LanguageSwitcher } from "@/components/language-switcher";
 
 export function Navigation() {
   const [location] = useLocation();
@@ -26,13 +27,14 @@ export function Navigation() {
           </Link>
 
           {/* Navigation */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            <LanguageSwitcher />
             
             <Link href="/shadowfang-training">
               <Button 
                 size="sm"
                 variant="outline"
-                className="border-red-500 text-red-400 hover:bg-red-500/10"
+                className="border-red-500 text-red-400 hover:bg-red-500/10 hidden sm:flex"
               >
                 SHADOWFANG
               </Button>
@@ -44,7 +46,8 @@ export function Navigation() {
                 className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold"
               >
                 <Lock className="w-4 h-4 mr-2" />
-                Join Elite
+                <span className="hidden sm:inline">Join Elite</span>
+                <span className="sm:hidden">Elite</span>
               </Button>
             </Link>
           </div>
