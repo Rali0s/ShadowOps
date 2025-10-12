@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'wouter';
-// import { useTranslation } from 'react-i18next'; // TODO: Wire up translations
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import { CountdownTimer } from '@/components/countdown-timer';
 import { Mobile, Desktop, ShowAbove, ShowBelow } from '@/hooks/use-responsive';
 import { useAuth } from '@/hooks/use-auth';
@@ -32,11 +34,19 @@ import {
 import { SiDiscord } from 'react-icons/si';
 
 export default function LandingPage() {
-  // const { t } = useTranslation(); // TODO: Wire up translations
+  const { i18n } = useTranslation();
   const { user, isLoading, isSubscribed, isAuthorized, betaStatus, loginWithDiscord } = useAuth();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const betaLaunchDate = new Date(Date.now() + 45 * 24 * 60 * 60 * 1000); // 45 days from now
+  
+  // Language state
+  const [language, setLanguage] = useState(i18n.language || 'en');
+  
+  const handleLanguageChange = (value: string) => {
+    setLanguage(value);
+    i18n.changeLanguage(value);
+  };
 
   // Beta expiration handling
   const handleBetaComplete = () => {
@@ -315,6 +325,45 @@ export default function LandingPage() {
             <ShowAbove breakpoint="sm">⚡ BETA PRE-RELEASE • PHASE ONE ⚡</ShowAbove>
             <ShowBelow breakpoint="sm">⚡ BETA PHASE ONE ⚡</ShowBelow>
           </Badge>
+          
+          {/* Language Selection */}
+          <div className="mb-6 sm:mb-8 flex justify-center">
+            <RadioGroup 
+              value={language} 
+              onValueChange={handleLanguageChange}
+              className="flex flex-row gap-6"
+              data-testid="radio-language"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem 
+                  value="en" 
+                  id="lang-en" 
+                  className="border-red-500 text-red-500 data-[state=checked]:border-red-600 data-[state=checked]:bg-red-600"
+                  data-testid="radio-lang-en"
+                />
+                <Label 
+                  htmlFor="lang-en" 
+                  className="text-base sm:text-lg font-medium cursor-pointer hover:text-red-400 transition-colors"
+                >
+                  🇺🇸 English
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem 
+                  value="ja" 
+                  id="lang-ja"
+                  className="border-red-500 text-red-500 data-[state=checked]:border-red-600 data-[state=checked]:bg-red-600"
+                  data-testid="radio-lang-ja"
+                />
+                <Label 
+                  htmlFor="lang-ja" 
+                  className="text-base sm:text-lg font-medium cursor-pointer hover:text-red-400 transition-colors"
+                >
+                  🇯🇵 日本語
+                </Label>
+              </div>
+            </RadioGroup>
+          </div>
           
           {/* Main Headline */}
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold mb-4 sm:mb-6 leading-tight px-2">
