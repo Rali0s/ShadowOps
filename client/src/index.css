@@ -39,8 +39,8 @@
   --sidebar-accent-foreground: hsl(0, 0%, 5.0980%);
   --sidebar-border: hsl(210, 5.2632%, 14.9020%);
   --sidebar-ring: hsl(130, 100%, 31.3725%);
-  --font-sans: 'Inter', sans-serif;
-  --font-serif: Georgia, serif;
+  --font-sans: 'Inter', 'Noto Sans JP', sans-serif;
+  --font-serif: Georgia, 'Noto Sans JP', serif;
   --font-mono: 'Fira Code', monospace;
   --font-cyber: 'Orbitron', sans-serif;
   --radius: 1.3rem;
