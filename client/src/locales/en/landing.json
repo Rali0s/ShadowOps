@@ -1,0 +1,256 @@
+{
+  "alerts": {
+    "elite_active": {
+      "desktop": "✅ ELITE MEMBER ACTIVE • FULL PLATFORM ACCESS • WELCOME BACK ✅",
+      "mobile": "✅ ELITE ACTIVE • WELCOME ✅"
+    },
+    "discord_verified": {
+      "desktop": "🎯 DISCORD VERIFIED • BETA ACCESS GRANTED • ENTER PLATFORM 🎯",
+      "mobile": "🎯 VERIFIED • ENTER PLATFORM 🎯"
+    },
+    "beta_expired": {
+      "desktop": "⏰ BETA EXPIRED • ELITE UPGRADE AVAILABLE • LIMITED TIME ⏰",
+      "mobile": "⏰ BETA EXPIRED • UPGRADE NOW ⏰"
+    },
+    "join_discord": {
+      "desktop": "🚀 JOIN DISCORD FIRST • GET VERIFIED • UNLOCK BETA ACCESS 🚀",
+      "mobile": "🚀 DISCORD FIRST • BETA ACCESS 🚀"
+    }
+  },
+  "header": {
+    "app_name": "_Fq",
+    "tagline": "Is This A Simulation",
+    "cta": {
+      "loading": "Loading...",
+      "dashboard": "Dashboard",
+      "enter": "Enter",
+      "subscribe": "Subscribe",
+      "join_beta": "Join Beta"
+    }
+  },
+  "hero": {
+    "badge": {
+      "desktop": "⚡ BETA PRE-RELEASE • PHASE ONE ⚡",
+      "mobile": "⚡ BETA PHASE ONE ⚡"
+    },
+    "language": {
+      "english": "🇺🇸 English",
+      "japanese": "🇯🇵 日本語"
+    },
+    "headline": {
+      "line1_desktop": "Transform Your Mind With",
+      "line1_mobile": "Transform Your Mind",
+      "line2": "ShadowFang Training"
+    },
+    "subheadline": {
+      "intro_desktop": "The world's first ",
+      "platform": "neurohacker membership platform",
+      "description_desktop": " combining experimental relaxation research with declassified training protocols to",
+      "description_mobile": " to",
+      "action": " help you study, focus, and evolve"
+    },
+    "status_messages": {
+      "elite_active": {
+        "desktop": "✅ <strong>Elite Member Active</strong> • Access all training modules and premium features",
+        "mobile": "✅ <strong>Elite Active</strong> • Full Access"
+      },
+      "discord_beta": {
+        "desktop": "🎯 <strong>Discord Beta Access</strong> • Community verified • Platform access granted",
+        "mobile": "🎯 <strong>Beta Access</strong> • Verified"
+      },
+      "beta_expired_upgrade": {
+        "desktop": "⏰ <strong>Beta Expired</strong> • Upgrade to Elite for <strong>$5.89/mo</strong> (limited time)",
+        "mobile": "⏰ <strong>Beta Expired</strong> • Upgrade Available"
+      },
+      "join_discord_flow": {
+        "desktop": "🚀 <strong>Join Discord First</strong> • Get verified → Beta access → Lock in <strong>$5.89/mo forever</strong>",
+        "mobile": "🚀 <strong>Discord First</strong> • Then Beta"
+      }
+    }
+  },
+  "cta": {
+    "primary": {
+      "loading": {
+        "text": "Loading...",
+        "subtext": "Please wait"
+      },
+      "access_dashboard": {
+        "text": "Access Dashboard",
+        "subtext": "Continue Training"
+      },
+      "upgrade_elite": {
+        "text": "Upgrade to Elite",
+        "subtext": "Beta Expired - Subscribe"
+      },
+      "access_training": {
+        "text": "Access Training",
+        "subtext": "Enter Platform"
+      },
+      "join_discord": {
+        "text": "Join Discord Community",
+        "subtext": "Required for Access"
+      }
+    },
+    "secondary": {
+      "join_discord": {
+        "text": "Join Discord",
+        "subtext": "Community Access"
+      },
+      "lock_beta_price": {
+        "text": "Lock In Beta Price",
+        "subtext": "$5.89/mo Forever"
+      },
+      "discord_login": {
+        "text": "Discord Login",
+        "subtext": "After Joining Server"
+      }
+    }
+  },
+  "goals": {
+    "title": "Our <highlight>Core Mission</highlight>",
+    "subtitle": "Three pillars of cognitive enhancement",
+    "items": [
+      {
+        "title": "HELP PEOPLE STUDY",
+        "description": "Advanced learning techniques using declassified military training protocols"
+      },
+      {
+        "title": "EXPERIMENTAL RELAXATION RESEARCH",
+        "description": "Cutting-edge frequency entrainment for deep cognitive states"
+      },
+      {
+        "title": "BONUS PROGRAMS",
+        "description": "Exclusive access to advanced neurohacker tools and methods"
+      }
+    ]
+  },
+  "tiers": {
+    "title": "Beta Access <highlight>Tiers</highlight>",
+    "subtitle": "Progressive access system for beta members",
+    "tier1": {
+      "badge": "TIER 1",
+      "title": "Private Discord Access",
+      "subtitle": "Pre-countdown exclusive",
+      "features": [
+        "Direct access to development team",
+        "Beta testing participation",
+        "Weekly group sessions",
+        "Community-driven research"
+      ]
+    },
+    "tier2": {
+      "badge": "TIER 2",
+      "title": "Elite Member Access",
+      "subtitle": "During public window",
+      "features": [
+        "Everything in Tier 1",
+        "Priority platform access",
+        "Advanced training modules",
+        "1-on-1 guidance sessions"
+      ]
+    }
+  },
+  "features": {
+    "list": [
+      "ShadowFang AIO Training System",
+      "1 Comprehensive Training Manual",
+      "Binaural Frequency Generator",
+      "Sacred Geometry Visualizations",
+      "Mobile Optimized (iOS/Android)",
+      "Private Discord Community",
+      "Elite Member Priority Access",
+      "Weekly Live Sessions"
+    ]
+  },
+  "pricing": {
+    "title": "Beta Member <highlight>Pricing</highlight>",
+    "subtitle": "Lock in your rate before public launch",
+    "badge": "BETA PRICING - LIMITED TIME",
+    "card_title": "ShadowFang Beta Access",
+    "price": "$5.89",
+    "period": "/month",
+    "locked_text": "Locked in forever",
+    "original_price": "$20.00/mo",
+    "original_label": "Future price",
+    "button": "Secure Beta Access Now",
+    "fine_print": "Cancel anytime • Instant access • Secure payment",
+    "spots_remaining": "Only {count} beta spots remaining"
+  },
+  "system": {
+    "title": "The <highlight>ShadowFang</highlight> System",
+    "subtitle": "All-In-One neurohacker training platform",
+    "features": [
+      {
+        "title": "AIO Training",
+        "description": "Comprehensive HUMINT protocols with teleprompter system"
+      },
+      {
+        "title": "Frequency Generator",
+        "description": "Advanced binaural beats for cognitive enhancement"
+      },
+      {
+        "title": "Safety Protocols",
+        "description": "Military-grade psychological safety measures"
+      },
+      {
+        "title": "Sacred Geometry",
+        "description": "Visual programming with frequency synchronization"
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "Beta Tester <highlight>Feedback</highlight>",
+    "items": [
+      {
+        "name": "Dr. Sarah Chen",
+        "role": "Cognitive Neuroscientist",
+        "content": "Revolutionary approach to cognitive enhancement. The ShadowFang system delivers real results.",
+        "rating": 5
+      },
+      {
+        "name": "Marcus Rivera",
+        "role": "Former Intelligence Analyst",
+        "content": "Finally, professional-grade training tools accessible to serious practitioners.",
+        "rating": 5
+      },
+      {
+        "name": "Alex Thompson",
+        "role": "Biohacker",
+        "content": "The experimental relaxation protocols are unlike anything else available.",
+        "rating": 5
+      }
+    ]
+  },
+  "final_cta": {
+    "title": "Ready to <highlight>Transform Your Mind</highlight>?",
+    "subtitle": "Join the beta program and lock in your membership at just $5.89/month forever.",
+    "warning": "Limited spots available • Price increases to $20/mo after beta",
+    "button": "Join Beta Program Now",
+    "fine_print": "By joining, you agree to our terms of service. Cancel anytime."
+  },
+  "footer": {
+    "copyright": "© 2025 _Fq Neurohacker Platform • ShadowFang Training System",
+    "tagline": "Is This A Simulation?",
+    "email_label": "Email:",
+    "email": "premise@directivestyles.com",
+    "contact_japanese": "🇯🇵 日本語でお問い合わせ (Contact in Japanese)"
+  },
+  "toasts": {
+    "beta_complete": {
+      "title": "Beta Period Ended",
+      "description": "The beta access countdown has reached zero. Time to upgrade!"
+    },
+    "beta_ended_premium": {
+      "title": "Beta Ended - Premium Access Active",
+      "description": "Your subscription ensures continued access to all features."
+    },
+    "beta_access_expired": {
+      "title": "Beta Access Expired",
+      "description": "Subscribe now to continue your neurohacker journey!"
+    },
+    "beta_period_ended": {
+      "title": "Beta Period Ended",
+      "description": "Join Discord and subscribe to unlock full access!"
+    }
+  }
+}

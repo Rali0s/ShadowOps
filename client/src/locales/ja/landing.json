@@ -1,0 +1,256 @@
+{
+  "alerts": {
+    "elite_active": {
+      "desktop": "✅ エリートメンバー有効 • フルプラットフォームアクセス • おかえりなさい ✅",
+      "mobile": "✅ エリート有効 • ようこそ ✅"
+    },
+    "discord_verified": {
+      "desktop": "🎯 Discord認証済み • ベータアクセス許可 • プラットフォームに入る 🎯",
+      "mobile": "🎯 認証済み • プラットフォームに入る 🎯"
+    },
+    "beta_expired": {
+      "desktop": "⏰ ベータ期限切れ • エリートアップグレード可能 • 期間限定 ⏰",
+      "mobile": "⏰ ベータ期限切れ • 今すぐアップグレード ⏰"
+    },
+    "join_discord": {
+      "desktop": "🚀 まずDiscordに参加 • 認証を受ける • ベータアクセス解除 🚀",
+      "mobile": "🚀 まずDiscord • ベータアクセス 🚀"
+    }
+  },
+  "header": {
+    "app_name": "_Fq",
+    "tagline": "これはシミュレーションか？",
+    "cta": {
+      "loading": "読み込み中...",
+      "dashboard": "ダッシュボード",
+      "enter": "入る",
+      "subscribe": "登録",
+      "join_beta": "ベータ参加"
+    }
+  },
+  "hero": {
+    "badge": {
+      "desktop": "⚡ ベータプレリリース • フェーズ1 ⚡",
+      "mobile": "⚡ ベータフェーズ1 ⚡"
+    },
+    "language": {
+      "english": "🇺🇸 English",
+      "japanese": "🇯🇵 日本語"
+    },
+    "headline": {
+      "line1_desktop": "あなたの心を変革する",
+      "line1_mobile": "あなたの心を変革",
+      "line2": "ShadowFangトレーニング"
+    },
+    "subheadline": {
+      "intro_desktop": "世界初の ",
+      "platform": "ニューロハッカー会員制プラットフォーム",
+      "description_desktop": "実験的リラクゼーション研究と機密解除された訓練プロトコルを組み合わせて",
+      "description_mobile": "",
+      "action": "学習、集中、進化をサポート"
+    },
+    "status_messages": {
+      "elite_active": {
+        "desktop": "✅ <strong>エリートメンバー有効</strong> • すべてのトレーニングモジュールとプレミアム機能にアクセス",
+        "mobile": "✅ <strong>エリート有効</strong> • フルアクセス"
+      },
+      "discord_beta": {
+        "desktop": "🎯 <strong>Discordベータアクセス</strong> • コミュニティ認証済み • プラットフォームアクセス許可",
+        "mobile": "🎯 <strong>ベータアクセス</strong> • 認証済み"
+      },
+      "beta_expired_upgrade": {
+        "desktop": "⏰ <strong>ベータ期限切れ</strong> • <strong>月額$5.89</strong>でエリートにアップグレード（期間限定）",
+        "mobile": "⏰ <strong>ベータ期限切れ</strong> • アップグレード可能"
+      },
+      "join_discord_flow": {
+        "desktop": "🚀 <strong>まずDiscordに参加</strong> • 認証を受ける → ベータアクセス → <strong>月額$5.89を永久にロック</strong>",
+        "mobile": "🚀 <strong>まずDiscord</strong> • 次にベータ"
+      }
+    }
+  },
+  "cta": {
+    "primary": {
+      "loading": {
+        "text": "読み込み中...",
+        "subtext": "お待ちください"
+      },
+      "access_dashboard": {
+        "text": "ダッシュボードにアクセス",
+        "subtext": "トレーニング継続"
+      },
+      "upgrade_elite": {
+        "text": "エリートにアップグレード",
+        "subtext": "ベータ期限切れ - 登録"
+      },
+      "access_training": {
+        "text": "トレーニングにアクセス",
+        "subtext": "プラットフォームに入る"
+      },
+      "join_discord": {
+        "text": "Discordコミュニティに参加",
+        "subtext": "アクセスに必要"
+      }
+    },
+    "secondary": {
+      "join_discord": {
+        "text": "Discordに参加",
+        "subtext": "コミュニティアクセス"
+      },
+      "lock_beta_price": {
+        "text": "ベータ価格をロック",
+        "subtext": "月額$5.89 永久"
+      },
+      "discord_login": {
+        "text": "Discordログイン",
+        "subtext": "サーバー参加後"
+      }
+    }
+  },
+  "goals": {
+    "title": "私たちの<highlight>中核使命</highlight>",
+    "subtitle": "認知機能強化の3つの柱",
+    "items": [
+      {
+        "title": "学習支援",
+        "description": "機密解除された軍事訓練プロトコルを使用した高度な学習技術"
+      },
+      {
+        "title": "実験的リラクゼーション研究",
+        "description": "深い認知状態のための最先端の周波数エントレインメント"
+      },
+      {
+        "title": "ボーナスプログラム",
+        "description": "高度なニューロハッカーツールと方法への独占アクセス"
+      }
+    ]
+  },
+  "tiers": {
+    "title": "ベータアクセス<highlight>ティア</highlight>",
+    "subtitle": "ベータメンバー向けの段階的アクセスシステム",
+    "tier1": {
+      "badge": "ティア1",
+      "title": "プライベートDiscordアクセス",
+      "subtitle": "カウントダウン前の独占",
+      "features": [
+        "開発チームへの直接アクセス",
+        "ベータテスト参加",
+        "週次グループセッション",
+        "コミュニティ主導の研究"
+      ]
+    },
+    "tier2": {
+      "badge": "ティア2",
+      "title": "エリートメンバーアクセス",
+      "subtitle": "公開期間中",
+      "features": [
+        "ティア1のすべて",
+        "優先プラットフォームアクセス",
+        "高度なトレーニングモジュール",
+        "1対1ガイダンスセッション"
+      ]
+    }
+  },
+  "features": {
+    "list": [
+      "ShadowFang AIOトレーニングシステム",
+      "1つの包括的トレーニングマニュアル",
+      "バイノーラル周波数ジェネレーター",
+      "神聖幾何学ビジュアライゼーション",
+      "モバイル最適化（iOS/Android）",
+      "プライベートDiscordコミュニティ",
+      "エリートメンバー優先アクセス",
+      "週次ライブセッション"
+    ]
+  },
+  "pricing": {
+    "title": "ベータメンバー<highlight>価格</highlight>",
+    "subtitle": "公開前にレートをロック",
+    "badge": "ベータ価格 - 期間限定",
+    "card_title": "ShadowFangベータアクセス",
+    "price": "$5.89",
+    "period": "/月",
+    "locked_text": "永久にロック",
+    "original_price": "$20.00/月",
+    "original_label": "将来の価格",
+    "button": "今すぐベータアクセスを確保",
+    "fine_print": "いつでもキャンセル可 • 即座にアクセス • 安全な支払い",
+    "spots_remaining": "残りベータ枠{count}のみ"
+  },
+  "system": {
+    "title": "<highlight>ShadowFang</highlight>システム",
+    "subtitle": "オールインワンニューロハッカートレーニングプラットフォーム",
+    "features": [
+      {
+        "title": "AIOトレーニング",
+        "description": "テレプロンプターシステムを備えた包括的HUMINTプロトコル"
+      },
+      {
+        "title": "周波数ジェネレーター",
+        "description": "認知機能強化のための高度なバイノーラルビート"
+      },
+      {
+        "title": "安全プロトコル",
+        "description": "軍事グレードの心理的安全対策"
+      },
+      {
+        "title": "神聖幾何学",
+        "description": "周波数同期によるビジュアルプログラミング"
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "ベータテスター<highlight>フィードバック</highlight>",
+    "items": [
+      {
+        "name": "Dr. Sarah Chen",
+        "role": "認知神経科学者",
+        "content": "認知機能強化への革命的なアプローチ。ShadowFangシステムは実際の結果を提供します。",
+        "rating": 5
+      },
+      {
+        "name": "Marcus Rivera",
+        "role": "元インテリジェンスアナリスト",
+        "content": "ついに、真剣な実践者がアクセスできるプロフェッショナルグレードのトレーニングツール。",
+        "rating": 5
+      },
+      {
+        "name": "Alex Thompson",
+        "role": "バイオハッカー",
+        "content": "実験的リラクゼーションプロトコルは他では得られないものです。",
+        "rating": 5
+      }
+    ]
+  },
+  "final_cta": {
+    "title": "準備はいいですか？<highlight>あなたの心を変革</highlight>しましょう",
+    "subtitle": "ベータプログラムに参加して、月額わずか$5.89の会員資格を永久にロックしましょう。",
+    "warning": "限定枠 • ベータ後は月額$20に値上げ",
+    "button": "今すぐベータプログラムに参加",
+    "fine_print": "参加することで、利用規約に同意したことになります。いつでもキャンセル可能。"
+  },
+  "footer": {
+    "copyright": "© 2025 _Fq ニューロハッカープラットフォーム • ShadowFangトレーニングシステム",
+    "tagline": "これはシミュレーションか？",
+    "email_label": "メール：",
+    "email": "premise@directivestyles.com",
+    "contact_japanese": "🇯🇵 日本語でお問い合わせ (Contact in Japanese)"
+  },
+  "toasts": {
+    "beta_complete": {
+      "title": "ベータ期間終了",
+      "description": "ベータアクセスカウントダウンがゼロになりました。アップグレードの時間です！"
+    },
+    "beta_ended_premium": {
+      "title": "ベータ終了 - プレミアムアクセス有効",
+      "description": "あなたのサブスクリプションはすべての機能への継続的なアクセスを保証します。"
+    },
+    "beta_access_expired": {
+      "title": "ベータアクセス期限切れ",
+      "description": "ニューロハッカーの旅を続けるために今すぐ登録してください！"
+    },
+    "beta_period_ended": {
+      "title": "ベータ期間終了",
+      "description": "Discordに参加して登録し、フルアクセスをロック解除！"
+    }
+  }
+}
