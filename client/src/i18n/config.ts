@@ -8,12 +8,14 @@ import enTerminal from '../locales/en/terminal.json';
 import enResearch from '../locales/en/research.json';
 import enTraining from '../locales/en/training.json';
 import enAuth from '../locales/en/auth.json';
+import enLanding from '../locales/en/landing.json';
 
 import jaCommon from '../locales/ja/common.json';
 import jaTerminal from '../locales/ja/terminal.json';
 import jaResearch from '../locales/ja/research.json';
 import jaTraining from '../locales/ja/training.json';
 import jaAuth from '../locales/ja/auth.json';
+import jaLanding from '../locales/ja/landing.json';
 
 const resources = {
   en: {
@@ -22,6 +24,7 @@ const resources = {
     research: enResearch,
     training: enTraining,
     auth: enAuth,
+    landing: enLanding,
   },
   ja: {
     common: jaCommon,
@@ -29,6 +32,7 @@ const resources = {
     research: jaResearch,
     training: jaTraining,
     auth: jaAuth,
+    landing: jaLanding,
   },
 };
 
@@ -49,7 +53,7 @@ i18n
       caches: ['localStorage'],
     },
     
-    ns: ['common', 'terminal', 'research', 'training', 'auth'],
+    ns: ['common', 'terminal', 'research', 'training', 'auth', 'landing'],
     defaultNS: 'common',
   });
 
