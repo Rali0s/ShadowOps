@@ -117,8 +117,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const isReplit = process.env.REPL_URL || (process.env.NODE_ENV === 'production');
   
   // Use secure cookies in production HTTPS environment
+  // Can be explicitly set via USE_SECURE_COOKIES env var for custom deployments
   const isProduction = process.env.NODE_ENV === 'production';
-  const useSecureCookies = isProduction && process.env.REPL_URL?.startsWith('https://');
+  const useSecureCookies = process.env.USE_SECURE_COOKIES === 'true' || 
+                           (isProduction && process.env.REPL_URL?.startsWith('https://'));
   
   console.log('🔒 Session Configuration:', {
     isProduction,
