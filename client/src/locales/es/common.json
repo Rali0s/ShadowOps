@@ -45,11 +45,12 @@
   "translation": {
     "disclaimer": {
       "title": "Aviso de Calidad de Traducción",
-      "aiPhase": "Actualmente usando traducción mejorada por IA para construir audiencia internacional.",
-      "upgradePhase1": "Fase 1 (Con Ganancias): Traducción profesional nativa por traductores certificados",
-      "upgradePhase2": "Fase 2 (Crecimiento): Adaptación cultural y refinamiento de localización",
-      "feedback": "¿Encontraste problemas de traducción? ¡Por favor repórtalos en la comunidad Discord!",
-      "thankYou": "¡Gracias por tu paciencia mientras crecemos globalmente! 🌏"
+      "aiPhase": "Ahora usamos traducción con IA para las personas en Japón, España, y pronto Rusia.",
+      "currentStatus": "Actual: Revisando el contenido en español a mano.",
+      "upgradePhase1": "Fase 1 (Con Ganancias): Traductores profesionales traducirán el contenido de pago",
+      "upgradePhase2": "Fase 2 (Crecimiento): Adaptaremos el contenido a cada cultura",
+      "feedback": "¿Encontraste errores de traducción? ¡Repórtalos en Discord!",
+      "thankYou": "¡Gracias por tu paciencia mientras crecemos! 🌏"
     }
   },
   "errors": {

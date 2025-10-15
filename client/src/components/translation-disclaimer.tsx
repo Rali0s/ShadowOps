@@ -21,9 +21,15 @@ export function TranslationDisclaimer() {
           <Users className="h-4 w-4 mr-2 mt-0.5 text-blue-400" />
           {t('translation.disclaimer.aiPhase')}
         </p>
+        <p className="text-sm text-yellow-300 font-medium ml-6">
+          {t('translation.disclaimer.currentStatus')}
+        </p>
+        <p className="mt-3">
+          <span className="text-sm font-semibold text-green-300">As we Grow:</span>
+        </p>
         <p className="flex items-start">
           <TrendingUp className="h-4 w-4 mr-2 mt-0.5 text-green-400" />
-          <span>
+          <span className="text-sm">
             <strong>{t('translation.disclaimer.upgradePhase1')}</strong>
             <br />
             <strong>{t('translation.disclaimer.upgradePhase2')}</strong>

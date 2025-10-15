@@ -45,10 +45,11 @@
   "translation": {
     "disclaimer": {
       "title": "Translation Quality Notice",
-      "aiPhase": "Currently using AI-enhanced translation to build international audience base.",
-      "upgradePhase1": "Phase 1 (At Profit): Professional native translation by certified translators",
-      "upgradePhase2": "Phase 2 (Growth): Cultural adaptation and localization refinement",
-      "feedback": "Found translation issues? Please report in Discord community!",
+      "aiPhase": "We are currently using AI-enhanced translation to meet the needs of our international audiences in Japan, Spain, and soon Russia.",
+      "currentStatus": "Current: Manually vetting AI Spain-based Spanish content by hand.",
+      "upgradePhase1": "Phase 1 (Profit): Professional native translation by certified translators for paid content will be used",
+      "upgradePhase2": "Phase 2 (Growth): Cultural adaptation and localization refinement for paid content will be used",
+      "feedback": "Did you encounter translation issues? Please report them in the Discord community!",
       "thankYou": "Thank you for your patience as we grow globally! 🌏"
     }
   },
