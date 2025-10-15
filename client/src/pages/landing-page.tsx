@@ -235,27 +235,6 @@ export default function LandingPage() {
     t('features.list.7')
   ];
 
-  const testimonials = [
-    {
-      name: t('testimonials.items.0.name'),
-      role: t('testimonials.items.0.role'),
-      content: t('testimonials.items.0.content'),
-      rating: 5
-    },
-    {
-      name: t('testimonials.items.1.name'),
-      role: t('testimonials.items.1.role'), 
-      content: t('testimonials.items.1.content'),
-      rating: 5
-    },
-    {
-      name: t('testimonials.items.2.name'),
-      role: t('testimonials.items.2.role'),
-      content: t('testimonials.items.2.content'),
-      rating: 5
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
       {/* Beta Launch Alert Bar */}
@@ -724,35 +703,6 @@ export default function LandingPage() {
                 <p className="text-gray-400 text-sm">{t('system.features.3.description')}</p>
               </CardContent>
             </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-16 px-4 sm:px-6 bg-gray-900/30">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4" dangerouslySetInnerHTML={{ __html: t('testimonials.title').replace('<highlight>', '<span class="text-red-400">').replace('</highlight>', '</span>') }}>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="bg-black/50 border-gray-700">
-                <CardContent className="p-6">
-                  <div className="flex mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-gray-300 mb-4 italic">"{testimonial.content}"</p>
-                  <div>
-                    <p className="font-semibold text-white">{testimonial.name}</p>
-                    <p className="text-sm text-gray-500">{testimonial.role}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>

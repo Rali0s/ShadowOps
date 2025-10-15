@@ -198,29 +198,6 @@
       }
     ]
   },
-  "testimonials": {
-    "title": "Research <highlight>Validation</highlight>",
-    "items": [
-      {
-        "name": "Study Participant #23",
-        "role": "Undergraduate Research Subject",
-        "content": "The multimodal condition helped me retain 21% more information compared to traditional study methods. The synchronized visual and audio entrainment made studying feel effortless.",
-        "rating": 5
-      },
-      {
-        "name": "EEG Analysis Results",
-        "role": "Neurophysiological Data (N=60)",
-        "content": "47% mean increase in theta band power (4-8 Hz) during multimodal study sessions, with effect size η²=.304 demonstrating robust cognitive state modulation.",
-        "rating": 5
-      },
-      {
-        "name": "7-Day Retention Study",
-        "role": "Long-term Memory Assessment",
-        "content": "Multimodal condition showed superior retention at 7 days (M=32.1, SD=4.9) versus control (M=24.8, SD=6.1), t(38)=4.21, p<.001, with large effect size d=1.34 confirming durable memory enhancement.",
-        "rating": 5
-      }
-    ]
-  },
   "final_cta": {
     "title": "Ready to <highlight>Transform Your Mind</highlight>?",
     "subtitle": "Join the beta program and lock in your membership at just $5.89/month forever.",
