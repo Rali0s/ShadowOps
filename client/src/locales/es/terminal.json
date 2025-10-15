@@ -1,0 +1,50 @@
+{
+  "boot": {
+    "initializing": "Initializing _Fq Neural Matrix System...",
+    "loading": "Loading brainwave frequency modules...",
+    "ready": "System Ready",
+    "welcome": "Type 'help' to see available commands."
+  },
+  "commands": {
+    "help": "Display this help message",
+    "frequencies": "Show brainwave frequency bands",
+    "alpha": "Access Alpha wave training (8-12 Hz)",
+    "beta": "Access Beta wave training (12-30 Hz)",
+    "theta": "Access Theta wave training (4-8 Hz)",
+    "gamma": "Access Gamma wave training (30-100+ Hz)",
+    "sacred": "Activate sacred geometry wheel visualization",
+    "research": "View published research foundation",
+    "status": "Show system status",
+    "clear": "Clear terminal screen",
+    "exit": "Terminate session"
+  },
+  "frequencies": {
+    "alpha": {
+      "title": "ALPHA WAVE TRAINING (8-12 Hz)",
+      "description": "Alpha waves promote relaxed wakefulness and creative flow states.",
+      "ideal": "Perfect for meditation, creative work, and stress reduction."
+    },
+    "beta": {
+      "title": "BETA WAVE TRAINING (12-30 Hz)",
+      "description": "Beta waves enhance alert thinking and analytical processing.",
+      "ideal": "Ideal for focus, concentration, and problem-solving tasks."
+    },
+    "theta": {
+      "title": "THETA WAVE TRAINING (4-8 Hz)",
+      "description": "Theta waves facilitate deep processing and creative insights.",
+      "ideal": "Associated with deep meditation and subconscious access."
+    },
+    "gamma": {
+      "title": "GAMMA WAVE TRAINING (30-100+ Hz)",
+      "description": "Gamma waves represent peak cognitive performance and consciousness.",
+      "ideal": "Associated with heightened awareness and cognitive binding."
+    }
+  },
+  "status": {
+    "title": "System Status:",
+    "accessLevel": "Access Level: OPEN ACCESS",
+    "availableFrequencies": "Available Frequencies: ALL",
+    "session": "Session: ACTIVE",
+    "mode": "Mode: TRAINING READY"
+  }
+}

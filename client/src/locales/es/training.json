@@ -1,0 +1,34 @@
+{
+  "title": "ShadowFang AIO Training",
+  "subtitle": "Brainwave Frequency Training System",
+  "frequencies": {
+    "alpha": "Alpha (8-12 Hz)",
+    "beta": "Beta (12-30 Hz)",
+    "theta": "Theta (4-8 Hz)",
+    "gamma": "Gamma (30-100+ Hz)"
+  },
+  "benefits": {
+    "title": "Training Benefits",
+    "focus": "Enhanced Focus & Concentration",
+    "memory": "Improved Memory Encoding",
+    "creativity": "Creative Flow States",
+    "performance": "Peak Performance"
+  },
+  "generator": {
+    "title": "Frequency Generator",
+    "selectFrequency": "Select Frequency",
+    "duration": "Duration (minutes)",
+    "volume": "Volume",
+    "start": "Start Session",
+    "stop": "Stop Session",
+    "currentFrequency": "Current Frequency: {{freq}} Hz",
+    "timeRemaining": "Time Remaining: {{time}}"
+  },
+  "sacredGeometry": {
+    "title": "Sacred Geometry Wheel",
+    "description": "Visual entrainment synchronized with binaural beats",
+    "speed": "Rotation Speed",
+    "intensity": "Visual Intensity",
+    "activate": "Activate Wheel"
+  }
+}

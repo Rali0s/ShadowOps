@@ -1,0 +1,235 @@
+{
+  "alerts": {
+    "elite_active": {
+      "desktop": "✅ MEMBRESÍA ELITE ACTIVA • ACCESO COMPLETO A LA PLATAFORMA • BIENVENIDO/A ✅",
+      "mobile": "✅ ELITE ACTIVO • BIENVENIDO/A ✅"
+    },
+    "discord_verified": {
+      "desktop": "🎯 DISCORD VERIFICADO • ACCESO BETA CONCEDIDO • ENTRAR A LA PLATAFORMA 🎯",
+      "mobile": "🎯 VERIFICADO • ENTRAR 🎯"
+    },
+    "beta_expired": {
+      "desktop": "⏰ BETA EXPIRADO • ACTUALIZACIÓN ELITE DISPONIBLE • TIEMPO LIMITADO ⏰",
+      "mobile": "⏰ BETA EXPIRADO • ACTUALIZAR AHORA ⏰"
+    },
+    "join_discord": {
+      "desktop": "🚀 ÚNETE A DISCORD PRIMERO • VERIFÍCATE • DESBLOQUEA ACCESO BETA 🚀",
+      "mobile": "🚀 DISCORD PRIMERO • ACCESO BETA 🚀"
+    }
+  },
+  "header": {
+    "app_name": "_Fq",
+    "tagline": "¿Es Esto Una Simulación?",
+    "cta": {
+      "loading": "Cargando...",
+      "dashboard": "Panel de Control",
+      "enter": "Entrar",
+      "subscribe": "Suscribirse",
+      "join_beta": "Unirse a Beta"
+    }
+  },
+  "hero": {
+    "badge": {
+      "desktop": "⚡ PRE-LANZAMIENTO BETA • FASE UNO ⚡",
+      "mobile": "⚡ BETA FASE UNO ⚡"
+    },
+    "language": {
+      "english": "🇺🇸 English",
+      "japanese": "🇯🇵 日本語",
+      "spanish": "🇪🇸 Español"
+    },
+    "headline": {
+      "line1_desktop": "Transforma Tu Mente Con",
+      "line1_mobile": "Transforma Tu Mente",
+      "line2": "Entrenamiento ShadowFang"
+    },
+    "subheadline": {
+      "intro_desktop": "La primera ",
+      "platform": "plataforma de membresía neurohacker respaldada por investigación",
+      "description_desktop": " basada en estudio publicado de entrainment theta que demuestra 21% de mejora en codificación de memoria para",
+      "description_mobile": " para",
+      "action": " ayudarte a estudiar, concentrarte y evolucionar"
+    },
+    "status_messages": {
+      "elite_active": {
+        "desktop": "✅ <strong>Membresía Elite Activa</strong> • Acceso a todos los módulos de entrenamiento y características premium",
+        "mobile": "✅ <strong>Elite Activo</strong> • Acceso Completo"
+      },
+      "discord_beta": {
+        "desktop": "🎯 <strong>Acceso Beta Discord</strong> • Comunidad verificada • Acceso a plataforma concedido",
+        "mobile": "🎯 <strong>Acceso Beta</strong> • Verificado"
+      },
+      "beta_expired_upgrade": {
+        "desktop": "⏰ <strong>Beta Expirado</strong> • Actualiza a Elite por <strong>$5.89/mes</strong> (tiempo limitado)",
+        "mobile": "⏰ <strong>Beta Expirado</strong> • Actualización Disponible"
+      },
+      "join_discord_flow": {
+        "desktop": "🚀 <strong>Únete a Discord Primero</strong> • Verifícate → Acceso beta → Asegura <strong>$5.89/mes para siempre</strong>",
+        "mobile": "🚀 <strong>Discord Primero</strong> • Luego Beta"
+      }
+    }
+  },
+  "cta": {
+    "primary": {
+      "loading": {
+        "text": "Cargando...",
+        "subtext": "Por favor espera"
+      },
+      "access_dashboard": {
+        "text": "Acceder al Panel",
+        "subtext": "Continuar Entrenamiento"
+      },
+      "upgrade_elite": {
+        "text": "Actualizar a Elite",
+        "subtext": "Beta Expirado - Suscribirse"
+      },
+      "access_training": {
+        "text": "Acceder al Entrenamiento",
+        "subtext": "Entrar a la Plataforma"
+      },
+      "join_discord": {
+        "text": "Unirse a la Comunidad Discord",
+        "subtext": "Requerido para Acceso"
+      }
+    },
+    "secondary": {
+      "join_discord": {
+        "text": "Unirse a Discord",
+        "subtext": "Acceso a la Comunidad"
+      },
+      "lock_beta_price": {
+        "text": "Asegurar Precio Beta",
+        "subtext": "$5.89/mes Para Siempre"
+      },
+      "discord_login": {
+        "text": "Iniciar Sesión Discord",
+        "subtext": "Después de Unirse al Servidor"
+      }
+    }
+  },
+  "goals": {
+    "title": "Nuestra <highlight>Misión Principal</highlight>",
+    "subtitle": "Tres pilares de mejora cognitiva",
+    "items": [
+      {
+        "title": "MEJORA DE MEMORIA MULTIMODAL",
+        "description": "Aumento visual respaldado por investigación combinado con entrainment auditivo theta (4-8 Hz) para codificación superior de memoria"
+      },
+      {
+        "title": "OPTIMIZACIÓN DEL ESTADO THETA",
+        "description": "47% de aumento en potencia theta demostrado mediante estudios EEG (η²=.304) usando ritmos binaurales sincronizados y parpadeo visual"
+      },
+      {
+        "title": "APRENDIZAJE BASADO EN EVIDENCIA",
+        "description": "Investigación publicada mostrando 21% de mejora en recuperación (M=38.2 vs 31.5) con ventajas de retención persistentes de 7 días"
+      }
+    ]
+  },
+  "tiers": {
+    "title": "Niveles de Acceso <highlight>Beta</highlight>",
+    "subtitle": "Sistema de acceso progresivo para miembros beta",
+    "tier1": {
+      "badge": "NIVEL 1",
+      "title": "Acceso Privado a Discord",
+      "subtitle": "Exclusivo pre-cuenta regresiva",
+      "features": [
+        "Acceso directo al equipo de desarrollo",
+        "Participación en pruebas beta",
+        "Sesiones grupales semanales",
+        "Investigación impulsada por la comunidad"
+      ]
+    },
+    "tier2": {
+      "badge": "NIVEL 2",
+      "title": "Acceso de Miembro Elite",
+      "subtitle": "Durante ventana pública",
+      "features": [
+        "Todo en Nivel 1",
+        "Acceso prioritario a la plataforma",
+        "Módulos de entrenamiento avanzados",
+        "Sesiones de orientación 1-a-1"
+      ]
+    }
+  },
+  "features": {
+    "list": [
+      "Sistema de Entrenamiento AIO ShadowFang",
+      "1 Manual de Entrenamiento Completo",
+      "Generador de Frecuencias Binaurales",
+      "Visualizaciones de Geometría Sagrada",
+      "Optimizado para Móvil (iOS/Android)",
+      "Comunidad Privada de Discord",
+      "Acceso Prioritario Miembro Elite",
+      "Sesiones en Vivo Semanales"
+    ]
+  },
+  "pricing": {
+    "title": "Precio de <highlight>Miembro Beta</highlight>",
+    "subtitle": "Asegura tu tarifa antes del lanzamiento público",
+    "badge": "PRECIO BETA - TIEMPO LIMITADO",
+    "card_title": "Acceso Beta ShadowFang",
+    "price": "$5.89",
+    "period": "/mes",
+    "locked_text": "Bloqueado para siempre",
+    "original_price": "$20.00/mes",
+    "original_label": "Precio futuro",
+    "button": "Asegurar Acceso Beta Ahora",
+    "fine_print": "Cancela en cualquier momento • Acceso instantáneo • Pago seguro",
+    "spots_remaining": "Solo quedan {count} plazas beta"
+  },
+  "system": {
+    "title": "El Sistema <highlight>ShadowFang</highlight>",
+    "subtitle": "Plataforma de entrenamiento neurohacker todo en uno",
+    "features": [
+      {
+        "title": "Entrainment Multimodal",
+        "description": "Ritmos binaurales de 6 Hz sincronizados con parpadeo visual para inducción del estado theta"
+      },
+      {
+        "title": "Aumento Visual",
+        "description": "Parpadeo LED ambiental (200 lux) y pulsación de punto focal sincronizada con frecuencia de audio"
+      },
+      {
+        "title": "Protocolos Respaldados por Investigación",
+        "description": "Basado en estudio revisado por pares (N=60) que demuestra mejora significativa de memoria"
+      },
+      {
+        "title": "Optimización de Potencia Theta",
+        "description": "47% de aumento medio en potencia de banda 4-8 Hz durante sesiones de estudio"
+      }
+    ]
+  },
+  "final_cta": {
+    "title": "¿Preparado/a para <highlight>Transformar Tu Mente</highlight>?",
+    "subtitle": "Únete al programa beta y asegura tu membresía a solo $5.89/mes para siempre.",
+    "warning": "Plazas limitadas disponibles • El precio aumenta a $20/mes después del beta",
+    "button": "Únete al Programa Beta Ahora",
+    "fine_print": "Al unirte, aceptas nuestros términos de servicio. Cancela en cualquier momento."
+  },
+  "footer": {
+    "copyright": "© 2025 _Fq Plataforma Neurohacker • Sistema de Entrenamiento ShadowFang",
+    "tagline": "¿Es Esto Una Simulación?",
+    "email_label": "Email:",
+    "email": "premise@directivestyles.com",
+    "contact_japanese": "🇯🇵 日本語でお問い合わせ (Contacto en Japonés)",
+    "contact_spanish": "🇪🇸 Contacto en Español"
+  },
+  "toasts": {
+    "beta_complete": {
+      "title": "Período Beta Terminado",
+      "description": "La cuenta regresiva de acceso beta ha llegado a cero. ¡Hora de actualizar!"
+    },
+    "beta_ended_premium": {
+      "title": "Beta Terminado - Acceso Premium Activo",
+      "description": "Tu suscripción asegura acceso continuo a todas las características."
+    },
+    "beta_access_expired": {
+      "title": "Acceso Beta Expirado",
+      "description": "¡Suscríbete ahora para continuar tu viaje neurohacker!"
+    },
+    "beta_period_ended": {
+      "title": "Período Beta Terminado",
+      "description": "¡Únete a Discord y suscríbete para desbloquear acceso completo!"
+    }
+  }
+}

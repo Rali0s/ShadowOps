@@ -1,0 +1,127 @@
+{
+  "title": "Research Foundation",
+  "subtitle": "Scientific Evidence for Frequency-Enhanced Learning",
+  "badge": "Peer-Reviewed Research",
+  "tabs": {
+    "visualEntrainment": "Visual Entrainment",
+    "studyMethod": "Study Protocols",
+    "mentalRehearsal": "Mental Rehearsal"
+  },
+  "visualStudy": {
+    "title": "Visual Augmentation & Frequency Entrainment Study",
+    "badge": "Published Research",
+    "overview": {
+      "title": "Study Overview",
+      "objective": "Investigate whether visual augmentation combined with auditory frequency entrainment (6 Hz theta binaural beats) enhances memory encoding compared to traditional study methods.",
+      "participants": "60 undergraduate students (M age = 22.3 years) randomly assigned to three conditions."
+    },
+    "findings": {
+      "title": "Key Findings",
+      "immediateRecall": {
+        "title": "Immediate Recall",
+        "value": "38.2 vs 31.5",
+        "description": "Multimodal vs Control (p < .001)"
+      },
+      "thetaPower": {
+        "title": "Theta Power Increase",
+        "value": "+47%",
+        "description": "EEG confirmed theta enhancement"
+      },
+      "retention": {
+        "title": "7-Day Retention",
+        "value": "32.1 vs 24.8",
+        "description": "Multimodal vs Control (d = 1.34)"
+      },
+      "effectSize": {
+        "title": "Effect Size",
+        "value": "η² = .304",
+        "description": "Large effect size for learning"
+      }
+    },
+    "implementation": {
+      "title": "Platform Implementation",
+      "item1": "Sacred Geometry Wheel: Implements 6 Hz visual entrainment with synchronized pulsing",
+      "item2": "Binaural Beat Generator: Produces precise theta frequencies (4-8 Hz) for memory consolidation",
+      "item3": "Multimodal Synchronization: Combines visual and auditory stimuli for maximum effect"
+    }
+  },
+  "studyMethod": {
+    "title": "The Frequency-Enhanced Study Method",
+    "badge": "Practical Protocol",
+    "phases": {
+      "title": "The Three-Phase Study Cycle",
+      "phase1": {
+        "title": "Phase 1: Active Learning (Beta 14-18 Hz)",
+        "description": "Focused reading, note-taking, problem-solving",
+        "duration": "Duration: 25-45 minute blocks"
+      },
+      "phase2": {
+        "title": "Phase 2: Integration (Alpha 8-12 Hz)",
+        "description": "Reviewing, connecting concepts, creative thinking",
+        "duration": "Duration: 10-15 minutes between blocks"
+      },
+      "phase3": {
+        "title": "Phase 3: Consolidation (Theta 4-8 Hz)",
+        "description": "Memory processing during rest and sleep",
+        "duration": "Duration: Pre-sleep review + full night's sleep"
+      }
+    },
+    "protocols": {
+      "title": "Task-Specific Frequency Protocols",
+      "memorization": "Memorization Tasks",
+      "problemSolving": "Problem-Solving",
+      "reading": "Reading Comprehension",
+      "creative": "Creative Work"
+    },
+    "preSleep": {
+      "title": "Pre-Sleep Encoding Boost",
+      "subtitle": "15-20 Minutes Before Bed:",
+      "step1": "Light Review (5 min): Skim key concepts without deep thinking",
+      "step2": "Theta Transition (10-15 min): Use 6 Hz theta beats, lie down, eyes closed",
+      "step3": "Mental Drift: Let concepts flow through your mind naturally",
+      "step4": "Direct to Sleep: Brain continues processing during sleep phases"
+    }
+  },
+  "mentalRehearsal": {
+    "title": "Enhanced Skill Acquisition Through Mental Rehearsal",
+    "badge": "Research Proposal",
+    "framework": {
+      "title": "Theoretical Framework",
+      "dualProcess": {
+        "title": "Dual-Process Theory",
+        "description": "Optimizing transition between System 1 (automatic) and System 2 (deliberate) processing"
+      },
+      "chunking": {
+        "title": "Chunking Theory",
+        "description": "Creating efficient cognitive chunks through structured rehearsal"
+      },
+      "contextMemory": {
+        "title": "Context-Dependent Memory",
+        "description": "Environmental anchors enhance recall and execution"
+      }
+    },
+    "anchorMethod": {
+      "title": "The Anchor Method",
+      "description": "Pair specific environmental cues with information to improve recall and trigger task-specific cognitive schemas.",
+      "step1": "Choose Anchor: Sound, action, or object (pen clicking, specific music, scent)",
+      "step2": "Consistent Pairing: Use same anchor during study sessions",
+      "step3": "Test Recall: Use anchor when remembering information",
+      "step4": "Application: Bring anchor to exam or performance"
+    },
+    "integration": {
+      "title": "Platform Integration",
+      "subtitle": "How This Research Enhances ShadowFang AIO:",
+      "item1": "Frequency Anchoring: Use specific frequencies as environmental triggers for different cognitive states",
+      "item2": "Visual Cues: Sacred geometry patterns serve as visual anchors for memory consolidation",
+      "item3": "Mental Rehearsal Protocols: Structured visualization exercises for skill automaticity",
+      "item4": "State-Dependent Learning: Match study and performance states for optimal recall"
+    }
+  },
+  "cta": {
+    "title": "Apply Research-Backed Methods",
+    "description": "Experience the scientifically-proven benefits of frequency-enhanced learning",
+    "frequencyGenerator": "Try Frequency Generator",
+    "startTraining": "Start Training",
+    "learnMethodology": "Learn Methodology"
+  }
+}
