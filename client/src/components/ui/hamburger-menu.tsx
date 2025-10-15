@@ -4,6 +4,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Link } from 'wouter';
+import { useAuth } from '@/hooks/use-auth';
 import { 
   Menu, 
   Brain, 
@@ -15,7 +16,8 @@ import {
   Users,
   Lock,
   Home,
-  X
+  Compass,
+  Crown
 } from 'lucide-react';
 
 interface HamburgerMenuProps {
@@ -25,14 +27,20 @@ interface HamburgerMenuProps {
 
 export function HamburgerMenu({ userCount = "2,847", showAuthButton = true }: HamburgerMenuProps) {
   const [open, setOpen] = useState(false);
+  const { isSubscribed } = useAuth();
 
-  const menuItems = [
-    { href: '/', label: 'Home', icon: Home, description: 'Landing page' },
+  // Free tier menu items - only 4 core items for simplicity
+  const freeMenuItems = [
     { href: '/shadowfang-training', label: 'ShadowFang Training', icon: Target, description: 'HUMINT protocols' },
     { href: '/ops-manual', label: 'Ops Manual', icon: BookOpen, description: 'Operational guides' },
     { href: '/neural-matrix', label: 'Neural Matrix', icon: Brain, description: 'Core system' },
     { href: '/frequency-generator', label: 'Frequency Generator', icon: Zap, description: 'Binaural beats' },
+  ];
+
+  // Tier 2 paid menu items - locked for non-subscribers
+  const paidMenuItems = [
     { href: '/ksp-dossier', label: 'KSP Dossier', icon: FileText, description: 'Classified docs' },
+    { href: '/grounding-methods', label: 'Grounding Methods', icon: Compass, description: 'Reality anchoring' },
     { href: '/scientific-method', label: 'Scientific Method', icon: Settings, description: 'Research protocols' },
     { href: '/education', label: 'Education', icon: BookOpen, description: 'Learning materials' },
     { href: '/methodology', label: 'Methodology', icon: FileText, description: 'Self-report system' },
@@ -77,13 +85,14 @@ export function HamburgerMenu({ userCount = "2,847", showAuthButton = true }: Ha
           </div>
         </div>
 
-        {/* Navigation Items */}
+        {/* Free Tier Navigation */}
         <nav className="space-y-2 mb-6">
-          {menuItems.map((item, index) => (
+          {freeMenuItems.map((item, index) => (
             <Link key={index} href={item.href}>
               <button
                 onClick={() => setOpen(false)}
                 className="w-full flex items-center space-x-3 px-3 py-[5px] rounded-lg hover:bg-red-600/10 hover:border-red-500/30 border border-transparent transition-all text-left group"
+                data-testid={`menu-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
               >
                 <item.icon className="w-5 h-5 text-gray-400 group-hover:text-red-400 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
@@ -95,18 +104,69 @@ export function HamburgerMenu({ userCount = "2,847", showAuthButton = true }: Ha
           ))}
         </nav>
 
+        {/* Tier 2 Paid Section */}
+        {!isSubscribed && (
+          <>
+            <Separator className="bg-gray-700 mb-4" />
+            <div className="mb-4 p-3 bg-yellow-600/10 border border-yellow-600/30 rounded-lg">
+              <div className="flex items-center gap-2 mb-1">
+                <Crown className="w-4 h-4 text-yellow-500" />
+                <span className="text-yellow-500 text-sm font-semibold">Researcher Tier</span>
+              </div>
+              <p className="text-xs text-gray-400">Subscribe to unlock advanced tools</p>
+            </div>
+          </>
+        )}
+
+        {/* Tier 2 Menu Items - Locked or Unlocked */}
+        <nav className="space-y-2 mb-6">
+          {paidMenuItems.map((item, index) => (
+            isSubscribed ? (
+              <Link key={index} href={item.href}>
+                <button
+                  onClick={() => setOpen(false)}
+                  className="w-full flex items-center space-x-3 px-3 py-[5px] rounded-lg hover:bg-red-600/10 hover:border-red-500/30 border border-transparent transition-all text-left group"
+                  data-testid={`menu-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  <item.icon className="w-5 h-5 text-gray-400 group-hover:text-red-400 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-white text-sm font-medium group-hover:text-red-400">{item.label}</div>
+                    <div className="text-xs text-gray-500 group-hover:text-gray-400 truncate">{item.description}</div>
+                  </div>
+                </button>
+              </Link>
+            ) : (
+              <div key={index} className="relative">
+                <button
+                  disabled
+                  className="w-full flex items-center space-x-3 px-3 py-[5px] rounded-lg border border-gray-700/50 bg-gray-800/30 text-left opacity-50 cursor-not-allowed"
+                  data-testid={`menu-locked-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  <item.icon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-gray-500 text-sm font-medium">{item.label}</div>
+                    <div className="text-xs text-gray-600 truncate">{item.description}</div>
+                  </div>
+                  <Lock className="w-4 h-4 text-gray-600 flex-shrink-0" />
+                </button>
+              </div>
+            )
+          ))}
+        </nav>
+
         {/* Bottom Actions */}
-        {showAuthButton && (
+        {showAuthButton && !isSubscribed && (
           <>
             <Separator className="bg-gray-700 mb-4" />
             <div className="space-y-3">
               <Link href="/subscribe">
                 <Button 
                   onClick={() => setOpen(false)}
-                  className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
+                  className="w-full bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-700 hover:to-yellow-800"
+                  data-testid="button-unlock-researcher-tier"
                 >
-                  <Lock className="w-4 h-4 mr-2" />
-                  Unlock Full Access
+                  <Crown className="w-4 h-4 mr-2" />
+                  Unlock Researcher Tier
                 </Button>
               </Link>
               
