@@ -23,7 +23,7 @@ Scientific Method Training: ADDED - Comprehensive self-study and self-report met
 Music Recommendations: REMOVED - User requested removal of music section.
 Education Materials: ADDED - Comprehensive mentalist training guide featuring Mind Palace (Method of Loci), Rubber Duck Debugging techniques, and combined systems for memory enhancement. Includes interactive palace walkthrough, debugging processes, and advanced tips with "Think for yourself. Question everything. DYOR." philosophy integration.
 Research Foundation: ADDED - Integration of three published research papers on visual augmentation (38.2 vs 31.5 recall, +47% theta power), frequency-enhanced study method (phase-specific protocols), and mental rehearsal (environmental anchoring). Research shows multimodal entrainment significantly outperforms unimodal approaches with large effect sizes (η² = .304, d = 1.34).
-Language Support & Translation: ADDED - Full i18n infrastructure with react-i18next supporting English, Japanese, and Spanish (Spain). User speaks English and Spanish (Spain) fluently and can verify these translations. Japanese translations are AI-generated and UNVERIFIED (user cannot read/speak Japanese). Translation approach: Using free AI translation until profit, then upgrading to professional native translation. Language switcher uses radio button design with flags (🇺🇸 EN, 🇯🇵 JA, 🇪🇸 ES) for easy switching.
+Language Support & Translation: ADDED - Full i18n infrastructure with react-i18next supporting English, Japanese, and Spanish (Spain). User speaks English and Spanish (Spain) fluently and can verify these translations. Japanese translations are AI-generated and UNVERIFIED (user cannot read/speak Japanese). Translation approach: Using free AI translation until profit, then upgrading to professional native translation. Language switcher uses radio button design with flags (🇺🇸 EN, 🇯🇵 JA, 🇪🇸 ES) for easy switching. Translation Quality Notice displayed for non-English languages: Currently using AI-enhanced translation for Japan, Spain, and soon Russia. Current status: Manually vetting AI Spain-based Spanish content by hand. Phased upgrade plan: Phase 1 (Profit) = Professional native translation by certified translators for paid content; Phase 2 (Growth) = Cultural adaptation and localization refinement for paid content. Users encouraged to report translation issues in Discord community.
 Tiered Navigation Menu: UPDATED - Simplified hamburger menu for new users with progressive disclosure. Free tier shows only 4 core items (ShadowFang Training, Ops Manual, Neural Matrix, Frequency Generator). Tier 2 paid menu items (KSP Dossier, Grounding Methods, Scientific Method, Education, Methodology) are locked with visual indicators for non-subscribers and fully accessible to paid members.
 Grounding Methods: ADDED - New Tier 2 feature with 4 reality-anchoring techniques: (1) GPS Coordinates & Match - verify physical location with geolocation API, (2) UTC Time Clock - universal coordinated time display, (3) Zulu Time - military/aviation time format with educational explanation (DDHHMMZ MMM YY), (4) Solo Inception - environmental validation by hiding objects and finding them upon return, with manual mental grounding fallback if object is missing.
 
@@ -64,6 +64,17 @@ Grounding Methods: ADDED - New Tier 2 feature with 4 reality-anchoring technique
 - **react-i18next**: For internationalization (English, Japanese [unverified], Spanish [Spain]).
 
 # Recent Changes
+
+## Translation Quality Notice Refinement (October 15, 2025)
+**Enhanced Translation Disclaimer**: Refined translation quality notice across all languages (EN, ES, JA) with detailed current status and phased upgrade plan. Notice now displays:
+- Current approach: AI-enhanced translation for Japan, Spain, and soon Russia
+- Current status: Manually vetting AI Spain-based Spanish content by hand (displayed in yellow highlight)
+- "As we Grow:" section with phased upgrade plan
+- Phase 1 (Profit): Professional native translation by certified translators for paid content
+- Phase 2 (Growth): Cultural adaptation and localization refinement for paid content
+- Updated feedback prompt: "Did you encounter translation issues? Please report them in the Discord community!"
+- Spanish translation simplified to 5th grade reading level for accessibility
+- Japanese translation includes all new fields (AI-generated, unverified by user)
 
 ## Menu Simplification & Grounding Methods (October 2025)
 **Tiered Menu Navigation**: Simplified hamburger menu to reduce cognitive overload for new users. Free tier displays only 4 essential pages (ShadowFang Training, Ops Manual, Neural Matrix, Frequency Generator). Tier 2 items (KSP Dossier, Grounding Methods, Scientific Method, Education, Methodology) show as locked with Crown icon and "Researcher Tier" badge for non-subscribers, fully unlocked for paid members ($5.89/mo).
