@@ -29,7 +29,7 @@ export function CountdownTimer({
   // Use server-side beta end date if available, otherwise use provided targetDate or fallback
   const effectiveTargetDate = betaStatus?.endsAt 
     ? new Date(betaStatus.endsAt)
-    : targetDate || new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
+    : targetDate || new Date(Date.now() + 10 * 24 * 60 * 60 * 1000);
 
   useEffect(() => {
     // If beta is already expired, trigger callbacks immediately
