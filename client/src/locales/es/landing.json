@@ -45,8 +45,8 @@
     },
     "subheadline": {
       "intro_desktop": "La primera ",
-      "platform": "plataforma de membresía neurohacker respaldada por investigación",
-      "description_desktop": " basada en estudio publicado de entrainment theta que demuestra 21% de mejora en codificación de memoria para",
+      "platform": "plataforma neurohacker con investigación científica",
+      "description_desktop": " basada en estudio que muestra 21% mejor memoria para",
       "description_mobile": " para",
       "action": " ayudarte a estudiar, concentrarte y evolucionar"
     },
@@ -112,16 +112,16 @@
     "subtitle": "Tres pilares de mejora cognitiva",
     "items": [
       {
-        "title": "MEJORA DE MEMORIA MULTIMODAL",
-        "description": "Aumento visual respaldado por investigación combinado con entrainment auditivo theta (4-8 Hz) para codificación superior de memoria"
+        "title": "MEJOR MEMORIA CON MÚLTIPLES SENTIDOS",
+        "description": "Combina sonidos y visuales especiales (4-8 Hz) para ayudarte a recordar mejor"
       },
       {
-        "title": "OPTIMIZACIÓN DEL ESTADO THETA",
-        "description": "47% de aumento en potencia theta demostrado mediante estudios EEG (η²=.304) usando ritmos binaurales sincronizados y parpadeo visual"
+        "title": "MEJORA TU ESTADO THETA",
+        "description": "47% más de ondas theta en el cerebro usando sonidos binaurales y luces especiales"
       },
       {
-        "title": "APRENDIZAJE BASADO EN EVIDENCIA",
-        "description": "Investigación publicada mostrando 21% de mejora en recuperación (M=38.2 vs 31.5) con ventajas de retención persistentes de 7 días"
+        "title": "COMPROBADO CON CIENCIA",
+        "description": "Estudios reales muestran 21% mejor memoria (38.2 vs 31.5) que dura 7 días"
       }
     ]
   },
@@ -182,20 +182,20 @@
     "subtitle": "Plataforma de entrenamiento neurohacker todo en uno",
     "features": [
       {
-        "title": "Entrainment Multimodal",
-        "description": "Ritmos binaurales de 6 Hz sincronizados con parpadeo visual para inducción del estado theta"
+        "title": "Sonidos y Luces Juntos",
+        "description": "Sonidos de 6 Hz con luces que parpadean para activar estado theta en tu cerebro"
       },
       {
-        "title": "Aumento Visual",
-        "description": "Parpadeo LED ambiental (200 lux) y pulsación de punto focal sincronizada con frecuencia de audio"
+        "title": "Luces Especiales",
+        "description": "Luces LED suaves (200 lux) que sincronizan con los sonidos para mejor efecto"
       },
       {
-        "title": "Protocolos Respaldados por Investigación",
-        "description": "Basado en estudio revisado por pares (N=60) que demuestra mejora significativa de memoria"
+        "title": "Comprobado con Ciencia Real",
+        "description": "Basado en estudio científico (60 personas) que muestra mejora clara de memoria"
       },
       {
-        "title": "Optimización de Potencia Theta",
-        "description": "47% de aumento medio en potencia de banda 4-8 Hz durante sesiones de estudio"
+        "title": "Más Ondas Theta",
+        "description": "47% más ondas theta (4-8 Hz) en tu cerebro mientras estudias"
       }
     ]
   },
@@ -211,8 +211,9 @@
     "tagline": "¿Es Esto Una Simulación?",
     "email_label": "Email:",
     "email": "premise@directivestyles.com",
-    "contact_japanese": "🇯🇵 日本語でお問い合わせ (Contacto en Japonés)",
-    "contact_spanish": "🇪🇸 Contacto en Español"
+    "contact_english": "🇺🇸 Contacto en Inglés",
+    "contact_spanish": "🇪🇸 Contacto en Español",
+    "contact_japanese": "🇯🇵 Contacto en Japonés (Respuesta con IA)"
   },
   "toasts": {
     "beta_complete": {
