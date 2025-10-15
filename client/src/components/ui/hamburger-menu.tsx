@@ -83,7 +83,7 @@ export function HamburgerMenu({ userCount = "2,847", showAuthButton = true }: Ha
             <Link key={index} href={item.href}>
               <button
                 onClick={() => setOpen(false)}
-                className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-red-600/10 hover:border-red-500/30 border border-transparent transition-all text-left group"
+                className="w-full flex items-center space-x-3 px-3 py-[5px] rounded-lg hover:bg-red-600/10 hover:border-red-500/30 border border-transparent transition-all text-left group"
               >
                 <item.icon className="w-5 h-5 text-gray-400 group-hover:text-red-400 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
