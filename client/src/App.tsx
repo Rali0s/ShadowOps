@@ -21,6 +21,7 @@ import ShadowFangTrainingPage from "@/pages/shadowfang-training-page";
 import OpsManualPage from "@/pages/ops-manual-page";
 import NeuralMatrixPage from "@/pages/neural-matrix-page";
 import KSPDossier from "@/pages/ksp-dossier";
+import GroundingMethodsPage from "@/pages/grounding-methods";
 import ScientificMethodPage from "@/pages/scientific-method-page";
 import EducationMaterialsPage from "@/pages/education-materials-page";
 import SelfReportMethodologyPage from "@/pages/self-report-methodology";
@@ -42,6 +43,7 @@ function Router() {
       <ProtectedRoute path="/ops-manual" component={OpsManualPage} />
       <ProtectedRoute path="/neural-matrix" component={NeuralMatrixPage} />
       <ProtectedRoute path="/ksp-dossier" component={KSPDossier} />
+      <ProtectedRoute path="/grounding-methods" component={GroundingMethodsPage} />
       <ProtectedRoute path="/scientific-method" component={ScientificMethodPage} />
       <ProtectedRoute path="/education" component={EducationMaterialsPage} />
       <ProtectedRoute path="/methodology" component={SelfReportMethodologyPage} />
