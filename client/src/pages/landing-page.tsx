@@ -38,7 +38,7 @@ export default function LandingPage() {
   const { user, isLoading, isSubscribed, isAuthorized, betaStatus, loginWithDiscord } = useAuth();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const betaLaunchDate = new Date(Date.now() + 45 * 24 * 60 * 60 * 1000); // 45 days from now
+  const betaLaunchDate = new Date(Date.now() + 10 * 24 * 60 * 60 * 1000); // 10 days from now
   
   // Language state
   const [language, setLanguage] = useState(i18n.language || 'en');
