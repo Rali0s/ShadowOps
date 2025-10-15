@@ -80,15 +80,28 @@ function validateEnv() {
 export const config = validateEnv();
 
 // Discord configuration helper
-export const getDiscordConfig = () => ({
-  clientId: config.DISCORD_CLIENT_ID,
-  clientSecret: config.DISCORD_CLIENT_SECRET,
-  redirectUri: config.DISCORD_REDIRECT_URI || 
-    `${config.REPL_URL || `http://localhost:${config.PORT}`}/api/auth/discord/callback`,
-  guildId: config.DISCORD_GUILD_ID,
-  publicKey: config.DISCORD_PUBLIC_KEY,
-  betaEndAt: config.BETA_END_AT,
-});
+export const getDiscordConfig = () => {
+  const redirectUri = config.DISCORD_REDIRECT_URI || 
+    `${config.REPL_URL || `http://localhost:${config.PORT}`}/api/auth/discord/callback`;
+  
+  console.log('🔵 Discord Config:', {
+    hasClientId: !!config.DISCORD_CLIENT_ID,
+    hasClientSecret: !!config.DISCORD_CLIENT_SECRET,
+    redirectUri: redirectUri,
+    hasGuildId: !!config.DISCORD_GUILD_ID,
+    replUrl: config.REPL_URL,
+    port: config.PORT
+  });
+  
+  return {
+    clientId: config.DISCORD_CLIENT_ID,
+    clientSecret: config.DISCORD_CLIENT_SECRET,
+    redirectUri: redirectUri,
+    guildId: config.DISCORD_GUILD_ID,
+    publicKey: config.DISCORD_PUBLIC_KEY,
+    betaEndAt: config.BETA_END_AT,
+  };
+};
 
 // Stripe configuration helper
 export const getStripeConfig = () => ({
