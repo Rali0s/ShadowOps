@@ -213,7 +213,9 @@
     "email": "premise@directivestyles.com",
     "contact_english": "🇺🇸 English Inquiries",
     "contact_spanish": "🇪🇸 Spanish Inquiries",
-    "contact_japanese": "🇯🇵 日本語でお問い合わせ (Replies via AI Translation)"
+    "contact_japanese": "🇯🇵 日本語でお問い合わせ (Replies via AI Translation)",
+    "author_credits": "Platform created by CypherNoir • Neural Matrix Research",
+    "author_link": "https://bio.site/3XC"
   },
   "toasts": {
     "beta_complete": {

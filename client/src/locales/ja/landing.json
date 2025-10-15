@@ -213,7 +213,9 @@
     "email": "premise@directivestyles.com",
     "contact_english": "🇺🇸 英語でのお問い合わせ",
     "contact_spanish": "🇪🇸 スペイン語でのお問い合わせ",
-    "contact_japanese": "🇯🇵 日本語でお問い合わせ（AI翻訳で返信）"
+    "contact_japanese": "🇯🇵 日本語でお問い合わせ（AI翻訳で返信）",
+    "author_credits": "プラットフォーム制作：CypherNoir • Neural Matrix研究",
+    "author_link": "https://bio.site/3XC"
   },
   "toasts": {
     "beta_complete": {

@@ -760,11 +760,32 @@ export default function LandingPage() {
           <p className="text-gray-500 text-xs mt-2">
             {t('footer.email_label')} {t('footer.email')}
           </p>
-          <div className="mt-4">
+          <div className="mt-4 space-y-2">
+            <a href="mailto:premise@directivestyles.com?subject=English%20Inquiry" data-testid="button-email-en">
+              <Button variant="outline" size="sm" className="text-xs border-red-600 text-red-400 hover:bg-red-950/30 mx-1">
+                {t('footer.contact_english')}
+              </Button>
+            </a>
+            <a href="mailto:premise@directivestyles.com?subject=Spanish%20Inquiry" data-testid="button-email-es">
+              <Button variant="outline" size="sm" className="text-xs border-red-600 text-red-400 hover:bg-red-950/30 mx-1">
+                {t('footer.contact_spanish')}
+              </Button>
+            </a>
             <a href="mailto:premise@directivestyles.com?subject=Japanese%20Language%20Support" data-testid="button-email-jp">
-              <Button variant="outline" size="sm" className="text-xs border-red-600 text-red-400 hover:bg-red-950/30">
+              <Button variant="outline" size="sm" className="text-xs border-red-600 text-red-400 hover:bg-red-950/30 mx-1">
                 {t('footer.contact_japanese')}
               </Button>
+            </a>
+          </div>
+          <div className="mt-6 pt-4 border-t border-gray-800/50">
+            <a 
+              href={t('footer.author_link')} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-red-400 text-xs transition-colors duration-200"
+              data-testid="link-author-credits"
+            >
+              {t('footer.author_credits')}
             </a>
           </div>
         </div>
