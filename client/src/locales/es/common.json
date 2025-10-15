@@ -1,0 +1,64 @@
+{
+  "app": {
+    "name": "_Fq",
+    "tagline": "¿Es Esto Una Simulación?",
+    "description": "Sitio de Membresía Beta Neurohacker"
+  },
+  "nav": {
+    "home": "Inicio",
+    "training": "Entrenamiento",
+    "research": "Investigación",
+    "education": "Educación",
+    "frequency": "Generador de Frecuencias",
+    "methodology": "Metodología",
+    "subscribe": "Suscribirse",
+    "login": "Iniciar Sesión",
+    "logout": "Cerrar Sesión"
+  },
+  "buttons": {
+    "getStarted": "Comenzar",
+    "joinDiscord": "Unirse a la Comunidad Discord",
+    "subscribe": "Suscribirse Ahora",
+    "learnMore": "Saber Más",
+    "backToHome": "Volver al Terminal",
+    "tryIt": "Probarlo Ahora",
+    "close": "Cerrar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Guardar",
+    "reset": "Reiniciar"
+  },
+  "pricing": {
+    "beta": "$5.89/mes (bloqueado para siempre)",
+    "regular": "$20/mes",
+    "discordFree": "GRATIS durante beta"
+  },
+  "access": {
+    "tiers": {
+      "beta": "Acceso Beta",
+      "elite": "Acceso Elite",
+      "shadow": "Acceso Shadow"
+    },
+    "betaEnds": "Beta termina 6 de diciembre, 2025",
+    "daysRemaining": "{{days}} días restantes"
+  },
+  "translation": {
+    "disclaimer": {
+      "title": "Aviso de Calidad de Traducción",
+      "aiPhase": "Actualmente usando traducción mejorada por IA para construir audiencia internacional.",
+      "upgradePhase1": "Fase 1 (Con Ganancias): Traducción profesional nativa por traductores certificados",
+      "upgradePhase2": "Fase 2 (Crecimiento): Adaptación cultural y refinamiento de localización",
+      "feedback": "¿Encontraste problemas de traducción? ¡Por favor repórtalos en la comunidad Discord!",
+      "thankYou": "¡Gracias por tu paciencia mientras crecemos globalmente! 🌏"
+    }
+  },
+  "errors": {
+    "generic": "Algo salió mal. Por favor inténtalo de nuevo.",
+    "notFound": "Página no encontrada",
+    "unauthorized": "Acceso denegado. Por favor inicia sesión.",
+    "betaExpired": "El período beta ha expirado"
+  },
+  "loading": "Cargando...",
+  "success": "¡Éxito!",
+  "welcome": "Bienvenido/a a _Fq"
+}

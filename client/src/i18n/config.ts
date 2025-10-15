@@ -17,6 +17,13 @@ import jaTraining from '../locales/ja/training.json';
 import jaAuth from '../locales/ja/auth.json';
 import jaLanding from '../locales/ja/landing.json';
 
+import esCommon from '../locales/es/common.json';
+import esTerminal from '../locales/es/terminal.json';
+import esResearch from '../locales/es/research.json';
+import esTraining from '../locales/es/training.json';
+import esAuth from '../locales/es/auth.json';
+import esLanding from '../locales/es/landing.json';
+
 const resources = {
   en: {
     common: enCommon,
@@ -33,6 +40,14 @@ const resources = {
     training: jaTraining,
     auth: jaAuth,
     landing: jaLanding,
+  },
+  es: {
+    common: esCommon,
+    terminal: esTerminal,
+    research: esResearch,
+    training: esTraining,
+    auth: esAuth,
+    landing: esLanding,
   },
 };
 

@@ -23,7 +23,7 @@ Scientific Method Training: ADDED - Comprehensive self-study and self-report met
 Music Recommendations: REMOVED - User requested removal of music section.
 Education Materials: ADDED - Comprehensive mentalist training guide featuring Mind Palace (Method of Loci), Rubber Duck Debugging techniques, and combined systems for memory enhancement. Includes interactive palace walkthrough, debugging processes, and advanced tips with "Think for yourself. Question everything. DYOR." philosophy integration.
 Research Foundation: ADDED - Integration of three published research papers on visual augmentation (38.2 vs 31.5 recall, +47% theta power), frequency-enhanced study method (phase-specific protocols), and mental rehearsal (environmental anchoring). Research shows multimodal entrainment significantly outperforms unimodal approaches with large effect sizes (η² = .304, d = 1.34).
-Japanese Language Support: ADDED - Full i18n infrastructure with react-i18next, Japanese translation files (common, terminal, research, training, auth namespaces), language switcher component, translation disclaimer explaining AI→Professional upgrade path, and Noto Sans JP font support. Using free AI translation until profit, then upgrading to professional native translation.
+Language Support & Translation: ADDED - Full i18n infrastructure with react-i18next supporting English, Japanese, and Spanish (Spain). User speaks English and Spanish (Spain) fluently and can verify these translations. Japanese translations are AI-generated and UNVERIFIED (user cannot read/speak Japanese). Translation approach: Using free AI translation until profit, then upgrading to professional native translation. Language switcher uses radio button design with flags (🇺🇸 EN, 🇯🇵 JA, 🇪🇸 ES) for easy switching.
 Tiered Navigation Menu: UPDATED - Simplified hamburger menu for new users with progressive disclosure. Free tier shows only 4 core items (ShadowFang Training, Ops Manual, Neural Matrix, Frequency Generator). Tier 2 paid menu items (KSP Dossier, Grounding Methods, Scientific Method, Education, Methodology) are locked with visual indicators for non-subscribers and fully accessible to paid members.
 Grounding Methods: ADDED - New Tier 2 feature with 4 reality-anchoring techniques: (1) GPS Coordinates & Match - verify physical location with geolocation API, (2) UTC Time Clock - universal coordinated time display, (3) Zulu Time - military/aviation time format with educational explanation (DDHHMMZ MMM YY), (4) Solo Inception - environmental validation by hiding objects and finding them upon return, with manual mental grounding fallback if object is missing.
 
@@ -61,7 +61,7 @@ Grounding Methods: ADDED - New Tier 2 feature with 4 reality-anchoring technique
 ## Development Tools
 - **Vite**: Fast development server and build tool.
 - **TypeScript**: For full-stack type safety.
-- **react-i18next**: For internationalization (Japanese language support).
+- **react-i18next**: For internationalization (English, Japanese [unverified], Spanish [Spain]).
 
 # Recent Changes
 

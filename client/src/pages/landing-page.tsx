@@ -341,6 +341,20 @@ export default function LandingPage() {
                   {t('hero.language.japanese')}
                 </Label>
               </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem 
+                  value="es" 
+                  id="lang-es"
+                  className="border-red-500 text-red-500 data-[state=checked]:border-red-600 data-[state=checked]:bg-red-600"
+                  data-testid="radio-lang-es"
+                />
+                <Label 
+                  htmlFor="lang-es" 
+                  className="text-base sm:text-lg font-medium cursor-pointer hover:text-red-400 transition-colors"
+                >
+                  {t('hero.language.spanish')}
+                </Label>
+              </div>
             </RadioGroup>
           </div>
           
