@@ -211,7 +211,9 @@
     "tagline": "Is This A Simulation?",
     "email_label": "Email:",
     "email": "premise@directivestyles.com",
-    "contact_japanese": "🇯🇵 日本語でお問い合わせ (Contact in Japanese)"
+    "contact_english": "🇺🇸 English Inquiries",
+    "contact_spanish": "🇪🇸 Spanish Inquiries",
+    "contact_japanese": "🇯🇵 日本語でお問い合わせ (Replies via AI Translation)"
   },
   "toasts": {
     "beta_complete": {
