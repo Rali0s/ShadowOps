@@ -10,7 +10,7 @@ Self-reporting system: REMOVED - User requested removal of self-reporting and in
 Admin system: REMOVED - User requested removal of admin tab from navigation.
 Terminal integration: UPDATED - Terminal functionality moved from separate pages to main homepage integration for streamlined user experience.
 Navigation streamlining: UPDATED - Removed terminal-specific navigation links, advanced terminal page, and faraday study completely from platform.
-Self-report methodology: ADDED - User requested to "teach how to self report instead" - Created educational methodology page teaching scientific self-observation techniques without any data collection by the platform. Expanded to include advanced cognitive research models: top-down/bottom-up processing, inductive/deductive reasoning, transactional/relational processing, with planned future expansion for heuristics and behavioral analysis frameworks.
+Self-report methodology: SIMPLIFIED - User requested removal of all digital logging features. Page now simply recommends using a physical notebook and pen/pencil for personal observations. No data collection, no tracking apps, no complex systems - just analog documentation for privacy and simplicity.
 Sacred geometry visualization: ADDED - User requested red-based sacred geometry auto-wheel with high-speed elliptical patterns, 13 alternating circles with complex triangles and varying directional shapes, broader complex shapes between cross sections for future self-programming goals integration.
 Psychological programming integration: ADDED - Full integration of "Knot-So-lution Programming" study with Education of Ops Manuals, Trigger-Anchor-Knot system, psychological schema operations (A, B, C types), and visual recall operations with "PRODUCT OF A MAD MAN" disclaimer warnings.
 Neural Matrix backstory integration: ADDED - Thematic narrative of infiltrating Neural Matrix (formerly ShadowFang) through age falsification, acquiring classified psychological programming manuals before public release, with full declassified document archives showing evolution from military psychological warfare to civilian cognitive enhancement platform.
@@ -86,3 +86,8 @@ Japanese Language Support: ADDED - Full i18n infrastructure with react-i18next, 
 - **Paid Path**: Direct $5.89/mo subscription → Platform access
 - Both paths provide beta access until December 6, 2025
 - Hamburger menu clearly presents both options to users
+
+## Content Updates (October 2025)
+**Landing Page Research Integration**: Transformed generic marketing content into academically accurate claims based on published thesis "Visual Augmentation and Frequency Entrainment for Enhanced Memory Encoding" with exact statistical data (M=38.2 vs 31.5, 47% theta power increase, η²=.304, d=1.34).
+**Testimonials Removed**: All testimonial sections removed from landing page per user request.
+**Notebook Features Simplified**: Removed all digital logging, tracking, and documentation features from self-report methodology page. Now simply recommends using physical notebook and pen/pencil for private, analog observation keeping.
