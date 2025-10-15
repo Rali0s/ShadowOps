@@ -116,13 +116,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Determine if we're on Replit (check for .replit.app domain)
   const isReplit = process.env.REPL_URL || (process.env.NODE_ENV === 'production');
   
+  // Use secure cookies in production HTTPS environment
+  const isProduction = process.env.NODE_ENV === 'production';
+  const useSecureCookies = isProduction && process.env.REPL_URL?.startsWith('https://');
+  
+  console.log('🔒 Session Configuration:', {
+    isProduction,
+    useSecureCookies,
+    replUrl: process.env.REPL_URL,
+    nodeEnv: process.env.NODE_ENV
+  });
+  
   app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     name: 'sessionId', // Give the session cookie a specific name
     cookie: {
-      secure: false, // Set to false for Replit compatibility
+      secure: useSecureCookies, // Use secure cookies for HTTPS in production
       httpOnly: true, // Prevent XSS attacks
       sameSite: 'lax', // Use 'lax' for better compatibility with OAuth flows
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
