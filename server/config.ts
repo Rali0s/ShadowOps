@@ -47,14 +47,19 @@ function validateEnv() {
       });
     }
     
-    // In production, exit on missing env vars
-    if (process.env.NODE_ENV === 'production') {
+    const enforceProductionValidation = process.env.ENFORCE_PRODUCTION_VALIDATION === 'true';
+
+    if (process.env.NODE_ENV === 'production' && enforceProductionValidation) {
       console.error('❌ Production environment validation failed. Exiting...');
       process.exit(1);
     }
-    
-    // In development, use safe defaults
-    console.warn('⚠️  Using development defaults for missing environment variables');
+
+    if (process.env.NODE_ENV === 'production') {
+      console.warn('⚠️  Production environment validation failed. Using development defaults for local fallback.');
+      console.warn('    Set ENFORCE_PRODUCTION_VALIDATION=true to exit on missing values.');
+    } else {
+      console.warn('⚠️  Using development defaults for missing environment variables');
+    }
     return {
       NODE_ENV: process.env.NODE_ENV || 'development',
       PORT: process.env.PORT || '5000',

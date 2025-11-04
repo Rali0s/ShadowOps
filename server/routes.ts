@@ -5,19 +5,52 @@ import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual, webcrypto } from "crypto";
 import { promisify } from "util";
 import fetch from "node-fetch";
-import { storage } from "./storage";
+import { config as envConfig, getDiscordConfig, getStripeConfig } from "./config";
+import { logger } from "./logger";
+import { isDatabaseBacked, storage } from "./storage";
 
 const scryptAsync = promisify(scrypt);
+
+const stripeConfig = getStripeConfig();
+const isStripeConfigured = Boolean(stripeConfig.secretKey && stripeConfig.priceId);
+
+const stripe = isStripeConfigured
+  ? new Stripe(stripeConfig.secretKey, {
+      apiVersion: "2025-07-30.basil",
+    })
+  : null;
+
+if (!isStripeConfigured) {
+  logger.warn(
+    "Stripe environment variables are not configured. Billing endpoints will return 503 responses.",
+  );
+}
+
+const discordRuntimeConfig = getDiscordConfig();
+const discordPublicKey = discordRuntimeConfig.publicKey?.trim();
+
+if (!discordPublicKey) {
+  logger.warn(
+    "DISCORD_PUBLIC_KEY is not configured. Discord interaction verification will be disabled.",
+  );
+} else {
+  logger.info("✅ Discord public key loaded", { length: discordPublicKey.length });
+}
+
+logger.info("Storage mode initialised", { databaseBacked: isDatabaseBacked });
 
 // Discord signature verification function
 async function verifyDiscordSignature(
   signature: string,
   timestamp: string,
   body: string,
-  publicKey: string
+  publicKey?: string,
 ): Promise<boolean> {
+  if (!publicKey) {
+    return false;
+  }
   try {
-    
+
     // Convert signature from hex to Uint8Array
     const sig = new Uint8Array(Buffer.from(signature, 'hex'));
     
@@ -49,25 +82,10 @@ async function verifyDiscordSignature(
     
     return isValid;
   } catch (error) {
-    console.error('Discord signature verification error:', error);
+    logger.error('Discord signature verification error', error);
     return false;
   }
 }
-
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
-}
-
-// Discord environment variable validation
-const DISCORD_PUBLIC_KEY = process.env.DISCORD_PUBLIC_KEY?.trim();
-if (!DISCORD_PUBLIC_KEY) {
-  throw new Error('Missing required: DISCORD_PUBLIC_KEY');
-}
-console.log('✅ Discord public key loaded:', DISCORD_PUBLIC_KEY.length, 'characters');
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2025-07-30.basil",
-});
 
 // In-memory user storage for this demo
 interface User {
@@ -107,33 +125,34 @@ declare module 'express-session' {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  
-  // Session middleware
-  if (!process.env.SESSION_SECRET) {
+
+  const sessionSecret = envConfig.SESSION_SECRET || 'dev-secret-change-in-production';
+
+  if (!sessionSecret) {
     throw new Error('SESSION_SECRET environment variable is required for production');
   }
 
-  // Determine if we're on Replit (check for .replit.app domain)
-  const isReplit = process.env.REPL_URL || (process.env.NODE_ENV === 'production');
+  if (sessionSecret === 'dev-secret-change-in-production') {
+    logger.warn('Using fallback session secret. Set SESSION_SECRET in production environments.');
+  }
+
+  const isProduction = envConfig.NODE_ENV === 'production';
+  const useSecureCookies = process.env.USE_SECURE_COOKIES === 'true' ||
+    (isProduction && (envConfig.REPL_URL?.startsWith('https://') ?? false));
   
-  // Use secure cookies in production HTTPS environment
-  // Can be explicitly set via USE_SECURE_COOKIES env var for custom deployments
-  const isProduction = process.env.NODE_ENV === 'production';
-  const useSecureCookies = process.env.USE_SECURE_COOKIES === 'true' || 
-                           (isProduction && process.env.REPL_URL?.startsWith('https://'));
-  
-  console.log('🔒 Session Configuration:', {
+  logger.info('🔒 Session Configuration', {
     isProduction,
     useSecureCookies,
-    replUrl: process.env.REPL_URL,
-    nodeEnv: process.env.NODE_ENV
+    replUrl: envConfig.REPL_URL,
+    nodeEnv: envConfig.NODE_ENV
   });
   
   app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
     name: 'sessionId', // Give the session cookie a specific name
+    store: storage.sessionStore,
     cookie: {
       secure: useSecureCookies, // Use secure cookies for HTTPS in production
       httpOnly: true, // Prevent XSS attacks
@@ -152,13 +171,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!req.session.userId) {
       return res.status(401).json({ 
         message: 'Authentication required',
-        redirectTo: process.env.NODE_ENV === 'production' ? '/api/auth/discord/login' : null
+        redirectTo: envConfig.NODE_ENV === 'production' ? '/api/auth/discord/login' : null
       });
     }
 
     // In production, only allow database users (Discord OAuth)
-    if (process.env.NODE_ENV === 'production' && typeof req.session.userId === 'number') {
-      return res.status(401).json({ 
+    if (envConfig.NODE_ENV === 'production' && typeof req.session.userId === 'number') {
+      return res.status(401).json({
         message: 'Please login with Discord OAuth',
         redirectTo: '/api/auth/discord/login'
       });
@@ -186,8 +205,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   };
   // Register endpoint - Disabled in production (Discord OAuth only)
   app.post("/api/register", async (req, res) => {
-    if (process.env.NODE_ENV === 'production') {
-      return res.status(403).json({ 
+    if (envConfig.NODE_ENV === 'production') {
+      return res.status(403).json({
         message: 'Email/password registration is disabled in production. Please use Discord OAuth.',
         redirectTo: '/api/auth/discord/login'
       });
@@ -233,8 +252,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Login endpoint - Disabled in production (Discord OAuth only)
   app.post("/api/login", async (req, res) => {
-    if (process.env.NODE_ENV === 'production') {
-      return res.status(403).json({ 
+    if (envConfig.NODE_ENV === 'production') {
+      return res.status(403).json({
         message: 'Email/password login is disabled in production. Please use Discord OAuth.',
         redirectTo: '/api/auth/discord/login'
       });
@@ -326,9 +345,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create subscription
   app.post("/api/create-subscription", requireAuth, async (req, res) => {
     try {
+      if (!stripe) {
+        return res.status(503).json({
+          message: 'Stripe is not configured for this environment. Set STRIPE_SECRET_KEY and STRIPE_PRICE_ID to enable billing.'
+        });
+      }
+
       // In production, only work with database users (Discord OAuth)
-      if (process.env.NODE_ENV === 'production' && typeof req.session.userId === 'number') {
-        return res.status(403).json({ 
+      if (envConfig.NODE_ENV === 'production' && typeof req.session.userId === 'number') {
+        return res.status(403).json({
           message: 'Subscription creation requires Discord OAuth authentication',
           redirectTo: '/api/auth/discord/login'
         });
@@ -402,7 +427,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const subscription = await stripe.subscriptions.create({
         customer: customerId,
         items: [{
-          price: process.env.STRIPE_PRICE_ID,
+          price: stripeConfig.priceId,
         }],
         payment_behavior: 'default_incomplete',
         expand: ['latest_invoice.payment_intent'],
@@ -428,11 +453,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Stripe webhook handler (for subscription updates)
   app.post("/api/webhook", async (req, res) => {
+    if (!stripe) {
+      return res.status(503).json({ message: 'Stripe not configured' });
+    }
+
     const sig = req.headers['stripe-signature'];
     let event;
 
     try {
-      event = stripe.webhooks.constructEvent(req.body, sig as string, process.env.STRIPE_WEBHOOK_SECRET || '');
+      event = stripe.webhooks.constructEvent(
+        req.body,
+        sig as string,
+        stripeConfig.webhookSecret || '',
+      );
     } catch (err) {
       console.error('Webhook signature verification failed:', err);
       return res.status(400).send(`Webhook Error: ${err}`);
@@ -648,7 +681,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
         return res.status(400).json({ 
           message: 'Invalid state parameter',
-          debug: process.env.NODE_ENV === 'development' ? {
+          debug: envConfig.NODE_ENV === 'development' ? {
             providedState: state,
             sessionState: req.session?.discordState,
             sessionId: req.sessionID
@@ -792,12 +825,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
         return res.status(500).json({ 
           message: 'Database error during user creation',
-          ...(process.env.NODE_ENV === 'development' && { 
-            error: error instanceof Error ? error.message : 'Unknown database error',
-            discordData: {
-              id: discordUser.id,
-              username: discordUser.username,
-              hasEmail: !!discordUser.email
+        ...(envConfig.NODE_ENV === 'development' && {
+          error: error instanceof Error ? error.message : 'Unknown database error',
+          discordData: {
+            id: discordUser.id,
+            username: discordUser.username,
+            hasEmail: !!discordUser.email
             }
           })
         });
@@ -840,8 +873,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.status(500).json({ 
         message: 'Internal server error during Discord authentication',
-        ...(process.env.NODE_ENV === 'development' && { 
-          error: error instanceof Error ? error.message : 'Unknown error' 
+        ...(envConfig.NODE_ENV === 'development' && {
+          error: error instanceof Error ? error.message : 'Unknown error'
         })
       });
     }
@@ -883,10 +916,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const discordInteractionsHandler = async (req: any, res: any) => {
     try {
       console.log('🟣 Discord interaction request received');
-      
+
       // First verify Discord signature before parsing JSON
       const signature = req.headers['x-signature-ed25519'] as string;
       const timestamp = req.headers['x-signature-timestamp'] as string;
+
+      if (!discordPublicKey) {
+        console.error('❌ Discord public key not configured, cannot verify interaction');
+        return res.status(503).json({ error: 'Discord verification not configured' });
+      }
 
       if (!signature || !timestamp) {
         console.error('❌ Missing Discord signature or timestamp headers');
@@ -899,7 +937,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         signature,
         timestamp,
         rawBodyString,
-        DISCORD_PUBLIC_KEY! // Non-null assertion since we validated it exists at startup
+        discordPublicKey
       );
 
       if (!isValidRequest) {
