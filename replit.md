@@ -1,5 +1,5 @@
 # Overview
-Fq is a neurohacker membership platform leveraging experimental relaxation research and bonus programs to enhance study capabilities. It features the ShadowFang AIO (All-In-One) training system, offering brainwave frequency training (Alpha, Beta, Theta, Gamma). The platform aims to transform classified military psychological warfare techniques into civilian cognitive enhancement tools, challenging users with "Is This A Simulation."
+Fq is a neurohacker membership platform focused on enhancing study capabilities through experimental relaxation research and brainwave frequency training (Alpha, Beta, Theta, Gamma) via the ShadowFang AIO system. The platform aims to adapt classified military psychological warfare techniques into civilian cognitive enhancement tools, challenging users with a "Is This A Simulation" narrative. It includes features for cognitive enhancement, psychological programming, and self-study methodologies.
 
 # User Preferences
 Preferred communication style: Simple, everyday language.
@@ -26,7 +26,8 @@ Research Foundation: ADDED - Integration of three published research papers on v
 Language Support & Translation: ADDED - Full i18n infrastructure with react-i18next supporting English, Japanese, and Spanish (Spain). User speaks English and Spanish (Spain) fluently and can verify these translations. Japanese translations are AI-generated and UNVERIFIED (user cannot read/speak Japanese). Translation approach: Using free AI translation until profit, then upgrading to professional native translation. Language switcher uses radio button design with flags (🇺🇸 EN, 🇯🇵 JA, 🇪🇸 ES) for easy switching. Translation Quality Notice displayed for non-English languages: Currently using AI-enhanced translation for Japan, Spain, and soon Russia. Current status: Manually vetting AI Spain-based Spanish content by hand. Phased upgrade plan: Phase 1 (Profit) = Professional native translation by certified translators for paid content; Phase 2 (Growth) = Cultural adaptation and localization refinement for paid content. Users encouraged to report translation issues in Discord community.
 Tiered Navigation Menu: UPDATED - Simplified hamburger menu for new users with progressive disclosure. Free tier shows only 4 core items (ShadowFang Training, Ops Manual, Neural Matrix, Frequency Generator). Tier 2 paid menu items (KSP Dossier, Grounding Methods, Scientific Method, Education, Methodology, Research Archive) are locked with visual indicators for non-subscribers and fully accessible to paid members.
 Grounding Methods: ADDED - New Tier 2 feature with 4 reality-anchoring techniques: (1) GPS Coordinates & Match - verify physical location with geolocation API, (2) UTC Time Clock - universal coordinated time display, (3) Zulu Time - military/aviation time format with educational explanation (DDHHMMZ MMM YY), (4) Solo Inception - environmental validation by hiding objects and finding them upon return, with manual mental grounding fallback if object is missing.
-Research Archive: ADDED - Tier 2 premium feature providing access to Citizen Cipher intelligence documents on cognitive biases, persuasion tactics, and defensive strategies. Comprehensive document management system with category filtering (research, operational), tag-based organization, full-text search, and detailed document viewer. Documents include metadata (author, summary, tags) and tier-based access control aligned with subscription levels (none, alpha, beta, theta, gamma). Eight foundational documents seeded covering topics like cognitive biases, persuasion tactics, propaganda, authority influence, OpSec, cognitive dissonance, and case studies. Backend API provides RESTful endpoints for document retrieval, search, and metadata aggregation.
+Research Archive: ADDED - Tier 2 premium feature providing access to Citizen Cipher intelligence documents on cognitive biases, persuasion tactics, and defensive strategies. Comprehensive document management system with category filtering (research, operational), tag-based organization, full-text search, and detailed document viewer. Documents include metadata (author, summary, tags) and tier-based access control aligned with subscription levels (none, alpha, beta, theta, gamma). Seventeen total documents including eight foundational papers plus five classified intelligence manuals (PROJECT GRILL FLAME, SUN STREAK, MK-ULTRA, Interview Transcript, RV Operational Guide) at Theta/Gamma tier access. Backend API provides RESTful endpoints for document retrieval, search, and metadata aggregation.
+RV Training Module: ADDED - Complete MailBox Card Remote Viewing Training system based on authentic declassified GRILL FLAME/SUN STREAK military protocols. Tier 2 premium feature implementing 3-tier training progression system: Class C (novice with immediate feedback), Class B (intermediate with feedback withdrawn), Class A (advanced double-blind operational). Six-stage perception framework: (1) Major Gestalt, (2) Sensory Contact, (3) Dimension/Motion, (4) Quantitative Aspects, (5) Qualitative Aspects, (6) Analytical Aspects. Database schema with 4 tables (rvTargets, rvSessions, rvPerceptions, rvProgress) tracks session history, perception accuracy, quick-reaction timing, and class progression. Backend API with RESTful endpoints for session management (/api/rv/progress, /api/rv/session/start, /api/rv/session/:id/perception, /api/rv/session/:id/complete, /api/rv/sessions). Frontend implements real-time perception recording with Enter-key quick submission, stage-based advancement, immediate feedback for Class C training, and comprehensive results display with accuracy metrics. Seeded with 15 training targets across 4 categories (geographic, structure, object, symbol) at 3 difficulty levels (novice, intermediate, advanced). Target selection based on authentic military RV training materials including landmarks (Washington Monument, Stonehenge, Machu Picchu), geographic features (Mount Everest, Santorini Caldera), symbolic imagery (Yin Yang, Celtic Knot, Mandala), and everyday objects. All methodology derived directly from declassified DoD psychoenergetics research documents.
 
 # System Architecture
 
@@ -36,16 +37,21 @@ Research Archive: ADDED - Tier 2 premium feature providing access to Citizen Cip
 - **Database**: PostgreSQL (Neon serverless) with Drizzle ORM and Drizzle Kit for migrations.
 
 ## Key Architectural Decisions & Features
-- **Tiered Beta Access Platform**: Dual OAuth (Discord and Auth0) for authentication, with Auth0 users automatically granted beta access.
+- **Tiered Beta Access Platform**: Dual OAuth (Discord and Auth0) for authentication with automatic beta access for Auth0 users.
 - **Demo Mode**: Full-access demo available when no authentication providers are configured.
-- **Brainwave Frequency Training**: Core functionality, supporting Alpha, Beta, Theta, and Gamma frequencies.
-- **Terminal Emulator**: Interactive React-based terminal on the homepage for various platform functions.
+- **Brainwave Frequency Training**: Core functionality supporting Alpha, Beta, Theta, and Gamma frequencies.
+- **Interactive Terminal**: React-based terminal integrated on the homepage.
 - **Sacred Geometry Auto-Wheel**: Animated, red-based visualization synchronized with brainwave frequencies.
 - **Psychological Programming System**: "Knot-So-lution Programming" with Ops Manuals, Trigger-Anchor-Knot system, and disclaimers.
 - **Neural Matrix Infiltration Narrative**: Thematic backstory based on declassified documents.
 - **KSP Dossier System**: A 10-section classified dossier for "Knot-So-lution Programming."
 - **Global Rebrand**: "Blackbriar" references updated to "ShadowFang."
 - **Payment Integration**: Stripe for subscription management.
+- **Internationalization (i18n)**: Implemented with `react-i18next` for English, Japanese, and Spanish, with a focus on user-verified Spanish translations and a plan for professional translation.
+- **Tiered Navigation**: Simplified hamburger menu with progressive disclosure for free vs. paid tier features.
+- **Grounding Methods**: Tier 2 feature with reality-anchoring techniques including GPS, UTC/Zulu time, and environmental validation.
+- **Research Archive**: Tier 2 premium feature providing access to citizen intelligence documents on cognitive biases and persuasion, with a comprehensive document management system.
+- **Remote Viewing (RV) Training Module**: Tier 2 premium feature implementing a 3-tier training progression system (Class C, B, A) based on declassified military protocols (GRILL FLAME/SUN STREAK), with a 6-stage perception framework and database tracking.
 
 # External Dependencies
 
@@ -65,31 +71,6 @@ Research Archive: ADDED - Tier 2 premium feature providing access to Citizen Cip
 - **TypeScript**: For full-stack type safety.
 - **react-i18next**: For internationalization (English, Japanese, Spanish).
 
-# Recent Changes
-
-## Dual OAuth Authentication System (November 5, 2025)
-**Complete Dual Provider Implementation**: Platform now supports BOTH Discord and Auth0 OAuth authentication simultaneously, allowing users to choose their preferred login method. This enables gradual migration while maintaining backward compatibility with existing Discord users.
-
-**Backend Infrastructure:**
-- **Discord OAuth Routes**: `/api/auth/discord/login`, `/api/auth/discord/callback`, `/api/auth/discord/recheck` (existing functionality preserved)
-- **Auth0 OAuth Routes**: `/api/auth/auth0/login`, `/api/auth0/callback` (new implementation with PKCE state validation)
-- **Database Schema**: Supports both provider identities - Discord fields (`discordId`, `discordUsername`, `discordAvatar`, `discordVerified`) AND Auth0 fields (`auth0Id`, `auth0Username`, `auth0Avatar`)
-- **Storage Layer**: Provider-agnostic methods support both `upsertUserByDiscord` and `upsertUserByAuth0` with unified `getUser` interface
-- **User Endpoint**: `/api/user` returns all OAuth fields for both providers
-- **Payment Bypass**: Updated `/api/payment-bypass-config` to show enabled status for both Discord and Auth0 providers
-
-**Frontend Integration:**
-- **Dual Login Buttons**: Auth page displays both `Auth0LoginButton` (orange #EB5424) and `DiscordLoginButton` (purple #5865F2) side-by-side
-- **useAuth Hook**: Supports both `loginWithDiscord()` and `loginWithAuth0()` functions for provider selection
-- **Authorization Logic**: Recognizes Discord users (via `discordVerified`) AND Auth0 users (via `auth0Id`) with automatic beta tier for both
-
-**Access Control:**
-- **Discord Users**: Existing guild verification flow unchanged, beta access based on guild membership
-- **Auth0 Users**: Automatic beta tier assignment on first login, immediate platform access
-- **Demo Mode**: Full access when no OAuth providers configured (no API keys required)
-- **Production Mode**: Requires either Discord OR Auth0 authentication, email/password disabled
-
-**Environment Variables:**
-- Discord: `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`, `DISCORD_REDIRECT_URI`, `DISCORD_PUBLIC_KEY`, `DISCORD_GUILD_ID`
-- Auth0: `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_CALLBACK_URL`
-- If neither provider configured, platform runs in demo mode
+## Authentication
+- **Discord OAuth**: For user authentication and beta access.
+- **Auth0 OAuth**: For user authentication and automatic beta access.
