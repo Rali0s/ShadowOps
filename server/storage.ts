@@ -23,12 +23,15 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   getUserByDiscordId(discordId: string): Promise<User | undefined>;
+  getUserByAuth0Id(auth0Id: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUserStripeInfo(id: string, stripeCustomerId: string, stripeSubscriptionId?: string): Promise<User>;
   updateUserSubscriptionTier(id: string, tier: string): Promise<User>;
   updateUserPassword(id: string, password: string): Promise<User>;
   updateUserDiscordInfo(id: string, discordId: string, discordUsername: string, discordAvatar: string, discordVerified: boolean): Promise<User>;
   upsertUserByDiscord(discordId: string, discordUsername: string, discordAvatar: string, discordVerified: boolean, email?: string): Promise<User>;
+  updateUserAuth0Info(id: string, auth0Id: string, auth0Username: string, auth0Avatar: string): Promise<User>;
+  upsertUserByAuth0(auth0Id: string, auth0Username: string, auth0Avatar: string, email?: string): Promise<User>;
   
   // Password reset functionality
   createPasswordResetToken(token: InsertPasswordResetToken): Promise<PasswordResetToken>;
@@ -120,6 +123,11 @@ export class DatabaseStorage implements IStorage {
     return user || undefined;
   }
 
+  async getUserByAuth0Id(auth0Id: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.auth0Id, auth0Id));
+    return user || undefined;
+  }
+
   async updateUserDiscordInfo(id: string, discordId: string, discordUsername: string, discordAvatar: string, discordVerified: boolean): Promise<User> {
     const [user] = await db
       .update(users)
@@ -128,6 +136,19 @@ export class DatabaseStorage implements IStorage {
         discordUsername,
         discordAvatar,
         discordVerified
+      })
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+
+  async updateUserAuth0Info(id: string, auth0Id: string, auth0Username: string, auth0Avatar: string): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ 
+        auth0Id,
+        auth0Username,
+        auth0Avatar
       })
       .where(eq(users.id, id))
       .returning();
@@ -196,6 +217,81 @@ export class DatabaseStorage implements IStorage {
                   discordAvatar,
                   discordVerified,
                   subscriptionTier: discordVerified ? 'beta' : 'none'
+                })
+                .returning();
+              
+              return user;
+            }
+          } else {
+            // Re-throw non-constraint errors
+            throw error;
+          }
+        }
+      }
+      
+      throw new Error('Failed to create user after multiple attempts');
+    }
+  }
+
+  async upsertUserByAuth0(auth0Id: string, auth0Username: string, auth0Avatar: string, email?: string): Promise<User> {
+    // First try to find existing user by Auth0 ID
+    const existingUser = await this.getUserByAuth0Id(auth0Id);
+    
+    if (existingUser) {
+      // Update existing user
+      return await this.updateUserAuth0Info(
+        existingUser.id, 
+        auth0Id, 
+        auth0Username, 
+        auth0Avatar
+      );
+    } else {
+      // Create new user - handle potential username/email conflicts
+      const userEmail = email || `${auth0Username}@auth0.local`;
+      let username = auth0Username || `auth0_${auth0Id}`;
+      
+      // Try to create user, handle unique constraint violations
+      let attempts = 0;
+      const maxAttempts = 5;
+      
+      while (attempts < maxAttempts) {
+        try {
+          const [user] = await db
+            .insert(users)
+            .values({
+              username: attempts === 0 ? username : `${username}_${attempts}`,
+              email: attempts === 0 ? userEmail : `${auth0Id}_${attempts}@auth0.local`,
+              password: 'auth0_oauth', // Placeholder password for Auth0 users
+              auth0Id,
+              auth0Username,
+              auth0Avatar,
+              subscriptionTier: 'beta' // Auto-grant beta tier for Auth0 users
+            })
+            .returning();
+          
+          return user;
+        } catch (error: any) {
+          attempts++;
+          
+          // Check if it's a unique constraint violation
+          if (error?.code === '23505' || error?.constraint || error?.message?.includes('unique')) {
+            console.log(`🟡 Username/email conflict on attempt ${attempts}, trying with suffix...`);
+            
+            if (attempts >= maxAttempts) {
+              // Last resort: use Auth0 ID as unique identifier
+              const fallbackUsername = `auth0_user_${auth0Id.replace(/[^a-zA-Z0-9]/g, '_')}`;
+              const fallbackEmail = `auth0_${auth0Id.replace(/[^a-zA-Z0-9]/g, '_')}@local`;
+              
+              const [user] = await db
+                .insert(users)
+                .values({
+                  username: fallbackUsername,
+                  email: fallbackEmail,
+                  password: 'auth0_oauth',
+                  auth0Id,
+                  auth0Username,
+                  auth0Avatar,
+                  subscriptionTier: 'beta' // Auto-grant beta tier for Auth0 users
                 })
                 .returning();
               

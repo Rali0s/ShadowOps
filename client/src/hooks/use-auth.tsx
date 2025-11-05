@@ -18,6 +18,9 @@ interface User {
   discordUsername?: string | null;
   discordAvatar?: string | null;
   discordVerified?: boolean;
+  auth0Id?: string | null;
+  auth0Username?: string | null;
+  auth0Avatar?: string | null;
 }
 
 interface BetaStatus {
@@ -40,6 +43,7 @@ type AuthContextType = {
   registerMutation: UseMutationResult<User, Error, RegisterData>;
   recheckDiscordMutation: UseMutationResult<any, Error, void>;
   loginWithDiscord: () => void;
+  loginWithAuth0: () => void;
   checkPaymentStatus: () => void;
 };
 
@@ -107,6 +111,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     (user?.subscriptionStatus === 'active') ||
     // Discord verified users get access based on bypass rules
     (user?.discordVerified && (isDiscordFree || !betaStatus?.expired)) ||
+    // Auth0 authenticated users get access (assigned beta tier on creation)
+    (user?.auth0Id && isBypassTier((user as any).subscriptionTier)) ||
     // Special tier users bypass payment requirements
     (user && isBypassTier((user as any).subscriptionTier))
   );
@@ -157,6 +163,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Discord login function
   const loginWithDiscord = () => {
     window.location.href = '/api/auth/discord/login';
+  };
+
+  // Auth0 login function
+  const loginWithAuth0 = () => {
+    window.location.href = '/api/auth/auth0/login';
   };
 
   const loginMutation = useMutation({
@@ -281,6 +292,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         registerMutation,
         recheckDiscordMutation,
         loginWithDiscord,
+        loginWithAuth0,
         checkPaymentStatus,
       }}
     >

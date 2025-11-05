@@ -17,6 +17,12 @@ const envSchema = z.object({
   DISCORD_GUILD_ID: z.string().optional(),
   DISCORD_PUBLIC_KEY: z.string().optional(),
   
+  // Auth0 OAuth (all optional for demo mode)
+  AUTH0_DOMAIN: z.string().optional(),
+  AUTH0_CLIENT_ID: z.string().optional(),
+  AUTH0_CLIENT_SECRET: z.string().optional(),
+  AUTH0_CALLBACK_URL: z.string().url().optional(),
+  
   // Beta Configuration
   BETA_END_AT: z.string().datetime().default('2025-12-06T00:00:00.000Z'),
   
@@ -65,6 +71,10 @@ function validateEnv() {
       DISCORD_REDIRECT_URI: process.env.DISCORD_REDIRECT_URI,
       DISCORD_GUILD_ID: process.env.DISCORD_GUILD_ID,
       DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY || '',
+      AUTH0_DOMAIN: process.env.AUTH0_DOMAIN || '',
+      AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID || '',
+      AUTH0_CLIENT_SECRET: process.env.AUTH0_CLIENT_SECRET || '',
+      AUTH0_CALLBACK_URL: process.env.AUTH0_CALLBACK_URL,
       BETA_END_AT: process.env.BETA_END_AT || '2025-12-06T00:00:00.000Z',
       STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY || '',
       STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID || '',
@@ -100,6 +110,28 @@ export const getDiscordConfig = () => {
     guildId: config.DISCORD_GUILD_ID,
     publicKey: config.DISCORD_PUBLIC_KEY,
     betaEndAt: config.BETA_END_AT,
+  };
+};
+
+// Auth0 configuration helper
+export const getAuth0Config = () => {
+  const callbackUrl = config.AUTH0_CALLBACK_URL || 
+    `${config.REPL_URL || `http://localhost:${config.PORT}`}/api/auth/auth0/callback`;
+  
+  console.log('🟣 Auth0 Config:', {
+    hasDomain: !!config.AUTH0_DOMAIN,
+    hasClientId: !!config.AUTH0_CLIENT_ID,
+    hasClientSecret: !!config.AUTH0_CLIENT_SECRET,
+    callbackUrl: callbackUrl,
+    replUrl: config.REPL_URL,
+    port: config.PORT
+  });
+  
+  return {
+    domain: config.AUTH0_DOMAIN,
+    clientId: config.AUTH0_CLIENT_ID,
+    clientSecret: config.AUTH0_CLIENT_SECRET,
+    callbackUrl: callbackUrl,
   };
 };
 
