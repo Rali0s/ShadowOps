@@ -569,7 +569,7 @@ export class DatabaseStorage implements IStorage {
   async getRvTargetById(targetId: string): Promise<RvTarget | undefined> {
     const [target] = await db.select().from(rvTargets).where(
       and(
-        eq(rvTargets.targetId, targetId),
+        eq(rvTargets.id, targetId),
         eq(rvTargets.isActive, true)
       )
     );
