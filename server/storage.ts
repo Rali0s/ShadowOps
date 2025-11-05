@@ -2,12 +2,24 @@ import {
   users, 
   dbDocuments, 
   passwordResetTokens,
+  rvTargets,
+  rvSessions,
+  rvPerceptions,
+  rvProgress,
   type User, 
   type InsertUser, 
   type DbDocument, 
   type InsertDbDocument,
   type PasswordResetToken,
-  type InsertPasswordResetToken
+  type InsertPasswordResetToken,
+  type RvTarget,
+  type InsertRvTarget,
+  type RvSession,
+  type InsertRvSession,
+  type RvPerception,
+  type InsertRvPerception,
+  type RvProgress,
+  type InsertRvProgress
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, like, or, lt } from "drizzle-orm";
@@ -62,6 +74,24 @@ export interface IStorage {
     activeUsers: number;
     revenue: number;
   }>;
+  
+  // RV Training Module
+  getRvTargets(difficulty?: string): Promise<RvTarget[]>;
+  getRvTargetById(targetId: string): Promise<RvTarget | undefined>;
+  getRandomRvTarget(difficulty?: string): Promise<RvTarget | undefined>;
+  createRvTarget(target: InsertRvTarget): Promise<RvTarget>;
+  
+  getRvProgress(userId: string): Promise<RvProgress | undefined>;
+  createRvProgress(progress: InsertRvProgress): Promise<RvProgress>;
+  updateRvProgress(userId: string, updates: Partial<InsertRvProgress>): Promise<RvProgress>;
+  
+  createRvSession(session: InsertRvSession): Promise<RvSession>;
+  getRvSession(sessionId: string): Promise<RvSession | undefined>;
+  updateRvSession(sessionId: string, updates: Partial<InsertRvSession>): Promise<RvSession>;
+  getUserRvSessions(userId: string): Promise<RvSession[]>;
+  
+  createRvPerception(perception: InsertRvPerception): Promise<RvPerception>;
+  getSessionPerceptions(sessionId: string): Promise<RvPerception[]>;
   
   sessionStore: any;
 }
@@ -521,6 +551,109 @@ export class DatabaseStorage implements IStorage {
     return Object.entries(tagCounts)
       .map(([tag, count]) => ({ tag, count }))
       .sort((a, b) => b.count - a.count);
+  }
+
+  // RV Training Module Implementation
+  async getRvTargets(difficulty?: string): Promise<RvTarget[]> {
+    if (difficulty) {
+      return await db.select().from(rvTargets).where(
+        and(
+          eq(rvTargets.difficulty, difficulty),
+          eq(rvTargets.isActive, true)
+        )
+      );
+    }
+    return await db.select().from(rvTargets).where(eq(rvTargets.isActive, true));
+  }
+
+  async getRvTargetById(targetId: string): Promise<RvTarget | undefined> {
+    const [target] = await db.select().from(rvTargets).where(
+      and(
+        eq(rvTargets.targetId, targetId),
+        eq(rvTargets.isActive, true)
+      )
+    );
+    return target || undefined;
+  }
+
+  async getRandomRvTarget(difficulty?: string): Promise<RvTarget | undefined> {
+    const { sql: rawSql } = await import('drizzle-orm');
+    let query = db.select().from(rvTargets).where(eq(rvTargets.isActive, true));
+    
+    if (difficulty) {
+      const targets = await db.select().from(rvTargets).where(
+        and(
+          eq(rvTargets.difficulty, difficulty),
+          eq(rvTargets.isActive, true)
+        )
+      );
+      if (targets.length === 0) return undefined;
+      return targets[Math.floor(Math.random() * targets.length)];
+    }
+    
+    const targets = await query;
+    if (targets.length === 0) return undefined;
+    return targets[Math.floor(Math.random() * targets.length)];
+  }
+
+  async createRvTarget(target: InsertRvTarget): Promise<RvTarget> {
+    const [newTarget] = await db.insert(rvTargets).values(target).returning();
+    return newTarget;
+  }
+
+  async getRvProgress(userId: string): Promise<RvProgress | undefined> {
+    const [progress] = await db.select().from(rvProgress).where(eq(rvProgress.userId, userId));
+    return progress || undefined;
+  }
+
+  async createRvProgress(progress: InsertRvProgress): Promise<RvProgress> {
+    const [newProgress] = await db.insert(rvProgress).values(progress).returning();
+    return newProgress;
+  }
+
+  async updateRvProgress(userId: string, updates: Partial<InsertRvProgress>): Promise<RvProgress> {
+    const [updated] = await db
+      .update(rvProgress)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(rvProgress.userId, userId))
+      .returning();
+    return updated;
+  }
+
+  async createRvSession(session: InsertRvSession): Promise<RvSession> {
+    const [newSession] = await db.insert(rvSessions).values(session).returning();
+    return newSession;
+  }
+
+  async getRvSession(sessionId: string): Promise<RvSession | undefined> {
+    const [session] = await db.select().from(rvSessions).where(eq(rvSessions.sessionId, sessionId));
+    return session || undefined;
+  }
+
+  async updateRvSession(sessionId: string, updates: Partial<InsertRvSession>): Promise<RvSession> {
+    const [updated] = await db
+      .update(rvSessions)
+      .set(updates)
+      .where(eq(rvSessions.sessionId, sessionId))
+      .returning();
+    return updated;
+  }
+
+  async getUserRvSessions(userId: string): Promise<RvSession[]> {
+    return await db.select().from(rvSessions)
+      .where(eq(rvSessions.userId, userId))
+      .orderBy(desc(rvSessions.createdAt));
+  }
+
+  async createRvPerception(perception: InsertRvPerception): Promise<RvPerception> {
+    const [newPerception] = await db.insert(rvPerceptions).values(perception).returning();
+    return newPerception;
+  }
+
+  async getSessionPerceptions(sessionId: string): Promise<RvPerception[]> {
+    return await db.select().from(rvPerceptions)
+      .where(eq(rvPerceptions.sessionId, sessionId))
+      .orderBy(desc(rvPerceptions.timestamp));
   }
 }
 

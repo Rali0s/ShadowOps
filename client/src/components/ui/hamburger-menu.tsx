@@ -42,6 +42,7 @@ export function HamburgerMenu({ userCount = "2,847", showAuthButton = true }: Ha
   const paidMenuItems = [
     { href: '/ksp-dossier', label: 'KSP Dossier', icon: FileText, description: 'Classified docs' },
     { href: '/grounding-methods', label: 'Grounding Methods', icon: Compass, description: 'Reality anchoring' },
+    { href: '/rv-training', label: 'RV Training', icon: Target, description: 'Remote viewing protocols' },
     { href: '/scientific-method', label: 'Scientific Method', icon: Settings, description: 'Research protocols' },
     { href: '/education', label: 'Education', icon: BookOpen, description: 'Learning materials' },
     { href: '/methodology', label: 'Methodology', icon: FileText, description: 'Self-report system' },
