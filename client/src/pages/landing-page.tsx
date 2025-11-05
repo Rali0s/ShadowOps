@@ -256,22 +256,65 @@ export default function LandingPage() {
             </RadioGroup>
           </div>
           
-          {/* Main Headline */}
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold mb-4 sm:mb-6 leading-tight px-2">
-            <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent block">
-              <ShowAbove breakpoint="sm">{t('hero.headline.line1_desktop')}</ShowAbove>
-              <ShowBelow breakpoint="sm">{t('hero.headline.line1_mobile')}</ShowBelow>
-            </span>
-            <span className="block text-red-400 mt-1 sm:mt-2">{t('hero.headline.line2')}</span>
-          </h1>
-          
-          {/* Subheadline with Main Goals */}
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 mb-6 sm:mb-8 max-w-4xl mx-auto px-2 leading-relaxed">
-            <ShowAbove breakpoint="md">{t('hero.subheadline.intro_desktop')}</ShowAbove><strong className="text-cyan-400">{t('hero.subheadline.platform')}</strong>
-            <ShowAbove breakpoint="sm">{t('hero.subheadline.description_desktop')}</ShowAbove>
-            <ShowBelow breakpoint="sm">{t('hero.subheadline.description_mobile')}</ShowBelow>
-            <strong className="text-green-400">{t('hero.subheadline.action')}</strong>.
-          </p>
+          {/* Classified Document Header */}
+          <div className="max-w-4xl mx-auto mb-8 border-2 border-red-500/50 bg-red-950/20 backdrop-blur-sm p-6 sm:p-8 rounded-lg font-mono text-left">
+            <div className="text-center mb-6 border-b border-red-500/30 pb-4">
+              <div className="text-red-500 font-bold text-sm sm:text-base mb-2 tracking-widest">
+                ⚠️ WARNING NOTICE: RESTRICTED ACCESS ⚠️
+              </div>
+              <div className="text-yellow-400 text-xs sm:text-sm uppercase tracking-wide">
+                THIS DOCUMENT CONTAINS SENSITIVE INFORMATION (SI)
+              </div>
+            </div>
+
+            <div className="text-red-400 font-bold text-lg sm:text-xl text-center mb-6 tracking-widest">
+              TOP SECRET // NOFORN
+            </div>
+
+            <div className="space-y-4 text-gray-300 text-xs sm:text-sm leading-relaxed">
+              <div>
+                <span className="text-red-400 font-bold">PROJECT:</span> SHADOWFANG (SF-TR)<br/>
+                <span className="text-red-400 font-bold">SUBJECT:</span> Cognitive Enhancement Protocol (CEP)<br/>
+                <span className="text-red-400 font-bold">DISTRIBUTION:</span> Authorized Personnel Only
+              </div>
+
+              <div>
+                <div className="text-white font-bold mb-2">1. (S) DIRECTIVE</div>
+                <p className="ml-4 text-gray-400">
+                  (TS//SI) This document outlines the SHADOWFANG TRAINING (SF-TR) protocol. SF-TR is an operational neuro-enhancement platform. Access is restricted to cleared personnel vetted for the COGNITIVE EVOLUTION (CE) program.
+                </p>
+              </div>
+
+              <div>
+                <div className="text-white font-bold mb-2">2. (TS) CAPABILITIES OVERVIEW</div>
+                <p className="ml-4 text-gray-400 mb-2">
+                  (TS//SI/NF) The SF-TR protocol is derived from validated research findings (File: T-21-MEC).
+                </p>
+                <div className="ml-4 text-gray-400 space-y-1">
+                  <div><span className="text-cyan-400">Methodology:</span> Theta Entrainment (TE)</div>
+                  <div><span className="text-green-400">Validated Result:</span> Field tests demonstrate a <strong className="text-yellow-400">21% mean improvement</strong> in memory encoding and information retention.</div>
+                  <div><span className="text-purple-400">Classification:</span> This platform is the primary, research-backed system for cognitive enhancement available to program operatives.</div>
+                </div>
+              </div>
+
+              <div>
+                <div className="text-white font-bold mb-2">3. (C) MISSION OBJECTIVES</div>
+                <p className="ml-4 text-gray-400 mb-2">
+                  (TS//SI/NF) The objective of the SHADOWFANG protocol is to enhance operator effectiveness. Authorized personnel will utilize SF-TR to achieve measurable improvements in:
+                </p>
+                <ul className="ml-8 text-gray-400 space-y-1 list-disc">
+                  <li><strong className="text-cyan-400">Cognitive Focus</strong> (Mission-Specific)</li>
+                  <li><strong className="text-green-400">Information Analysis & Retention</strong> (Study / Briefing Prep)</li>
+                  <li><strong className="text-purple-400">Adaptive Cognitive Evolution</strong> (Long-Term Performance)</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="text-red-400 font-bold text-center text-sm sm:text-base mt-6 pt-4 border-t border-red-500/30 tracking-widest">
+              TOP SECRET // NOFORN<br/>
+              <span className="text-xs text-gray-400">END OF DOCUMENT</span>
+            </div>
+          </div>
 
           {/* Countdown Timer */}
           <div className="max-w-2xl mx-auto mb-12">
