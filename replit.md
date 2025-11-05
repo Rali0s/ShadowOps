@@ -63,3 +63,32 @@ Grounding Methods: ADDED - New Tier 2 feature with 4 reality-anchoring technique
 - **Vite**: Fast development server and build tool.
 - **TypeScript**: For full-stack type safety.
 - **react-i18next**: For internationalization (English, Japanese, Spanish).
+
+# Recent Changes
+
+## Dual OAuth Authentication System (November 5, 2025)
+**Complete Dual Provider Implementation**: Platform now supports BOTH Discord and Auth0 OAuth authentication simultaneously, allowing users to choose their preferred login method. This enables gradual migration while maintaining backward compatibility with existing Discord users.
+
+**Backend Infrastructure:**
+- **Discord OAuth Routes**: `/api/auth/discord/login`, `/api/auth/discord/callback`, `/api/auth/discord/recheck` (existing functionality preserved)
+- **Auth0 OAuth Routes**: `/api/auth/auth0/login`, `/api/auth0/callback` (new implementation with PKCE state validation)
+- **Database Schema**: Supports both provider identities - Discord fields (`discordId`, `discordUsername`, `discordAvatar`, `discordVerified`) AND Auth0 fields (`auth0Id`, `auth0Username`, `auth0Avatar`)
+- **Storage Layer**: Provider-agnostic methods support both `upsertUserByDiscord` and `upsertUserByAuth0` with unified `getUser` interface
+- **User Endpoint**: `/api/user` returns all OAuth fields for both providers
+- **Payment Bypass**: Updated `/api/payment-bypass-config` to show enabled status for both Discord and Auth0 providers
+
+**Frontend Integration:**
+- **Dual Login Buttons**: Auth page displays both `Auth0LoginButton` (orange #EB5424) and `DiscordLoginButton` (purple #5865F2) side-by-side
+- **useAuth Hook**: Supports both `loginWithDiscord()` and `loginWithAuth0()` functions for provider selection
+- **Authorization Logic**: Recognizes Discord users (via `discordVerified`) AND Auth0 users (via `auth0Id`) with automatic beta tier for both
+
+**Access Control:**
+- **Discord Users**: Existing guild verification flow unchanged, beta access based on guild membership
+- **Auth0 Users**: Automatic beta tier assignment on first login, immediate platform access
+- **Demo Mode**: Full access when no OAuth providers configured (no API keys required)
+- **Production Mode**: Requires either Discord OR Auth0 authentication, email/password disabled
+
+**Environment Variables:**
+- Discord: `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`, `DISCORD_REDIRECT_URI`, `DISCORD_PUBLIC_KEY`, `DISCORD_GUILD_ID`
+- Auth0: `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_CALLBACK_URL`
+- If neither provider configured, platform runs in demo mode
