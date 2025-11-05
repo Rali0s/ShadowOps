@@ -1,5 +1,5 @@
 # Overview
-Fq is a neurohacker membership platform focused on helping people study through experimental relaxation research and bonus programs. It features the ShadowFang AIO (All-In-One) training system, launching with a tiered beta access approach. The platform emphasizes brainwave frequency training (Alpha, Beta, Theta, Gamma) and includes a countdown-driven sales page, comprehensive training manual, and streamlined user experience. The project aims to evolve from classified military psychological warfare techniques to a civilian cognitive enhancement platform, challenging users to question reality with the tagline "Is This A Simulation."
+Fq is a neurohacker membership platform leveraging experimental relaxation research and bonus programs to enhance study capabilities. It features the ShadowFang AIO (All-In-One) training system, offering brainwave frequency training (Alpha, Beta, Theta, Gamma). The platform aims to transform classified military psychological warfare techniques into civilian cognitive enhancement tools, challenging users with "Is This A Simulation."
 
 # User Preferences
 Preferred communication style: Simple, everyday language.
@@ -35,58 +35,31 @@ Grounding Methods: ADDED - New Tier 2 feature with 4 reality-anchoring technique
 - **Database**: PostgreSQL (Neon serverless) with Drizzle ORM and Drizzle Kit for migrations.
 
 ## Key Architectural Decisions & Features
-- **Tiered Beta Access Platform**: Discord OAuth authentication required for site access. Users must join Discord community, get beta access, then upgrade to $5.89/mo subscription for continued access.
-- **Brainwave Frequency Training**: Core functionality across Alpha, Beta, Theta, and Gamma frequencies.
-- **Terminal Emulator**: React-based interactive terminal on homepage with commands for brainwave training, sacred geometry, psychological programming, and Neural Matrix narrative access.
-- **Sacred Geometry Auto-Wheel**: Red-based, animated visualization with 13 alternating circles, complex triangles, and cross-sectional elements, synchronizing with brainwave frequency.
-- **Psychological Programming System**: Integrates "Knot-So-lution Programming" with Ops Manuals (Schema A, B, C), Trigger-Anchor-Knot system, Tiedown Protocols, and Visual Recall Operations, including disclaimers.
-- **Neural Matrix Infiltration Narrative**: Thematic backstory of infiltrating and acquiring classified psychological programming manuals via declassified document archives.
-- **KSP Dossier System**: A 10-section classified dossier detailing "Knot-So-lution Programming" technical specifications, risk assessments, and publishing pathways with disclaimers.
-- **Global Rebrand**: All "Blackbriar" references updated to "ShadowFang."
-- **Payment Integration**: Stripe architected for subscription management.
+- **Tiered Beta Access Platform**: Dual OAuth (Discord and Auth0) for authentication, with Auth0 users automatically granted beta access.
+- **Demo Mode**: Full-access demo available when no authentication providers are configured.
+- **Brainwave Frequency Training**: Core functionality, supporting Alpha, Beta, Theta, and Gamma frequencies.
+- **Terminal Emulator**: Interactive React-based terminal on the homepage for various platform functions.
+- **Sacred Geometry Auto-Wheel**: Animated, red-based visualization synchronized with brainwave frequencies.
+- **Psychological Programming System**: "Knot-So-lution Programming" with Ops Manuals, Trigger-Anchor-Knot system, and disclaimers.
+- **Neural Matrix Infiltration Narrative**: Thematic backstory based on declassified documents.
+- **KSP Dossier System**: A 10-section classified dossier for "Knot-So-lution Programming."
+- **Global Rebrand**: "Blackbriar" references updated to "ShadowFang."
+- **Payment Integration**: Stripe for subscription management.
 
 # External Dependencies
 
 ## Payment Processing
-- **Stripe**: Client-side (`@stripe/stripe-js`, `@stripe/react-stripe-js`) and server-side (`stripe`) SDKs.
+- **Stripe**: Client and server-side SDKs for subscription management.
 
 ## Database Services
 - **Neon Database**: PostgreSQL-compatible serverless database.
 
 ## UI Frameworks & Styling
-- **Radix UI**: Accessible, unstyled UI primitives.
+- **Radix UI**: Accessible UI primitives.
 - **shadcn/ui**: Pre-built component library.
 - **Tailwind CSS**: Utility-first CSS framework.
 
 ## Development Tools
 - **Vite**: Fast development server and build tool.
 - **TypeScript**: For full-stack type safety.
-- **react-i18next**: For internationalization (English, Japanese [unverified], Spanish [Spain]).
-
-# Recent Changes
-
-## Translation Quality Notice Refinement (October 15, 2025)
-**Enhanced Translation Disclaimer**: Refined translation quality notice across all languages (EN, ES, JA) with detailed current status and phased upgrade plan. Notice now displays:
-- Current approach: AI-enhanced translation for Japan, Spain, and soon Russia
-- Current status: Manually vetting AI Spain-based Spanish content by hand (displayed in yellow highlight)
-- "As we Grow:" section with phased upgrade plan
-- Phase 1 (Profit): Professional native translation by certified translators for paid content
-- Phase 2 (Growth): Cultural adaptation and localization refinement for paid content
-- Updated feedback prompt: "Did you encounter translation issues? Please report them in the Discord community!"
-- Spanish translation simplified to 5th grade reading level for accessibility
-- Japanese translation includes all new fields (AI-generated, unverified by user)
-
-## Menu Simplification & Grounding Methods (October 2025)
-**Tiered Menu Navigation**: Simplified hamburger menu to reduce cognitive overload for new users. Free tier displays only 4 essential pages (ShadowFang Training, Ops Manual, Neural Matrix, Frequency Generator). Tier 2 items (KSP Dossier, Grounding Methods, Scientific Method, Education, Methodology) show as locked with Crown icon and "Researcher Tier" badge for non-subscribers, fully unlocked for paid members ($5.89/mo).
-
-**Grounding Methods Page**: New Tier 2 exclusive feature providing 4 reality-anchoring techniques:
-1. **GPS Coordinates & Match**: Browser geolocation API integration with Haversine formula distance calculation (100m tolerance). Users input expected coordinates, system fetches actual GPS, validates match for reality confirmation.
-2. **UTC Time Clock**: Real-time Universal Coordinated Time display updating every second for objective temporal grounding.
-3. **Zulu Time**: Military/aviation time format (DDHHMMZ MMM YY) with educational alert explaining format structure. Live updates synchronized with UTC.
-4. **Solo Inception**: Environmental validation protocol - users describe and hide object before leaving location, attempt to find upon return. Found object = reality anchor confirmed. Missing object = triggers manual mental grounding protocol (breath focus, 5 physical sensations, verbal identity/location verification).
-
-**UX Improvements**: 
-- Menu items use consistent 10px vertical padding (5px top, 5px bottom) across all resolutions
-- Non-subscribers see disabled Tier 2 items with lock icons and muted styling
-- "Unlock Researcher Tier" CTA button shown only to non-subscribers
-- Subscribers see all menu items active with hover states and proper navigation
+- **react-i18next**: For internationalization (English, Japanese, Spanish).
