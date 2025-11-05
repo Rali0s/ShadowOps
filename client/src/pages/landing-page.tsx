@@ -86,117 +86,35 @@ export default function LandingPage() {
     }
   };
 
-  // Helper functions to determine CTA state
+  // Helper functions to determine CTA state - DEMO MODE SIMPLIFIED
   const getPrimaryCTA = () => {
-    if (isLoading) {
-      return {
-        text: t('cta.primary.loading.text'),
-        subText: t('cta.primary.loading.subtext'),
-        icon: Settings,
-        action: () => {},
-        href: null,
-        variant: "default" as const,
-        disabled: true
-      };
-    }
-
-    // Subscribed users - highest priority
-    if (isSubscribed) {
-      return {
-        text: t('cta.primary.access_dashboard.text'),
-        subText: t('cta.primary.access_dashboard.subtext'),
-        icon: Play,
-        action: undefined,
-        href: "/home",
-        variant: "default" as const,
-        disabled: false
-      };
-    }
-
-    // Discord verified but beta expired - upgrade prompt
-    if (user?.discordVerified && betaStatus?.expired) {
-      return {
-        text: t('cta.primary.upgrade_elite.text'),
-        subText: t('cta.primary.upgrade_elite.subtext'),
-        icon: Crown,
-        action: undefined,
-        href: "/subscribe",
-        variant: "default" as const,
-        disabled: false
-      };
-    }
-
-    // Discord verified with active beta - enter platform
-    if (user?.discordVerified && !betaStatus?.expired) {
-      return {
-        text: t('cta.primary.access_training.text'),
-        subText: t('cta.primary.access_training.subtext'),
-        icon: Play,
-        action: undefined,
-        href: "/home",
-        variant: "default" as const,
-        disabled: false
-      };
-    }
-
-    // Not authenticated or no Discord - join community first
+    // Demo Mode: Always show simple "Explore Training" button
     return {
-      text: t('cta.primary.join_discord.text'),
-      subText: t('cta.primary.join_discord.subtext'),
-      icon: SiDiscord,
-      action: () => window.open("https://discord.gg/3PfFZ6aC", "_blank"),
-      href: null,
+      text: "Explore ShadowFang Training",
+      subText: "Full access - all features unlocked",
+      icon: Brain,
+      action: undefined,
+      href: "/shadowfang-training",
       variant: "default" as const,
       disabled: false
     };
   };
 
   const getSecondaryCTA = () => {
-    if (isLoading) {
-      return null;
-    }
-
-    // For subscribed users - show Discord community
-    if (isSubscribed) {
-      return {
-        text: t('cta.secondary.join_discord.text'),
-        subText: t('cta.secondary.join_discord.subtext'),
-        icon: SiDiscord,
-        action: () => window.open("https://discord.gg/3PfFZ6aC", "_blank"),
-        href: null,
-        variant: "outline" as const
-      };
-    }
-
-    // For Discord users (verified or beta expired) - show subscription
-    if (user?.discordVerified) {
-      return {
-        text: t('cta.secondary.lock_beta_price.text'),
-        subText: t('cta.secondary.lock_beta_price.subtext'),
-        icon: Lock,
-        action: undefined,
-        href: "/subscribe",
-        variant: "outline" as const
-      };
-    }
-
-    // For non-Discord users - show Discord login as secondary
+    // Demo Mode: Show frequency generator as secondary option
     return {
-      text: t('cta.secondary.discord_login.text'),
-      subText: t('cta.secondary.discord_login.subtext'), 
-      icon: SiDiscord,
-      action: loginWithDiscord,
-      href: null,
+      text: "Frequency Generator",
+      subText: "Experience brainwave entrainment",
+      icon: Zap,
+      action: undefined,
+      href: "/frequency-generator",
       variant: "outline" as const
     };
   };
 
   const getHeaderCTA = () => {
-    if (isLoading) return { text: t('header.cta.loading'), href: "/subscribe", disabled: true };
-    if (isSubscribed) return { text: t('header.cta.dashboard'), href: "/home", disabled: false };
-    if (user?.discordVerified && !betaStatus?.expired) return { text: t('header.cta.enter'), href: "/home", disabled: false };
-    if (user?.discordVerified && betaStatus?.expired) return { text: t('header.cta.subscribe'), href: "/subscribe", disabled: false };
-    return { text: t('header.cta.join_beta'), href: "/subscribe", disabled: false };
+    // Demo Mode: Simple explore button
+    return { text: "Explore Platform", href: "/shadowfang-training", disabled: false };
   };
 
   const primaryCTA = getPrimaryCTA();
@@ -237,30 +155,10 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
-      {/* Beta Launch Alert Bar */}
-      <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-2 px-2 text-center animate-pulse">
+      {/* Demo Mode Alert Bar */}
+      <div className="bg-gradient-to-r from-terminal-green/80 to-terminal-green text-terminal-bg py-2 px-2 text-center">
         <p className="text-xs sm:text-sm font-bold leading-tight">
-          {isSubscribed ? (
-            <>
-              <span className="hidden xs:inline">{t('alerts.elite_active.desktop')}</span>
-              <span className="xs:hidden">{t('alerts.elite_active.mobile')}</span>
-            </>
-          ) : user?.discordVerified && !betaStatus?.expired ? (
-            <>
-              <span className="hidden xs:inline">{t('alerts.discord_verified.desktop')}</span>
-              <span className="xs:hidden">{t('alerts.discord_verified.mobile')}</span>
-            </>
-          ) : user?.discordVerified && betaStatus?.expired ? (
-            <>
-              <span className="hidden xs:inline">{t('alerts.beta_expired.desktop')}</span>
-              <span className="xs:hidden">{t('alerts.beta_expired.mobile')}</span>
-            </>
-          ) : (
-            <>
-              <span className="hidden xs:inline">{t('alerts.join_discord.desktop')}</span>
-              <span className="xs:hidden">{t('alerts.join_discord.mobile')}</span>
-            </>
-          )}
+          🧠 DEMO MODE - All Features Unlocked • Explore ShadowFang Training System Without Restrictions
         </p>
       </div>
 
