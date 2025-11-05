@@ -54,20 +54,18 @@ async function verifyDiscordSignature(
   }
 }
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
-}
-
-// Discord environment variable validation
+// Optional Stripe initialization (demo mode)
 const DISCORD_PUBLIC_KEY = process.env.DISCORD_PUBLIC_KEY?.trim();
-if (!DISCORD_PUBLIC_KEY) {
-  throw new Error('Missing required: DISCORD_PUBLIC_KEY');
-}
-console.log('✅ Discord public key loaded:', DISCORD_PUBLIC_KEY.length, 'characters');
+const stripe = process.env.STRIPE_SECRET_KEY 
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: "2025-07-30.basil" })
+  : null;
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2025-07-30.basil",
-});
+if (!stripe) {
+  console.log('⚠️  Running in demo mode without Stripe');
+}
+if (!DISCORD_PUBLIC_KEY) {
+  console.log('⚠️  Running in demo mode without Discord');
+}
 
 // In-memory user storage for this demo
 interface User {
@@ -108,10 +106,8 @@ declare module 'express-session' {
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
-  // Session middleware
-  if (!process.env.SESSION_SECRET) {
-    throw new Error('SESSION_SECRET environment variable is required for production');
-  }
+  // Session middleware (use default in demo mode)
+  const SESSION_SECRET = process.env.SESSION_SECRET || 'demo-secret-not-for-production';
 
   // Determine if we're on Replit (check for .replit.app domain)
   const isReplit = process.env.REPL_URL || (process.env.NODE_ENV === 'production');
@@ -130,7 +126,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     name: 'sessionId', // Give the session cookie a specific name
@@ -326,6 +322,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create subscription
   app.post("/api/create-subscription", requireAuth, async (req, res) => {
     try {
+      // Demo mode: just grant access without payment
+      if (!stripe) {
+        return res.json({
+          subscriptionId: 'demo_subscription',
+          clientSecret: null,
+          message: 'Demo mode - all features unlocked'
+        });
+      }
+
       // In production, only work with database users (Discord OAuth)
       if (process.env.NODE_ENV === 'production' && typeof req.session.userId === 'number') {
         return res.status(403).json({ 
@@ -428,6 +433,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Stripe webhook handler (for subscription updates)
   app.post("/api/webhook", async (req, res) => {
+    if (!stripe) {
+      return res.json({ received: true, message: 'Demo mode - webhook skipped' });
+    }
+
     const sig = req.headers['stripe-signature'];
     let event;
 
