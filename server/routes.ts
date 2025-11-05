@@ -1291,6 +1291,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.status(405).json({ error: "Method Not Allowed", message: "Use POST for Discord interactions" });
   });
 
+  // Research Archive API endpoints
+  app.get("/api/research/documents", async (req, res) => {
+    try {
+      const { category, tag, accessLevel, search } = req.query;
+      
+      const documents = await storage.getResearchDocuments({
+        category: category as string,
+        tag: tag as string,
+        accessLevel: accessLevel as string,
+        search: search as string
+      });
+      
+      res.json(documents);
+    } catch (error) {
+      console.error('Error fetching research documents:', error);
+      res.status(500).json({ error: 'Failed to fetch research documents' });
+    }
+  });
+
+  app.get("/api/research/documents/:id", async (req, res) => {
+    try {
+      const document = await storage.getResearchDocumentById(req.params.id);
+      
+      if (!document) {
+        return res.status(404).json({ error: 'Document not found' });
+      }
+      
+      res.json(document);
+    } catch (error) {
+      console.error('Error fetching research document:', error);
+      res.status(500).json({ error: 'Failed to fetch research document' });
+    }
+  });
+
+  app.get("/api/research/categories", async (req, res) => {
+    try {
+      const categories = await storage.getResearchCategories();
+      res.json(categories);
+    } catch (error) {
+      console.error('Error fetching research categories:', error);
+      res.status(500).json({ error: 'Failed to fetch research categories' });
+    }
+  });
+
+  app.get("/api/research/tags", async (req, res) => {
+    try {
+      const tags = await storage.getResearchTags();
+      res.json(tags);
+    } catch (error) {
+      console.error('Error fetching research tags:', error);
+      res.status(500).json({ error: 'Failed to fetch research tags' });
+    }
+  });
+
   // Health check
   app.get("/api/health", (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
