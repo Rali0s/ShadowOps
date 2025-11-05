@@ -34,7 +34,7 @@ export const passwordResetTokens = pgTable("password_reset_tokens", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-// Database documents for terminal file system simulation
+// Database documents for terminal file system simulation and research archive
 export const dbDocuments = pgTable("db_documents", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   documentId: text("document_id").notNull().unique(),
@@ -44,6 +44,10 @@ export const dbDocuments = pgTable("db_documents", {
   accessLevel: text("access_level").notNull(), // none, alpha, beta, theta, gamma
   fileType: text("file_type").default("txt"),
   fileSize: integer("file_size").notNull(),
+  category: text("category").default("general"), // general, research, operational, training
+  tags: text("tags").array().default(sql`'{}'::text[]`), // flexible tagging system
+  author: text("author"),
+  summary: text("summary"),
   isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
 });
