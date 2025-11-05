@@ -19,6 +19,7 @@ import {
   Shield
 } from 'lucide-react';
 import { DiscordLoginButton, DiscordStatus } from '@/components/DiscordLoginButton';
+import { Auth0LoginButton } from '@/components/Auth0LoginButton';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -223,7 +224,7 @@ export default function AuthPage() {
                       )}
                     </Button>
 
-                    {/* Discord Login Section */}
+                    {/* OAuth Login Section */}
                     <div className="relative my-6">
                       <div className="absolute inset-0 flex items-center">
                         <div className="w-full border-t border-gray-600"></div>
@@ -233,11 +234,20 @@ export default function AuthPage() {
                       </div>
                     </div>
                     
-                    <DiscordLoginButton 
-                      variant="outline" 
-                      className="w-full text-lg py-3 border-[#5865F2] text-[#5865F2] hover:bg-[#5865F2] hover:text-white"
-                      size="lg"
-                    />
+                    {/* Both OAuth Providers */}
+                    <div className="space-y-3">
+                      <Auth0LoginButton 
+                        variant="outline" 
+                        className="w-full text-lg py-3 border-[#EB5424] text-[#EB5424] hover:bg-[#EB5424] hover:text-white"
+                        size="lg"
+                      />
+                      
+                      <DiscordLoginButton 
+                        variant="outline" 
+                        className="w-full text-lg py-3 border-[#5865F2] text-[#5865F2] hover:bg-[#5865F2] hover:text-white"
+                        size="lg"
+                      />
+                    </div>
 
                     {/* Toggle Mode */}
                     <div className="text-center">
