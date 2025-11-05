@@ -46,6 +46,17 @@ export interface IStorage {
   searchDbDocuments(searchTerm: string, accessLevel?: string): Promise<DbDocument[]>;
   getDbDocumentsByAccessLevel(accessLevel: string): Promise<DbDocument[]>;
   
+  // Research archive methods
+  getResearchDocuments(filters: {
+    category?: string;
+    tag?: string;
+    accessLevel?: string;
+    search?: string;
+  }): Promise<DbDocument[]>;
+  getResearchDocumentById(documentId: string): Promise<DbDocument | undefined>;
+  getResearchCategories(): Promise<Array<{ category: string; count: number }>>;
+  getResearchTags(): Promise<Array<{ tag: string; count: number }>>;
+  
   // Admin functionality - simplified without courses
   getSystemStats(): Promise<{
     activeUsers: number;
@@ -434,6 +445,82 @@ export class DatabaseStorage implements IStorage {
         eq(dbDocuments.accessLevel, accessLevel),
         eq(dbDocuments.isActive, true)
       ));
+  }
+
+  async getResearchDocuments(filters: {
+    category?: string;
+    tag?: string;
+    accessLevel?: string;
+    search?: string;
+  }): Promise<DbDocument[]> {
+    const { sql: rawSql } = await import('drizzle-orm');
+    
+    let query = db.select().from(dbDocuments).where(eq(dbDocuments.isActive, true));
+    const docs = await query;
+    
+    return docs.filter(doc => {
+      if (filters.category && doc.category !== filters.category) return false;
+      if (filters.tag && doc.tags && !doc.tags.includes(filters.tag)) return false;
+      if (filters.accessLevel) {
+        const tierHierarchy = ["none", "alpha", "beta", "theta", "gamma"];
+        const userTierIndex = tierHierarchy.indexOf(filters.accessLevel);
+        const docTierIndex = tierHierarchy.indexOf(doc.accessLevel);
+        if (docTierIndex > userTierIndex) return false;
+      }
+      if (filters.search) {
+        const searchLower = filters.search.toLowerCase();
+        return (
+          doc.title.toLowerCase().includes(searchLower) ||
+          doc.content.toLowerCase().includes(searchLower) ||
+          doc.summary?.toLowerCase().includes(searchLower) ||
+          (doc.tags && doc.tags.some(tag => tag.toLowerCase().includes(searchLower)))
+        );
+      }
+      return true;
+    });
+  }
+
+  async getResearchDocumentById(documentId: string): Promise<DbDocument | undefined> {
+    const [document] = await db
+      .select()
+      .from(dbDocuments)
+      .where(and(
+        eq(dbDocuments.documentId, documentId),
+        eq(dbDocuments.isActive, true)
+      ));
+    return document || undefined;
+  }
+
+  async getResearchCategories(): Promise<Array<{ category: string; count: number }>> {
+    const docs = await db.select().from(dbDocuments).where(eq(dbDocuments.isActive, true));
+    
+    const categoryCounts = docs.reduce((acc, doc) => {
+      const category = doc.category || 'general';
+      acc[category] = (acc[category] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    return Object.entries(categoryCounts).map(([category, count]) => ({
+      category,
+      count
+    }));
+  }
+
+  async getResearchTags(): Promise<Array<{ tag: string; count: number }>> {
+    const docs = await db.select().from(dbDocuments).where(eq(dbDocuments.isActive, true));
+    
+    const tagCounts = docs.reduce((acc, doc) => {
+      if (doc.tags) {
+        doc.tags.forEach(tag => {
+          acc[tag] = (acc[tag] || 0) + 1;
+        });
+      }
+      return acc;
+    }, {} as Record<string, number>);
+    
+    return Object.entries(tagCounts)
+      .map(([tag, count]) => ({ tag, count }))
+      .sort((a, b) => b.count - a.count);
   }
 }
 
