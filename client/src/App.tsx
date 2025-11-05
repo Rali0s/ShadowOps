@@ -28,6 +28,7 @@ import SelfReportMethodologyPage from "@/pages/self-report-methodology";
 import FrequencyGeneratorPage from "@/pages/frequency-generator-page";
 import ResearchFoundationPage from "@/pages/research-foundation";
 import ResearchArchive from "@/pages/ResearchArchive";
+import RVTraining from "@/pages/RVTraining";
 
 function Router() {
   return (
@@ -51,6 +52,7 @@ function Router() {
       <ProtectedRoute path="/frequency-generator" component={FrequencyGeneratorPage} />
       <ProtectedRoute path="/research" component={ResearchFoundationPage} />
       <ProtectedRoute path="/research-archive" component={ResearchArchive} />
+      <ProtectedRoute path="/rv-training" component={RVTraining} />
       
       <Route component={NotFound} />
     </Switch>

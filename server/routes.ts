@@ -1345,6 +1345,237 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // RV Training Module API endpoints
+  
+  // Get user's RV progress (or create if doesn't exist)
+  app.get("/api/rv/progress", async (req, res) => {
+    try {
+      if (!req.session.userId || typeof req.session.userId !== 'string') {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+      
+      const userId = req.session.userId as string;
+      let progress = await storage.getRvProgress(userId);
+      
+      // Create progress record if it doesn't exist
+      if (!progress) {
+        progress = await storage.createRvProgress({
+          userId
+        });
+      }
+      
+      res.json(progress);
+    } catch (error) {
+      console.error('Error fetching RV progress:', error);
+      res.status(500).json({ error: 'Failed to fetch RV progress' });
+    }
+  });
+  
+  // Start a new RV training session
+  app.post("/api/rv/session/start", async (req, res) => {
+    try {
+      if (!req.session.userId || typeof req.session.userId !== 'string') {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+      
+      const userId = req.session.userId as string;
+      const { trainingClass, difficulty } = req.body;
+      
+      // Get user's progress to determine appropriate class
+      const progress = await storage.getRvProgress(userId);
+      const sessionClass = trainingClass || progress?.currentClass || 'C';
+      
+      // Get random target based on difficulty
+      const target = await storage.getRandomRvTarget(difficulty || 'novice');
+      
+      if (!target) {
+        return res.status(404).json({ error: 'No training targets available' });
+      }
+      
+      // Create session
+      const session = await storage.createRvSession({
+        sessionId: randomBytes(16).toString('hex'),
+        userId,
+        targetId: target.id,
+        trainingClass: sessionClass,
+        sessionType: 'training'
+      });
+      
+      // Return session with target info (but hide answer for Class B/A)
+      const sessionData = {
+        ...session,
+        target: sessionClass === 'C' ? target : {
+          id: target.id,
+          targetId: target.targetId,
+          category: target.category,
+          difficulty: target.difficulty
+        }
+      };
+      
+      res.json(sessionData);
+    } catch (error) {
+      console.error('Error starting RV session:', error);
+      res.status(500).json({ error: 'Failed to start RV session' });
+    }
+  });
+  
+  // Submit a perception during active session
+  app.post("/api/rv/session/:sessionId/perception", async (req, res) => {
+    try {
+      if (!req.session.userId || typeof req.session.userId !== 'string') {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+      
+      const userId = req.session.userId as string;
+      const { sessionId } = req.params;
+      const { perceptionText, perceptionType, stage, responseTimeMs } = req.body;
+      
+      // Verify session belongs to user
+      const session = await storage.getRvSession(sessionId);
+      if (!session || session.userId !== userId) {
+        return res.status(404).json({ error: 'Session not found' });
+      }
+      
+      // Create perception record
+      const perception = await storage.createRvPerception({
+        perceptionId: randomBytes(16).toString('hex'),
+        sessionId: session.id,
+        perceptionText,
+        perceptionType,
+        stage,
+        responseTimeMs
+      });
+      
+      // For Class C (immediate feedback), evaluate perception
+      if (session.trainingClass === 'C') {
+        const target = await storage.getRvTargetById(session.targetId);
+        if (target) {
+          const correctElements = target.correctElements as string[];
+          const perceptionLower = perceptionText.toLowerCase();
+          
+          // Simple keyword matching for feedback
+          const hasMatch = correctElements.some(element => 
+            perceptionLower.includes(element.toLowerCase())
+          );
+          
+          // Assign feedback: C (Correct), PC (Partially Correct), N (Neutral), S (Symbolic)
+          const feedback = hasMatch ? 'C' : 'N';
+          
+          // Update perception with feedback
+          perception.feedback = feedback;
+        }
+      }
+      
+      res.json(perception);
+    } catch (error) {
+      console.error('Error submitting perception:', error);
+      res.status(500).json({ error: 'Failed to submit perception' });
+    }
+  });
+  
+  // Complete RV session and get full feedback
+  app.post("/api/rv/session/:sessionId/complete", async (req, res) => {
+    try {
+      if (!req.session.userId || typeof req.session.userId !== 'string') {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+      
+      const userId = req.session.userId as string;
+      const { sessionId } = req.params;
+      
+      // Get session
+      const session = await storage.getRvSession(sessionId);
+      if (!session || session.userId !== userId) {
+        return res.status(404).json({ error: 'Session not found' });
+      }
+      
+      // Get target
+      const target = await storage.getRvTargetById(session.targetId);
+      if (!target) {
+        return res.status(404).json({ error: 'Target not found' });
+      }
+      
+      // Get all perceptions
+      const perceptions = await storage.getSessionPerceptions(session.id);
+      
+      // Calculate accuracy
+      const correctElements = target.correctElements as string[];
+      const accuratePerceptions = perceptions.filter(p => {
+        const perceptionLower = p.perceptionText.toLowerCase();
+        return correctElements.some(element => 
+          perceptionLower.includes(element.toLowerCase())
+        );
+      });
+      
+      const accuracy = perceptions.length > 0 
+        ? Math.round((accuratePerceptions.length / perceptions.length) * 100)
+        : 0;
+      
+      // Update session as complete
+      const durationSeconds = session.startedAt 
+        ? Math.floor((Date.now() - session.startedAt.getTime()) / 1000)
+        : 0;
+      await storage.updateRvSession(sessionId, {
+        isComplete: true,
+        completedAt: new Date(),
+        durationSeconds
+      });
+      
+      // Update user progress
+      const progress = await storage.getRvProgress(userId);
+      if (progress) {
+        const updates: any = {
+          totalSessions: (progress.totalSessions || 0) + 1,
+          totalAccuratePerceptions: (progress.totalAccuratePerceptions || 0) + accuratePerceptions.length,
+          lastSessionAt: new Date()
+        };
+        
+        // Update class-specific stats
+        if (session.trainingClass === 'C') {
+          updates.classCSessionsCompleted = (progress.classCSessionsCompleted || 0) + 1;
+          updates.classCAccuracy = accuracy;
+        } else if (session.trainingClass === 'B') {
+          updates.classBSessionsCompleted = (progress.classBSessionsCompleted || 0) + 1;
+          updates.classBAccuracy = accuracy;
+        } else if (session.trainingClass === 'A') {
+          updates.classASessionsCompleted = (progress.classASessionsCompleted || 0) + 1;
+          updates.classAAccuracy = accuracy;
+        }
+        
+        await storage.updateRvProgress(userId, updates);
+      }
+      
+      // Return full session data with target info
+      res.json({
+        session,
+        target,
+        perceptions,
+        accuracy,
+        accuratePerceptions: accuratePerceptions.length,
+        totalPerceptions: perceptions.length
+      });
+    } catch (error) {
+      console.error('Error completing RV session:', error);
+      res.status(500).json({ error: 'Failed to complete RV session' });
+    }
+  });
+  
+  // Get user's session history
+  app.get("/api/rv/sessions", async (req, res) => {
+    try {
+      if (!req.session.userId || typeof req.session.userId !== 'string') {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+      
+      const userId = req.session.userId as string;
+      const sessions = await storage.getUserRvSessions(userId);
+      res.json(sessions);
+    } catch (error) {
+      console.error('Error fetching RV sessions:', error);
+      res.status(500).json({ error: 'Failed to fetch RV sessions' });
+    }
+  });
+
   // Health check
   app.get("/api/health", (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
