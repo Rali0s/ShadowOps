@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Link } from 'wouter';
 import { useAuth } from '@/hooks/use-auth';
+import { ReplitAuthButton } from '@/components/ReplitAuthButton';
 import { 
   Menu, 
   Brain, 
@@ -18,7 +19,8 @@ import {
   Home,
   Compass,
   Crown,
-  Archive
+  Archive,
+  LogIn
 } from 'lucide-react';
 
 interface HamburgerMenuProps {
@@ -28,7 +30,7 @@ interface HamburgerMenuProps {
 
 export function HamburgerMenu({ userCount = "2,847", showAuthButton = true }: HamburgerMenuProps) {
   const [open, setOpen] = useState(false);
-  const { isSubscribed } = useAuth();
+  const { isSubscribed, user } = useAuth();
 
   // Free tier menu items - only 4 core items for simplicity
   const freeMenuItems = [
@@ -158,26 +160,46 @@ export function HamburgerMenu({ userCount = "2,847", showAuthButton = true }: Ha
         </nav>
 
         {/* Bottom Actions */}
-        {showAuthButton && !isSubscribed && (
+        {showAuthButton && (
           <>
             <Separator className="bg-gray-700 mb-4" />
             <div className="space-y-3">
-              <Link href="/subscribe">
-                <Button 
-                  onClick={() => setOpen(false)}
-                  className="w-full bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-700 hover:to-yellow-800"
-                  data-testid="button-unlock-researcher-tier"
-                >
-                  <Crown className="w-4 h-4 mr-2" />
-                  Unlock Researcher Tier
-                </Button>
-              </Link>
+              {!user && (
+                <div className="space-y-2">
+                  <ReplitAuthButton />
+                  <Link href="/auth">
+                    <Button 
+                      onClick={() => setOpen(false)}
+                      className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                      data-testid="button-auth-page"
+                    >
+                      <LogIn className="w-4 h-4 mr-2" />
+                      Sign In / Register
+                    </Button>
+                  </Link>
+                </div>
+              )}
               
-              <div className="text-center">
-                <p className="text-xs text-gray-500">
-                  $5.89/month • Cancel anytime
-                </p>
-              </div>
+              {user && !isSubscribed && (
+                <>
+                  <Link href="/subscribe">
+                    <Button 
+                      onClick={() => setOpen(false)}
+                      className="w-full bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-700 hover:to-yellow-800"
+                      data-testid="button-unlock-researcher-tier"
+                    >
+                      <Crown className="w-4 h-4 mr-2" />
+                      Unlock Researcher Tier
+                    </Button>
+                  </Link>
+                  
+                  <div className="text-center">
+                    <p className="text-xs text-gray-500">
+                      $5.89/month • Cancel anytime
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
           </>
         )}

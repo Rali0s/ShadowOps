@@ -9,19 +9,21 @@ import { useToast } from "@/hooks/use-toast";
 import { usePaymentBypass } from "@/hooks/use-payment-bypass";
 
 interface User {
-  id: number;
-  email: string;
+  id: string; // Replit Auth uses string IDs
+  email: string | null;
   subscriptionStatus: 'active' | 'inactive' | 'trial' | 'cancelled';
   subscriptionTier: string; // none, alpha, beta, theta, gamma
   subscriptionId?: string;
   trialEndsAt?: string;
+  // Replit Auth fields
+  firstName?: string | null;
+  lastName?: string | null;
+  profileImageUrl?: string | null;
+  // Discord OAuth fields
   discordId?: string | null;
   discordUsername?: string | null;
   discordAvatar?: string | null;
   discordVerified?: boolean;
-  auth0Id?: string | null;
-  auth0Username?: string | null;
-  auth0Avatar?: string | null;
 }
 
 interface BetaStatus {
@@ -44,7 +46,7 @@ type AuthContextType = {
   registerMutation: UseMutationResult<User, Error, RegisterData>;
   recheckDiscordMutation: UseMutationResult<any, Error, void>;
   loginWithDiscord: () => void;
-  loginWithAuth0: () => void;
+  loginWithReplit: () => void;
   checkPaymentStatus: () => void;
 };
 
@@ -68,10 +70,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     error,
     isLoading,
   } = useQuery<User | null>({
-    queryKey: ["/api/user"],
+    queryKey: ["/api/auth/user"],
     queryFn: async () => {
       try {
-        const response = await apiRequest("GET", "/api/user");
+        const response = await apiRequest("GET", "/api/auth/user");
         if (!response.ok) {
           if (response.status === 401) {
             return null; // Not authenticated
@@ -112,8 +114,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     (user?.subscriptionStatus === 'active') ||
     // Discord verified users get access based on bypass rules
     (user?.discordVerified && (isDiscordFree || !betaStatus?.expired)) ||
-    // Auth0 authenticated users get access (assigned beta tier on creation)
-    (user?.auth0Id && isBypassTier((user as any).subscriptionTier)) ||
     // Special tier users bypass payment requirements
     (user && isBypassTier((user as any).subscriptionTier))
   );
@@ -142,7 +142,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         });
         
         // Invalidate user and beta queries to refresh auth state
-        queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+        queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
         queryClient.invalidateQueries({ queryKey: ["/api/beta-status"] });
         
         // Redirect to subscription page after a short delay
@@ -166,9 +166,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     window.location.href = '/api/auth/discord/login';
   };
 
-  // Auth0 login function
-  const loginWithAuth0 = () => {
-    window.location.href = '/api/auth/auth0/login';
+  // Replit Auth login function
+  const loginWithReplit = () => {
+    window.location.href = '/api/login';
   };
 
   const loginMutation = useMutation({
@@ -180,7 +180,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return await res.json();
     },
     onSuccess: (user: User) => {
-      queryClient.setQueryData(["/api/user"], user);
+      queryClient.setQueryData(["/api/auth/user"], user);
       toast({
         title: "Welcome back!",
         description: "Successfully logged in to Neural Matrix Pro.",
@@ -205,7 +205,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return await res.json();
     },
     onSuccess: (user: User) => {
-      queryClient.setQueryData(["/api/user"], user);
+      queryClient.setQueryData(["/api/auth/user"], user);
       toast({
         title: "Welcome to Neural Matrix Pro!",
         description: "Account created successfully. Your 7-day trial has started.",
@@ -225,7 +225,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await apiRequest("POST", "/api/logout");
     },
     onSuccess: () => {
-      queryClient.setQueryData(["/api/user"], null);
+      queryClient.setQueryData(["/api/auth/user"], null);
       toast({
         title: "Logged out",
         description: "Successfully logged out from Neural Matrix Pro.",
@@ -250,7 +250,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: () => {
       // Invalidate user query to refetch updated Discord status
-      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
       toast({
         title: "Discord Status Updated",
         description: "Your Discord verification status has been rechecked.",
@@ -273,7 +273,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   
   // Check payment status function
   const checkPaymentStatus = useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+    queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
     queryClient.invalidateQueries({ queryKey: ["/api/payment-bypass-config"] });
   }, []);
 
@@ -293,7 +293,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         registerMutation,
         recheckDiscordMutation,
         loginWithDiscord,
-        loginWithAuth0,
+        loginWithReplit,
         checkPaymentStatus,
       }}
     >

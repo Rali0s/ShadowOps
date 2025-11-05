@@ -19,7 +19,7 @@ import {
   Shield
 } from 'lucide-react';
 import { DiscordLoginButton, DiscordStatus } from '@/components/DiscordLoginButton';
-import { Auth0LoginButton } from '@/components/Auth0LoginButton';
+import { ReplitAuthButton } from '@/components/ReplitAuthButton';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -236,11 +236,7 @@ export default function AuthPage() {
                     
                     {/* Both OAuth Providers */}
                     <div className="space-y-3">
-                      <Auth0LoginButton 
-                        variant="outline" 
-                        className="w-full text-lg py-3 border-[#EB5424] text-[#EB5424] hover:bg-[#EB5424] hover:text-white"
-                        size="lg"
-                      />
+                      <ReplitAuthButton />
                       
                       <DiscordLoginButton 
                         variant="outline" 
