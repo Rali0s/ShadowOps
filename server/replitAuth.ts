@@ -76,11 +76,19 @@ export async function setupAuth(app: Express) {
     tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers,
     verified: passport.AuthenticateCallback
   ) => {
-    const claims = tokens.claims();
-    const user = { userId: claims.sub }; // Store userId for session
-    updateUserSession(user, tokens);
-    await upsertUser(claims);
-    verified(null, user);
+    try {
+      const claims = tokens.claims();
+      if (!claims?.sub) {
+        throw new Error('Invalid claims: missing subject');
+      }
+      const user = { userId: claims.sub }; // Store userId for session
+      updateUserSession(user, tokens);
+      await upsertUser(claims);
+      verified(null, user);
+    } catch (error) {
+      console.error('❌ Replit Auth verification error:', error);
+      verified(error as Error);
+    }
   };
 
   // Keep track of registered strategies
