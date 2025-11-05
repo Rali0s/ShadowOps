@@ -1,25 +1,17 @@
-import { createContext, ReactNode, useContext, useEffect, useRef, useCallback } from "react";
-import {
-  useQuery,
-  useMutation,
-  UseMutationResult,
-} from "@tanstack/react-query";
-import { apiRequest, queryClient } from "../lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
-import { usePaymentBypass } from "@/hooks/use-payment-bypass";
+import { createContext, ReactNode, useContext, useMemo } from "react";
+import { useMutation, type UseMutationResult } from "@tanstack/react-query";
 
 interface User {
-  id: string; // Replit Auth uses string IDs
+  id: string;
   email: string | null;
-  subscriptionStatus: 'active' | 'inactive' | 'trial' | 'cancelled';
-  subscriptionTier: string; // none, alpha, beta, theta, gamma
-  subscriptionId?: string;
-  trialEndsAt?: string;
-  // Replit Auth fields
+  subscriptionStatus: "active" | "inactive" | "trial" | "cancelled";
+  subscriptionTier: "none" | "alpha" | "beta" | "theta" | "gamma";
+  subscriptionId?: string | null;
+  trialEndsAt?: string | null;
   firstName?: string | null;
   lastName?: string | null;
   profileImageUrl?: string | null;
-  // Discord OAuth fields
+  username?: string | null;
   discordId?: string | null;
   discordUsername?: string | null;
   discordAvatar?: string | null;
@@ -31,6 +23,39 @@ interface BetaStatus {
   expired: boolean;
   message: string;
 }
+
+const defaultUser: User = {
+  id: "demo-user",
+  email: null,
+  subscriptionStatus: "active",
+  subscriptionTier: "gamma",
+  subscriptionId: "demo-subscription",
+  trialEndsAt: null,
+  firstName: "Shadow",
+  lastName: "Operative",
+  profileImageUrl: null,
+  username: "ShadowOpsDemo",
+  discordId: "demo-discord-id",
+  discordUsername: "ShadowOpsDemo",
+  discordAvatar: null,
+  discordVerified: true,
+};
+
+const defaultBetaStatus: BetaStatus = {
+  endsAt: null,
+  expired: false,
+  message: "Demo mode — unrestricted access",
+};
+
+type LoginData = {
+  email: string;
+  password: string;
+};
+
+type RegisterData = {
+  email: string;
+  password: string;
+};
 
 type AuthContextType = {
   user: User | null;
@@ -44,259 +69,56 @@ type AuthContextType = {
   loginMutation: UseMutationResult<User, Error, LoginData>;
   logoutMutation: UseMutationResult<void, Error, void>;
   registerMutation: UseMutationResult<User, Error, RegisterData>;
-  recheckDiscordMutation: UseMutationResult<any, Error, void>;
+  recheckDiscordMutation: UseMutationResult<User, Error, void>;
   loginWithDiscord: () => void;
   loginWithReplit: () => void;
   checkPaymentStatus: () => void;
 };
 
-type LoginData = {
-  email: string;
-  password: string;
-};
-
-type RegisterData = {
-  email: string;
-  password: string;
-};
-
 export const AuthContext = createContext<AuthContextType | null>(null);
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const { toast } = useToast();
-  const prevBetaStatus = useRef<BetaStatus | null>(null);
-  
-  const {
-    data: user,
-    error,
-    isLoading,
-  } = useQuery<User | null>({
-    queryKey: ["/api/auth/user"],
-    queryFn: async () => {
-      try {
-        const response = await apiRequest("GET", "/api/auth/user");
-        if (!response.ok) {
-          if (response.status === 401) {
-            return null; // Not authenticated
-          }
-          throw new Error('Failed to fetch user');
-        }
-        return await response.json();
-      } catch (error) {
-        return null; // Handle network errors gracefully
-      }
-    },
-    retry: false,
+  const loginMutation = useMutation<User, Error, LoginData>({
+    mutationFn: async () => defaultUser,
   });
 
-  // Beta status query
-  const {
-    data: betaStatus,
-    isLoading: isBetaLoading,
-  } = useQuery<BetaStatus>({
-    queryKey: ["/api/beta-status"],
-    queryFn: async () => {
-      const response = await apiRequest("GET", "/api/beta-status");
-      if (!response.ok) {
-        throw new Error('Failed to fetch beta status');
-      }
-      return await response.json();
-    },
-    retry: false,
+  const registerMutation = useMutation<User, Error, RegisterData>({
+    mutationFn: async () => defaultUser,
   });
 
-  const { bypassConfig, isDiscordFree, isBypassTier } = usePaymentBypass();
-  
-  const isSubscribed = user?.subscriptionStatus === 'active' || user?.subscriptionStatus === 'trial';
-  
-  // Enhanced authorization logic with payment bypass
-  const isAuthorized = Boolean(
-    // Active subscription always grants access
-    (user?.subscriptionStatus === 'active') ||
-    // Discord verified users get access based on bypass rules
-    (user?.discordVerified && (isDiscordFree || !betaStatus?.expired)) ||
-    // Special tier users bypass payment requirements
-    (user && isBypassTier((user as any).subscriptionTier))
-  );
-
-  // Monitor beta status changes for active session handling
-  useEffect(() => {
-    if (!betaStatus || !prevBetaStatus.current) {
-      prevBetaStatus.current = betaStatus ?? null;
-      return;
-    }
-
-    // Detect beta expiration during active session
-    const betaJustExpired = !prevBetaStatus.current.expired && betaStatus.expired;
-    
-    if (betaJustExpired && user) {
-      if (user.subscriptionStatus === 'active') {
-        toast({
-          title: "Beta Period Ended",
-          description: "Your subscription ensures continued access to all features.",
-        });
-      } else if (user.discordVerified) {
-        toast({
-          title: "Beta Access Expired",
-          description: "Your beta access has ended. Subscribe to continue your neurohacker journey!",
-          variant: "destructive",
-        });
-        
-        // Invalidate user and beta queries to refresh auth state
-        queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
-        queryClient.invalidateQueries({ queryKey: ["/api/beta-status"] });
-        
-        // Redirect to subscription page after a short delay
-        setTimeout(() => {
-          window.location.href = '/subscribe';
-        }, 3000);
-      } else {
-        toast({
-          title: "Beta Period Ended",
-          description: "Join Discord and subscribe to unlock full access!",
-          variant: "destructive",
-        });
-      }
-    }
-
-    prevBetaStatus.current = betaStatus;
-  }, [betaStatus, user, toast]);
-
-  // Discord login function
-  const loginWithDiscord = () => {
-    window.location.href = '/api/auth/discord/login';
-  };
-
-  // Replit Auth login function
-  const loginWithReplit = () => {
-    window.location.href = '/api/login';
-  };
-
-  const loginMutation = useMutation({
-    mutationFn: async (credentials: LoginData) => {
-      const res = await apiRequest("POST", "/api/login", credentials);
-      if (!res.ok) {
-        throw new Error('Invalid credentials');
-      }
-      return await res.json();
-    },
-    onSuccess: (user: User) => {
-      queryClient.setQueryData(["/api/auth/user"], user);
-      toast({
-        title: "Welcome back!",
-        description: "Successfully logged in to Neural Matrix Pro.",
-      });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Login failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
+  const logoutMutation = useMutation<void, Error, void>({
+    mutationFn: async () => undefined,
   });
 
-  const registerMutation = useMutation({
-    mutationFn: async (credentials: RegisterData) => {
-      const res = await apiRequest("POST", "/api/register", credentials);
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || 'Registration failed');
-      }
-      return await res.json();
-    },
-    onSuccess: (user: User) => {
-      queryClient.setQueryData(["/api/auth/user"], user);
-      toast({
-        title: "Welcome to Neural Matrix Pro!",
-        description: "Account created successfully. Your 7-day trial has started.",
-      });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Registration failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
+  const recheckDiscordMutation = useMutation<User, Error, void>({
+    mutationFn: async () => defaultUser,
   });
 
-  const logoutMutation = useMutation({
-    mutationFn: async () => {
-      await apiRequest("POST", "/api/logout");
-    },
-    onSuccess: () => {
-      queryClient.setQueryData(["/api/auth/user"], null);
-      toast({
-        title: "Logged out",
-        description: "Successfully logged out from Neural Matrix Pro.",
-      });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Logout failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
-
-  const recheckDiscordMutation = useMutation({
-    mutationFn: async () => {
-      const response = await apiRequest("POST", "/api/recheck-discord");
-      if (!response.ok) {
-        throw new Error('Failed to recheck Discord verification');
-      }
-      return await response.json();
-    },
-    onSuccess: () => {
-      // Invalidate user query to refetch updated Discord status
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
-      toast({
-        title: "Discord Status Updated",
-        description: "Your Discord verification status has been rechecked.",
-      });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Discord Recheck Failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
-  
-  // Check if user can bypass payment
-  const canBypassPayment = Boolean(
-    (user?.discordVerified && isDiscordFree) ||
-    (user && isBypassTier((user as any).subscriptionTier))
-  );
-  
-  // Check payment status function
-  const checkPaymentStatus = useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
-    queryClient.invalidateQueries({ queryKey: ["/api/payment-bypass-config"] });
-  }, []);
+  const value = useMemo<AuthContextType>(() => ({
+    user: defaultUser,
+    isLoading: false,
+    error: null,
+    isSubscribed: true,
+    isAuthorized: true,
+    betaStatus: defaultBetaStatus,
+    isBetaLoading: false,
+    canBypassPayment: true,
+    loginMutation,
+    logoutMutation,
+    registerMutation,
+    recheckDiscordMutation,
+    loginWithDiscord: () => void 0,
+    loginWithReplit: () => void 0,
+    checkPaymentStatus: () => void 0,
+  }), [
+    loginMutation,
+    logoutMutation,
+    registerMutation,
+    recheckDiscordMutation,
+  ]);
 
   return (
-    <AuthContext.Provider
-      value={{
-        user: user ?? null,
-        isLoading,
-        error,
-        isSubscribed,
-        isAuthorized,
-        betaStatus: betaStatus ?? null,
-        isBetaLoading,
-        canBypassPayment,
-        loginMutation,
-        logoutMutation,
-        registerMutation,
-        recheckDiscordMutation,
-        loginWithDiscord,
-        loginWithReplit,
-        checkPaymentStatus,
-      }}
-    >
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

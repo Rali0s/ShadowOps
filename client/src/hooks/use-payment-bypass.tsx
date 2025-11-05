@@ -1,6 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
-import { apiRequest } from '@/lib/queryClient';
-
 export interface PaymentBypassConfig {
   discord: {
     enabled: boolean;
@@ -16,50 +13,41 @@ export interface PaymentBypassConfig {
   bypassTiers: string[];
 }
 
+const staticConfig: PaymentBypassConfig = {
+  discord: {
+    enabled: true,
+    requiresGuild: false,
+    betaActive: true,
+    betaDaysRemaining: 999,
+  },
+  pricing: {
+    beta: "$0.00/month",
+    regular: "$5.89/month",
+    discord: "$0.00/month",
+  },
+  bypassTiers: ["gamma", "theta", "beta"],
+};
+
 /**
- * Hook to check payment bypass configuration
- * Determines if user can access platform without payment
+ * Demo hook returning static payment bypass configuration.
+ * Authentication has been removed, so all premium features are unlocked by default.
  */
 export function usePaymentBypass() {
-  const {
-    data: bypassConfig,
-    isLoading,
-    error,
-  } = useQuery<PaymentBypassConfig>({
-    queryKey: ['/api/payment-bypass-config'],
-    queryFn: async () => {
-      const response = await apiRequest('GET', '/api/payment-bypass-config');
-      if (!response.ok) {
-        throw new Error('Failed to fetch payment bypass config');
-      }
-      return await response.json();
-    },
-    staleTime: 60000, // Cache for 1 minute
-    retry: 1,
-  });
+  const bypassConfig = staticConfig;
 
-  // Helper to determine if Discord users get free access
-  const isDiscordFree = Boolean(
-    bypassConfig?.discord.enabled && 
-    bypassConfig?.discord.betaActive
-  );
+  const isDiscordFree = bypassConfig.discord.enabled && bypassConfig.discord.betaActive;
 
-  // Helper to get the appropriate pricing for Discord users
-  const getDiscordPricing = () => {
-    if (!bypassConfig) return '$5.89/month';
-    return bypassConfig.pricing.discord;
-  };
+  const getDiscordPricing = () => bypassConfig.pricing.discord;
 
-  // Helper to check if a tier bypasses payment
   const isBypassTier = (tier: string | undefined) => {
-    if (!tier || !bypassConfig) return false;
+    if (!tier) return false;
     return bypassConfig.bypassTiers.includes(tier);
   };
 
   return {
     bypassConfig,
-    isLoading,
-    error,
+    isLoading: false,
+    error: null,
     isDiscordFree,
     getDiscordPricing,
     isBypassTier,
