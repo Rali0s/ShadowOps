@@ -7,7 +7,8 @@ import {
   FileText, 
   Home,
   GraduationCap,
-  FlaskConical
+  FlaskConical,
+  Eye
 } from 'lucide-react';
 
 export interface NavItem {
@@ -81,5 +82,12 @@ export const navigationConfig: NavItem[] = [
     icon: FlaskConical,
     protected: true,
     description: 'Research methods'
+  },
+  {
+    href: '/rv-training',
+    label: 'RV Training',
+    icon: Eye,
+    protected: true,
+    description: 'Remote viewing protocols'
   }
 ];
