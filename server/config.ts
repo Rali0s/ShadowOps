@@ -5,26 +5,26 @@ const envSchema = z.object({
   // Core
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.string().default('5000'),
-  SESSION_SECRET: z.string().min(32),
+  SESSION_SECRET: z.string().min(1).optional(),
   
   // Database
-  DATABASE_URL: z.string().url(),
+  DATABASE_URL: z.string().optional(),
   
-  // Discord OAuth
-  DISCORD_CLIENT_ID: z.string(),
-  DISCORD_CLIENT_SECRET: z.string(),
+  // Discord OAuth (all optional for demo mode)
+  DISCORD_CLIENT_ID: z.string().optional(),
+  DISCORD_CLIENT_SECRET: z.string().optional(),
   DISCORD_REDIRECT_URI: z.string().url().optional(),
   DISCORD_GUILD_ID: z.string().optional(),
-  DISCORD_PUBLIC_KEY: z.string(),
+  DISCORD_PUBLIC_KEY: z.string().optional(),
   
   // Beta Configuration
   BETA_END_AT: z.string().datetime().default('2025-12-06T00:00:00.000Z'),
   
-  // Stripe
-  STRIPE_SECRET_KEY: z.string(),
-  STRIPE_PRICE_ID: z.string(),
+  // Stripe (all optional for demo mode)
+  STRIPE_SECRET_KEY: z.string().optional(),
+  STRIPE_PRICE_ID: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
-  VITE_STRIPE_PUBLIC_KEY: z.string(),
+  VITE_STRIPE_PUBLIC_KEY: z.string().optional(),
   
   // Testing Stripe Keys (for e2e tests)
   TESTING_STRIPE_SECRET_KEY: z.string().optional(),
@@ -132,7 +132,7 @@ export const getBetaStatus = () => {
 // Production readiness checks
 export const isProductionReady = () => {
   const checks = {
-    hasSessionSecret: config.SESSION_SECRET.length >= 32,
+    hasSessionSecret: (config.SESSION_SECRET?.length || 0) >= 32,
     hasDatabase: !!config.DATABASE_URL,
     hasDiscord: !!config.DISCORD_CLIENT_ID && !!config.DISCORD_CLIENT_SECRET,
     hasStripe: !!config.STRIPE_SECRET_KEY && !!config.STRIPE_PRICE_ID,
