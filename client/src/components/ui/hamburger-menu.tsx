@@ -17,7 +17,8 @@ import {
   Lock,
   Home,
   Compass,
-  Crown
+  Crown,
+  Archive
 } from 'lucide-react';
 
 interface HamburgerMenuProps {
@@ -44,6 +45,7 @@ export function HamburgerMenu({ userCount = "2,847", showAuthButton = true }: Ha
     { href: '/scientific-method', label: 'Scientific Method', icon: Settings, description: 'Research protocols' },
     { href: '/education', label: 'Education', icon: BookOpen, description: 'Learning materials' },
     { href: '/methodology', label: 'Methodology', icon: FileText, description: 'Self-report system' },
+    { href: '/research-archive', label: 'Research Archive', icon: Archive, description: 'Citizen Cipher intel' },
   ];
 
   return (
