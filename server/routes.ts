@@ -102,47 +102,13 @@ declare module 'express-session' {
   interface SessionData {
     userId?: number | string; // Support both in-memory (number) and database (string) IDs
     discordState?: string;
-    auth0State?: string;
-  }
+    }
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
-  // Setup Replit Auth (OpenID Connect) - handles /api/login, /api/callback, /api/logout
+  // Setup Replit Auth (OpenID Connect) - handles /api/login, /api/callback, /api/logout, and session
   await setupAuth(app);
-  
-  // Session middleware (use default in demo mode)
-  const SESSION_SECRET = process.env.SESSION_SECRET || 'demo-secret-not-for-production';
-
-  // Determine if we're on Replit (check for .replit.app domain)
-  const isReplit = process.env.REPL_URL || (process.env.NODE_ENV === 'production');
-  
-  // Use secure cookies in production HTTPS environment
-  // Can be explicitly set via USE_SECURE_COOKIES env var for custom deployments
-  const isProduction = process.env.NODE_ENV === 'production';
-  const useSecureCookies = process.env.USE_SECURE_COOKIES === 'true' || 
-                           (isProduction && process.env.REPL_URL?.startsWith('https://'));
-  
-  console.log('🔒 Session Configuration:', {
-    isProduction,
-    useSecureCookies,
-    replUrl: process.env.REPL_URL,
-    nodeEnv: process.env.NODE_ENV
-  });
-  
-  app.use(session({
-    secret: SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    name: 'sessionId', // Give the session cookie a specific name
-    cookie: {
-      secure: useSecureCookies, // Use secure cookies for HTTPS in production
-      httpOnly: true, // Prevent XSS attacks
-      sameSite: 'lax', // Use 'lax' for better compatibility with OAuth flows
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-      // Don't set domain explicitly - let the browser handle it
-    }
-  }));
 
   // Helper to find user
   const findUser = (id: number): User | undefined => users.find(u => u.id === id);
@@ -150,18 +116,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Auth middleware - supports both in-memory (dev) and database (production) user IDs
   const requireAuth = async (req: any, res: any, next: any) => {
-    if (!req.session.userId) {
+    // Check both Passport user (Replit/Discord OAuth) and session userId (dev/in-memory)
+    const userId = req.user?.userId || req.session.userId;
+    
+    if (!userId) {
       return res.status(401).json({ 
         message: 'Authentication required',
-        redirectTo: process.env.NODE_ENV === 'production' ? '/api/auth/auth0/login' : null
+        redirectTo: '/api/login'
       });
     }
+    
+    // Populate req.session.userId for downstream compatibility
+    if (!req.session.userId && req.user?.userId) {
+      req.session.userId = req.user.userId;
+    }
 
-    // In production, only allow database users (OAuth providers: Discord or Auth0)
+    // In production, only allow database users (OAuth providers: Discord or Replit Auth)
     if (process.env.NODE_ENV === 'production' && typeof req.session.userId === 'number') {
       return res.status(401).json({ 
         message: 'Please login with an OAuth provider',
-        redirectTo: '/api/auth/auth0/login'
+        redirectTo: '/api/login'
       });
     }
 
@@ -172,7 +146,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Authentication required' });
       }
     } else {
-      // Database user system (supports both Discord and Auth0 OAuth users)
+      // Database user system (supports Discord and Replit Auth OAuth users)
       try {
         const dbUser = await storage.getUser(req.session.userId);
         if (!dbUser) {
@@ -185,12 +159,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     next();
   };
-  // Register endpoint - Disabled in production (OAuth providers only: Discord or Auth0)
+  // Register endpoint - Disabled in production (OAuth providers only: Discord or Replit Auth)
   app.post("/api/register", async (req, res) => {
     if (process.env.NODE_ENV === 'production') {
       return res.status(403).json({ 
-        message: 'Email/password registration is disabled in production. Please use Discord or Auth0 OAuth.',
-        redirectTo: '/api/auth/auth0/login'
+        message: 'Email/password registration is disabled in production. Please use Discord or Replit Auth.',
+        redirectTo: '/api/login'
       });
     }
     
@@ -232,12 +206,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Login endpoint - Disabled in production (OAuth providers only: Discord or Auth0)
+  // Login endpoint - Disabled in production (OAuth providers only: Discord or Replit Auth)
   app.post("/api/login", async (req, res) => {
     if (process.env.NODE_ENV === 'production') {
       return res.status(403).json({ 
-        message: 'Email/password login is disabled in production. Please use Discord or Auth0 OAuth.',
-        redirectTo: '/api/auth/auth0/login'
+        message: 'Email/password login is disabled in production. Please use Discord or Replit Auth.',
+        redirectTo: '/api/login'
       });
     }
     
@@ -270,11 +244,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(401).json({ message: 'Not authenticated' });
     }
 
-    // Try to get user from database first (for OAuth users: Discord or Auth0)
+    // Try to get user from database first (for OAuth users: Discord or Replit Auth)
     try {
       const dbUser = await storage.getUser(req.session.userId.toString());
       if (dbUser) {
-        // Return database user with both Discord and Auth0 fields
+        // Return database user with Discord and Replit Auth fields
         const { password: _, ...userResponse } = dbUser;
         return res.json({
           ...userResponse,
@@ -315,9 +289,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       discordUsername: null,
       discordAvatar: null,
       discordVerified: false,
-      auth0Id: null,
-      auth0Username: null,
-      auth0Avatar: null
     });
   });
 
@@ -344,11 +315,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // In production, only work with database users (OAuth: Discord or Auth0)
+      // In production, only work with database users (OAuth: Discord or Replit Auth)
       if (process.env.NODE_ENV === 'production' && typeof req.session.userId === 'number') {
         return res.status(403).json({ 
-          message: 'Subscription creation requires OAuth authentication (Discord or Auth0)',
-          redirectTo: '/api/auth/auth0/login'
+          message: 'Subscription creation requires OAuth authentication (Discord or Replit Auth)',
+          redirectTo: '/api/login'
         });
       }
       
@@ -508,15 +479,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     };
   };
 
-  // Auth0 OAuth environment variables check
-  const getAuth0Config = () => {
-    return {
-      domain: process.env.AUTH0_DOMAIN,
-      clientId: process.env.AUTH0_CLIENT_ID,
-      clientSecret: process.env.AUTH0_CLIENT_SECRET,
-      callbackUrl: process.env.AUTH0_CALLBACK_URL || `${process.env.REPL_URL || 'http://localhost:5000'}/api/auth/auth0/callback`,
-    };
-  };
 
   // Helper function to check Discord guild membership
   const checkGuildMembership = async (accessToken: string, guildId: string): Promise<boolean> => {
@@ -563,12 +525,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  // Payment bypass configuration endpoint - supports both Discord and Auth0
+  // Payment bypass configuration endpoint - supports Discord and Replit Auth
   app.get("/api/payment-bypass-config", (req, res) => {
     const discordConfig = getDiscordConfig();
-    const auth0Config = getAuth0Config();
     
-    // Beta timing is platform-wide (same for both providers)
+    // Beta timing is platform-wide (same for all auth providers)
     const betaEndDate = discordConfig.betaEndAt ? new Date(discordConfig.betaEndAt) : new Date();
     const now = new Date();
     const expired = now > betaEndDate;
@@ -578,11 +539,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       discord: {
         enabled: !!discordConfig.clientId,
         requiresGuild: !!discordConfig.guildId,
-        betaActive: !expired,
-        betaDaysRemaining: daysRemaining,
-      },
-      auth0: {
-        enabled: !!auth0Config.domain,
         betaActive: !expired,
         betaDaysRemaining: daysRemaining,
       },
@@ -935,281 +891,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
-    }
-  });
-
-  // Discord Interactions endpoint handler (shared logic)
-  const discordInteractionsHandler = async (req: any, res: any) => {
-    const config = getAuth0Config();
-    
-    console.log('🟣 Auth0 OAuth Login - Start', {
-      sessionId: req.sessionID,
-      hasSession: !!req.session,
-      userAgent: req.headers['user-agent'],
-      referer: req.headers['referer'],
-      host: req.headers['host']
-    });
-    
-    if (!config.domain || !config.clientId || !config.callbackUrl) {
-      return res.status(500).json({ 
-        message: 'Auth0 OAuth not configured. Missing DOMAIN, CLIENT_ID, or CALLBACK_URL.' 
-      });
-    }
-
-    const state = randomBytes(32).toString('hex');
-    req.session.auth0State = state;
-    
-    // Force session save to ensure it persists
-    req.session.save((err) => {
-      if (err) {
-        console.error('❌ Session save error:', err);
-      } else {
-        console.log('✅ Session saved successfully');
-      }
-    });
-
-    console.log('🟣 Auth0 OAuth Login - Generated State', {
-      state: state,
-      sessionAuth0State: req.session.auth0State,
-      sessionId: req.sessionID,
-      callbackUrl: config.callbackUrl
-    });
-
-    const auth0AuthUrl = new URL(`https://${config.domain}/authorize`);
-    auth0AuthUrl.searchParams.set('client_id', config.clientId);
-    auth0AuthUrl.searchParams.set('redirect_uri', config.callbackUrl);
-    auth0AuthUrl.searchParams.set('response_type', 'code');
-    auth0AuthUrl.searchParams.set('scope', 'openid profile email');
-    auth0AuthUrl.searchParams.set('state', state);
-
-    console.log('🟣 Redirecting to Auth0:', auth0AuthUrl.toString());
-    res.redirect(auth0AuthUrl.toString());
-  });
-
-  // Auth0 OAuth callback endpoint
-  app.get("/api/auth/auth0/callback", async (req, res) => {
-    try {
-      console.log('🟢 Auth0 OAuth Callback - Start', {
-        sessionId: req.sessionID,
-        hasSession: !!req.session,
-        sessionAuth0State: req.session?.auth0State,
-        userAgent: req.headers['user-agent'],
-        referer: req.headers['referer'],
-        host: req.headers['host']
-      });
-      
-      const config = getAuth0Config();
-      const { code, state } = req.query;
-
-      console.log('🟢 Auth0 OAuth Callback - Parameters', {
-        code: code ? 'present' : 'missing',
-        state: state,
-        sessionState: req.session?.auth0State,
-        stateMatch: state === req.session?.auth0State
-      });
-
-      if (!config.domain || !config.clientId || !config.clientSecret || !config.callbackUrl) {
-        console.error('❌ Auth0 OAuth configuration missing:', {
-          hasDomain: !!config.domain,
-          hasClientId: !!config.clientId,
-          hasClientSecret: !!config.clientSecret,
-          hasCallbackUrl: !!config.callbackUrl
-        });
-        return res.status(500).json({ 
-          message: 'Auth0 OAuth not configured properly' 
-        });
-      }
-
-      // Verify state parameter
-      if (!state || state !== req.session.auth0State) {
-        console.error('❌ State parameter validation failed', {
-          providedState: state,
-          sessionState: req.session?.auth0State,
-          hasSession: !!req.session,
-          sessionId: req.sessionID,
-          sessionKeys: req.session ? Object.keys(req.session) : 'no session'
-        });
-        return res.status(400).json({ 
-          message: 'Invalid state parameter',
-          debug: process.env.NODE_ENV === 'development' ? {
-            providedState: state,
-            sessionState: req.session?.auth0State,
-            sessionId: req.sessionID
-          } : undefined
-        });
-      }
-
-      console.log('✅ State parameter validation passed');
-
-      if (!code) {
-        console.error('❌ Authorization code not provided');
-        return res.status(400).json({ message: 'Authorization code not provided' });
-      }
-
-      // Exchange code for access token
-      console.log('🟡 Exchanging code for access token...');
-      let tokenResponse;
-      try {
-        tokenResponse = await fetch(`https://${config.domain}/oauth/token`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            grant_type: 'authorization_code',
-            client_id: config.clientId,
-            client_secret: config.clientSecret,
-            code: code as string,
-            redirect_uri: config.callbackUrl
-          })
-        });
-
-        if (!tokenResponse.ok) {
-          const errorText = await tokenResponse.text();
-          console.error('❌ Auth0 token exchange failed:', {
-            status: tokenResponse.status,
-            statusText: tokenResponse.statusText,
-            error: errorText
-          });
-          return res.status(400).json({ message: 'Failed to exchange authorization code' });
-        }
-      } catch (error) {
-        console.error('❌ Error during token exchange request:', error);
-        return res.status(500).json({ message: 'Network error during token exchange' });
-      }
-
-      let tokenData;
-      try {
-        tokenData = await tokenResponse.json() as { access_token: string; id_token?: string };
-        console.log('✅ Token exchange successful');
-      } catch (error) {
-        console.error('❌ Error parsing token response:', error);
-        return res.status(500).json({ message: 'Invalid token response from Auth0' });
-      }
-
-      // Get user info
-      console.log('🟡 Fetching Auth0 user info...');
-      let userResponse;
-      try {
-        userResponse = await fetch(`https://${config.domain}/userinfo`, {
-          headers: {
-            'Authorization': `Bearer ${tokenData.access_token}`
-          }
-        });
-
-        if (!userResponse.ok) {
-          const errorText = await userResponse.text();
-          console.error('❌ Failed to fetch Auth0 user info:', {
-            status: userResponse.status,
-            statusText: userResponse.statusText,
-            error: errorText
-          });
-          return res.status(400).json({ message: 'Failed to get user information' });
-        }
-      } catch (error) {
-        console.error('❌ Error during user info request:', error);
-        return res.status(500).json({ message: 'Network error during user info fetch' });
-      }
-
-      let auth0User;
-      try {
-        auth0User = await userResponse.json() as {
-          sub: string;
-          name?: string;
-          nickname?: string;
-          picture?: string;
-          email?: string;
-        };
-        console.log('✅ Auth0 user info fetched:', {
-          sub: auth0User.sub,
-          name: auth0User.name,
-          hasEmail: !!auth0User.email
-        });
-      } catch (error) {
-        console.error('❌ Error parsing user info response:', error);
-        return res.status(500).json({ message: 'Invalid user info response from Auth0' });
-      }
-
-      // Upsert user in database
-      console.log('🟡 Upserting user in database...');
-      let user;
-      try {
-        const username = auth0User.name || auth0User.nickname || auth0User.email?.split('@')[0] || 'User';
-        const avatarUrl = auth0User.picture || '';
-        
-        user = await storage.upsertUserByAuth0(
-          auth0User.sub,
-          username,
-          avatarUrl,
-          auth0User.email
-        );
-        console.log('✅ User upserted successfully:', { userId: user.id, username: user.username });
-      } catch (error) {
-        console.error('❌ Error upserting user in database:', error);
-        console.error('❌ Auth0 user data:', {
-          sub: auth0User.sub,
-          name: auth0User.name,
-          email: auth0User.email
-        });
-        if (error instanceof Error) {
-          console.error('❌ Database error details:', {
-            name: error.name,
-            message: error.message,
-            stack: error.stack
-          });
-        }
-        return res.status(500).json({ 
-          message: 'Database error during user creation',
-          ...(process.env.NODE_ENV === 'development' && { 
-            error: error instanceof Error ? error.message : 'Unknown database error',
-            auth0Data: {
-              sub: auth0User.sub,
-              name: auth0User.name,
-              hasEmail: !!auth0User.email
-            }
-          })
-        });
-      }
-
-      // Set session
-      console.log('🟡 Setting user session...');
-      try {
-        req.session.userId = user.id;
-        req.session.auth0State = undefined;
-        
-        await new Promise<void>((resolve, reject) => {
-          req.session.save((err) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve();
-            }
-          });
-        });
-        console.log('✅ Session set successfully');
-      } catch (error) {
-        console.error('❌ Error setting session:', error);
-        return res.status(500).json({ message: 'Session error during authentication' });
-      }
-
-      // Redirect to frontend
-      console.log('✅ Auth0 OAuth callback completed successfully, redirecting to /');
-      res.redirect('/');
-    } catch (error) {
-      console.error('❌ Unexpected error in Auth0 OAuth callback:', error);
-      if (error instanceof Error) {
-        console.error('Error details:', {
-          name: error.name,
-          message: error.message,
-          stack: error.stack
-        });
-      }
-      res.status(500).json({ 
-        message: 'Internal server error during Auth0 authentication',
-        ...(process.env.NODE_ENV === 'development' && { 
-          error: error instanceof Error ? error.message : 'Unknown error' 
-        })
-      });
     }
   });
 

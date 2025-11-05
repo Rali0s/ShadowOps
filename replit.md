@@ -37,7 +37,7 @@ RV Training Module: ADDED - Complete MailBox Card Remote Viewing Training system
 - **Database**: PostgreSQL (Neon serverless) with Drizzle ORM and Drizzle Kit for migrations.
 
 ## Key Architectural Decisions & Features
-- **Tiered Beta Access Platform**: Dual OAuth (Discord and Auth0) for authentication with automatic beta access for Auth0 users.
+- **Tiered Beta Access Platform**: Dual OAuth (Discord and Replit Auth) for authentication with automatic beta access for Replit Auth users.
 - **Demo Mode**: Full-access demo available when no authentication providers are configured.
 - **Brainwave Frequency Training**: Core functionality supporting Alpha, Beta, Theta, and Gamma frequencies.
 - **Interactive Terminal**: React-based terminal integrated on the homepage.
@@ -73,4 +73,4 @@ RV Training Module: ADDED - Complete MailBox Card Remote Viewing Training system
 
 ## Authentication
 - **Discord OAuth**: For user authentication and beta access.
-- **Auth0 OAuth**: For user authentication and automatic beta access.
+- **Replit Auth (OpenID Connect)**: For user authentication and automatic beta access via Replit's built-in authentication system.

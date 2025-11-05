@@ -36,7 +36,7 @@ export function getSession() {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production' && process.env.REPL_URL?.startsWith('https://'),
       maxAge: sessionTtl,
     },
   });
@@ -76,9 +76,10 @@ export async function setupAuth(app: Express) {
     tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers,
     verified: passport.AuthenticateCallback
   ) => {
-    const user = {};
+    const claims = tokens.claims();
+    const user = { userId: claims.sub }; // Store userId for session
     updateUserSession(user, tokens);
-    await upsertUser(tokens.claims());
+    await upsertUser(claims);
     verified(null, user);
   };
 
@@ -104,7 +105,16 @@ export async function setupAuth(app: Express) {
   };
 
   passport.serializeUser((user: Express.User, cb) => cb(null, user));
-  passport.deserializeUser((user: Express.User, cb) => cb(null, user));
+  passport.deserializeUser(async (user: Express.User, cb) => {
+    // Populate session.userId for compatibility with existing routes
+    const userObj = user as any;
+    if (userObj.userId) {
+      // Session userId will be available via req.user.userId
+      cb(null, userObj);
+    } else {
+      cb(null, user);
+    }
+  });
 
   app.get("/api/login", (req, res, next) => {
     ensureStrategy(req.hostname);
@@ -131,6 +141,51 @@ export async function setupAuth(app: Express) {
         }).href
       );
     });
+  });
+
+  // Get current user endpoint
+  app.get("/api/auth/user", async (req, res) => {
+    if (!req.isAuthenticated() || !req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    try {
+      const user = req.user as any;
+      const claims = user.claims;
+      
+      if (!claims?.sub) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      // Fetch user from database
+      const dbUser = await storage.getUser(claims.sub);
+      
+      if (!dbUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Return user data with subscription info
+      // Map database fields to frontend expected format
+      const subscriptionStatus = dbUser.stripeSubscriptionId ? 'active' : 'inactive';
+      
+      res.json({
+        id: dbUser.id,
+        email: dbUser.email,
+        firstName: dbUser.firstName,
+        lastName: dbUser.lastName,
+        profileImageUrl: dbUser.profileImageUrl,
+        subscriptionStatus: subscriptionStatus,
+        subscriptionTier: dbUser.subscriptionTier || 'none',
+        subscriptionId: dbUser.stripeSubscriptionId,
+        discordId: dbUser.discordId,
+        discordUsername: dbUser.discordUsername,
+        discordAvatar: dbUser.discordAvatar,
+        discordVerified: dbUser.discordVerified,
+      });
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
   });
 }
 
