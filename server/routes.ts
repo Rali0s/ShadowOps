@@ -153,10 +153,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     }
 
-    // In production, only allow database users (Auth0 OAuth)
+    // In production, only allow database users (OAuth providers: Discord or Auth0)
     if (process.env.NODE_ENV === 'production' && typeof req.session.userId === 'number') {
       return res.status(401).json({ 
-        message: 'Please login with Auth0',
+        message: 'Please login with an OAuth provider',
         redirectTo: '/api/auth/auth0/login'
       });
     }
@@ -168,7 +168,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Authentication required' });
       }
     } else {
-      // Database user system (Discord OAuth users)
+      // Database user system (supports both Discord and Auth0 OAuth users)
       try {
         const dbUser = await storage.getUser(req.session.userId);
         if (!dbUser) {
@@ -181,11 +181,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     next();
   };
-  // Register endpoint - Disabled in production (Auth0 OAuth only)
+  // Register endpoint - Disabled in production (OAuth providers only: Discord or Auth0)
   app.post("/api/register", async (req, res) => {
     if (process.env.NODE_ENV === 'production') {
       return res.status(403).json({ 
-        message: 'Email/password registration is disabled in production. Please use Auth0.',
+        message: 'Email/password registration is disabled in production. Please use Discord or Auth0 OAuth.',
         redirectTo: '/api/auth/auth0/login'
       });
     }
@@ -228,11 +228,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Login endpoint - Disabled in production (Auth0 OAuth only)
+  // Login endpoint - Disabled in production (OAuth providers only: Discord or Auth0)
   app.post("/api/login", async (req, res) => {
     if (process.env.NODE_ENV === 'production') {
       return res.status(403).json({ 
-        message: 'Email/password login is disabled in production. Please use Auth0.',
+        message: 'Email/password login is disabled in production. Please use Discord or Auth0 OAuth.',
         redirectTo: '/api/auth/auth0/login'
       });
     }
@@ -266,20 +266,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(401).json({ message: 'Not authenticated' });
     }
 
-    // Try to get user from database first (for Discord users)
+    // Try to get user from database first (for OAuth users: Discord or Auth0)
     try {
       const dbUser = await storage.getUser(req.session.userId.toString());
       if (dbUser) {
-        // Return database user with Discord fields
+        // Return database user with both Discord and Auth0 fields
         const { password: _, ...userResponse } = dbUser;
         return res.json({
           ...userResponse,
           // Map database user to match expected format
           subscriptionStatus: dbUser.subscriptionTier === 'none' ? 'inactive' : 'active',
+          // Discord fields
           discordId: dbUser.discordId,
           discordUsername: dbUser.discordUsername,
           discordAvatar: dbUser.discordAvatar,
-          discordVerified: dbUser.discordVerified
+          discordVerified: dbUser.discordVerified,
+          // Auth0 fields
+          auth0Id: dbUser.auth0Id,
+          auth0Username: dbUser.auth0Username,
+          auth0Avatar: dbUser.auth0Avatar
         });
       }
     } catch (error) {
@@ -298,14 +303,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       user.subscriptionStatus = 'inactive';
     }
 
-    // Return user without password, but include Discord fields (will be null for non-Discord users)
+    // Return user without password, include both Discord and Auth0 fields (will be null for OAuth users)
     const { password: _, ...userResponse } = user;
     res.json({
       ...userResponse,
       discordId: null,
       discordUsername: null,
       discordAvatar: null,
-      discordVerified: false
+      discordVerified: false,
+      auth0Id: null,
+      auth0Username: null,
+      auth0Avatar: null
     });
   });
 
@@ -332,10 +340,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // In production, only work with database users (Auth0 OAuth)
+      // In production, only work with database users (OAuth: Discord or Auth0)
       if (process.env.NODE_ENV === 'production' && typeof req.session.userId === 'number') {
         return res.status(403).json({ 
-          message: 'Subscription creation requires Auth0 authentication',
+          message: 'Subscription creation requires OAuth authentication (Discord or Auth0)',
           redirectTo: '/api/auth/auth0/login'
         });
       }
