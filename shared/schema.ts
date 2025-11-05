@@ -1,27 +1,43 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, timestamp, boolean, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, timestamp, boolean, jsonb, index } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Session storage table (required for Replit Auth with connect-pg-simple)
+export const sessions = pgTable(
+  "sessions",
+  {
+    sid: varchar("sid").primaryKey(),
+    sess: jsonb("sess").notNull(),
+    expire: timestamp("expire").notNull(),
+  },
+  (table) => [index("IDX_session_expire").on(table.expire)],
+);
+
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  username: text("username").notNull().unique(),
-  email: text("email").notNull().unique(),
-  password: text("password").notNull(),
+  username: text("username"),
+  email: text("email").unique(),
+  password: text("password"),
+  // Replit Auth fields
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  profileImageUrl: text("profile_image_url"),
+  // Subscription & tier management
   subscriptionTier: text("subscription_tier").default("none"), // none, alpha, beta, theta, gamma
   stripeCustomerId: text("stripe_customer_id"),
   stripeSubscriptionId: text("stripe_subscription_id"),
+  // Discord OAuth fields
   discordId: text("discord_id"),
   discordUsername: text("discord_username"),
   discordAvatar: text("discord_avatar"),
   discordVerified: boolean("discord_verified").default(false),
-  auth0Id: text("auth0_id"),
-  auth0Username: text("auth0_username"),
-  auth0Avatar: text("auth0_avatar"),
+  // System fields
   isActive: boolean("is_active").default(true),
   isAdmin: boolean("is_admin").default(false),
   createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // Password reset tokens
@@ -155,19 +171,29 @@ export const rvProgressRelations = relations(rvProgress, ({ one }) => ({
   }),
 }));
 
+// Replit Auth user upsert schema
+export const upsertReplitUserSchema = z.object({
+  id: z.string(),
+  email: z.string().nullable(),
+  firstName: z.string().nullable(),
+  lastName: z.string().nullable(),
+  profileImageUrl: z.string().nullable(),
+});
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
+  updatedAt: true,
   stripeCustomerId: true,
   stripeSubscriptionId: true,
   discordId: true,
   discordUsername: true,
   discordAvatar: true,
   discordVerified: true,
-  auth0Id: true,
-  auth0Username: true,
-  auth0Avatar: true,
+  firstName: true,
+  lastName: true,
+  profileImageUrl: true,
   isActive: true,
   isAdmin: true,
 });
@@ -210,6 +236,7 @@ export const insertRvProgressSchema = createInsertSchema(rvProgress).omit({
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
+export type UpsertUser = z.infer<typeof upsertReplitUserSchema>;
 export type InsertDbDocument = z.infer<typeof insertDbDocumentSchema>;
 export type DbDocument = typeof dbDocuments.$inferSelect;
 export type InsertPasswordResetToken = z.infer<typeof insertPasswordResetTokenSchema>;

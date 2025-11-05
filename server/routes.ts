@@ -6,6 +6,7 @@ import { scrypt, randomBytes, timingSafeEqual, webcrypto } from "crypto";
 import { promisify } from "util";
 import fetch from "node-fetch";
 import { storage } from "./storage";
+import { setupAuth, isAuthenticated } from "./replitAuth";
 
 const scryptAsync = promisify(scrypt);
 
@@ -106,6 +107,9 @@ declare module 'express-session' {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  
+  // Setup Replit Auth (OpenID Connect) - handles /api/login, /api/callback, /api/logout
+  await setupAuth(app);
   
   // Session middleware (use default in demo mode)
   const SESSION_SECRET = process.env.SESSION_SECRET || 'demo-secret-not-for-production';
@@ -281,10 +285,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           discordUsername: dbUser.discordUsername,
           discordAvatar: dbUser.discordAvatar,
           discordVerified: dbUser.discordVerified,
-          // Auth0 fields
-          auth0Id: dbUser.auth0Id,
-          auth0Username: dbUser.auth0Username,
-          auth0Avatar: dbUser.auth0Avatar
+          // Replit Auth fields
+          firstName: dbUser.firstName,
+          lastName: dbUser.lastName,
+          profileImageUrl: dbUser.profileImageUrl
         });
       }
     } catch (error) {
@@ -915,8 +919,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Auth0 OAuth login endpoint
-  app.get("/api/auth/auth0/login", (req, res) => {
+  // Replit Auth user endpoint
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      const { password: _, ...userResponse } = user;
+      res.json({
+        ...userResponse,
+        subscriptionStatus: user.subscriptionTier === 'none' ? 'inactive' : 'active',
+      });
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  // Discord Interactions endpoint handler (shared logic)
+  const discordInteractionsHandler = async (req: any, res: any) => {
     const config = getAuth0Config();
     
     console.log('🟣 Auth0 OAuth Login - Start', {
