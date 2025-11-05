@@ -12,6 +12,7 @@ interface User {
   id: number;
   email: string;
   subscriptionStatus: 'active' | 'inactive' | 'trial' | 'cancelled';
+  subscriptionTier: string; // none, alpha, beta, theta, gamma
   subscriptionId?: string;
   trialEndsAt?: string;
   discordId?: string | null;
