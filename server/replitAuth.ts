@@ -94,16 +94,32 @@ export async function setupAuth(app: Express) {
   // Keep track of registered strategies
   const registeredStrategies = new Set<string>();
 
-  // Helper function to ensure strategy exists for a domain
-  const ensureStrategy = (domain: string) => {
-    const strategyName = `replitauth:${domain}`;
+  // Get the proper callback URL for Replit Auth
+  const getCallbackURL = () => {
+    // In Replit, use REPLIT_DEV_DOMAIN or construct from slug/owner
+    if (process.env.REPLIT_DEV_DOMAIN) {
+      return `https://${process.env.REPLIT_DEV_DOMAIN}/api/callback`;
+    }
+    // Fallback: construct from REPL_SLUG and REPL_OWNER if available
+    if (process.env.REPL_SLUG && process.env.REPL_OWNER) {
+      return `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co/api/callback`;
+    }
+    // Development fallback - this won't work for actual OAuth but prevents crashes
+    return "http://localhost:5000/api/callback";
+  };
+
+  // Helper function to ensure strategy exists
+  const ensureStrategy = () => {
+    const strategyName = 'replitauth';
     if (!registeredStrategies.has(strategyName)) {
+      const callbackURL = getCallbackURL();
+      console.log('🟡 Registering Replit Auth strategy with callback:', callbackURL);
       const strategy = new Strategy(
         {
           name: strategyName,
           config,
           scope: "openid email profile offline_access",
-          callbackURL: `https://${domain}/api/callback`,
+          callbackURL,
         },
         verify,
       );
@@ -125,27 +141,48 @@ export async function setupAuth(app: Express) {
   });
 
   app.get("/api/login", (req, res, next) => {
-    ensureStrategy(req.hostname);
-    passport.authenticate(`replitauth:${req.hostname}`, {
-      prompt: "login consent",
-      scope: ["openid", "email", "profile", "offline_access"],
-    })(req, res, next);
+    try {
+      console.log('🟡 Replit Auth login attempt');
+      ensureStrategy();
+      console.log('🟡 Calling passport.authenticate...');
+      
+      const authMiddleware = passport.authenticate('replitauth', {
+        prompt: "login consent",
+        scope: ["openid", "email", "profile", "offline_access"],
+      });
+      
+      console.log('🟡 Auth middleware created, executing...');
+      authMiddleware(req, res, (err: any) => {
+        if (err) {
+          console.error('❌ Passport authenticate error:', err);
+          return res.status(500).json({ error: 'Authentication failed', details: err.message });
+        }
+        next(err);
+      });
+    } catch (error) {
+      console.error('❌ Replit Auth login error:', error);
+      res.status(500).json({ error: 'Authentication initialization failed', details: error instanceof Error ? error.message : 'Unknown error' });
+    }
   });
 
   app.get("/api/callback", (req, res, next) => {
-    ensureStrategy(req.hostname);
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    ensureStrategy();
+    passport.authenticate('replitauth', {
       successReturnToOrRedirect: "/",
       failureRedirect: "/api/login",
     })(req, res, next);
   });
 
   app.get("/api/logout", (req, res) => {
+    const postLogoutUri = process.env.REPLIT_DEV_DOMAIN 
+      ? `https://${process.env.REPLIT_DEV_DOMAIN}`
+      : `${req.protocol}://${req.hostname}`;
+      
     req.logout(() => {
       res.redirect(
         client.buildEndSessionUrl(config, {
           client_id: process.env.REPL_ID!,
-          post_logout_redirect_uri: `${req.protocol}://${req.hostname}`,
+          post_logout_redirect_uri: postLogoutUri,
         }).href
       );
     });
