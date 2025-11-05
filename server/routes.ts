@@ -559,25 +559,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  // Payment bypass configuration endpoint
+  // Payment bypass configuration endpoint - supports both Discord and Auth0
   app.get("/api/payment-bypass-config", (req, res) => {
-    const config = getDiscordConfig();
-    const betaEndDate = config.betaEndAt ? new Date(config.betaEndAt) : new Date();
+    const discordConfig = getDiscordConfig();
+    const auth0Config = getAuth0Config();
+    
+    // Beta timing is platform-wide (same for both providers)
+    const betaEndDate = discordConfig.betaEndAt ? new Date(discordConfig.betaEndAt) : new Date();
     const now = new Date();
     const expired = now > betaEndDate;
     const daysRemaining = expired ? 0 : Math.ceil((betaEndDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
     
     res.json({
       discord: {
-        enabled: true,
-        requiresGuild: !!config.guildId,
+        enabled: !!discordConfig.clientId,
+        requiresGuild: !!discordConfig.guildId,
+        betaActive: !expired,
+        betaDaysRemaining: daysRemaining,
+      },
+      auth0: {
+        enabled: !!auth0Config.domain,
         betaActive: !expired,
         betaDaysRemaining: daysRemaining,
       },
       pricing: {
         beta: '$5.89/month (locked forever)',
         regular: '$20/month',
-        discord: expired ? '$5.89/month (special Discord pricing)' : 'FREE during beta',
+        oauth: expired ? '$5.89/month (special OAuth pricing)' : 'FREE during beta',
       },
       bypassTiers: ['beta', 'elite', 'shadow'],
     });
