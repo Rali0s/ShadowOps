@@ -148,13 +148,13 @@
     <!-- Remove loading screen after app loads -->
     <script>
       // Enhanced loading screen for tablets
-      window.addEventListener('load', () => {
+      window.addEventListener('DOMContentLoaded', () => {
         const loading = document.getElementById('neuralLoading');
         if (loading) {
           setTimeout(() => {
             loading.style.opacity = '0';
             setTimeout(() => loading.remove(), 300);
-          }, 1000); // Show loading screen for 1 second minimum
+          }, 100); // Minimal delay
         }
       });
       
