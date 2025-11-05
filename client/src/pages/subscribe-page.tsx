@@ -176,24 +176,24 @@ export default function SubscribePage() {
       <div className="min-h-screen bg-terminal-bg flex items-center justify-center">
         <Card className="max-w-md mx-4 bg-card-bg border-gray-700">
           <CardContent className="pt-6 text-center">
-            <div className="text-red-400 mb-4">
-              <Shield className="h-12 w-12 mx-auto" />
+            <div className="text-terminal-green mb-4">
+              <Brain className="h-12 w-12 mx-auto animate-pulse" />
             </div>
             <h2 className="text-xl font-bold text-white mb-2">
-              {!stripePromise ? "Payment System Unavailable" : "Authentication Required"}
+              {!stripePromise ? "Demo Mode - Full Access Unlocked!" : "Authentication Required"}
             </h2>
             <p className="text-gray-400 mb-4">
               {!stripePromise 
-                ? "Payment processing is not configured. Please contact administrator." 
+                ? "All features are freely accessible. Explore the complete ShadowFang training system without payment." 
                 : "Please log in to access subscription services."
               }
             </p>
             <Button 
-              onClick={() => setLocation(!stripePromise ? "/" : "/subscribe")} 
+              onClick={() => setLocation("/")} 
               className="bg-terminal-green text-terminal-bg hover:bg-terminal-amber"
               data-testid="button-back-or-login"
             >
-              {!stripePromise ? "Back to Home" : "Try Again"}
+              {!stripePromise ? "Explore Training System" : "Try Again"}
             </Button>
           </CardContent>
         </Card>

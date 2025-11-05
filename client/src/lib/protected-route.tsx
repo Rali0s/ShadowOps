@@ -7,6 +7,9 @@ import {
   SubscriptionRequiredGate 
 } from "@/components/auth-gates";
 
+// Demo mode check - if Stripe public key is not configured, allow all access
+const isDemoMode = !import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+
 export function ProtectedRoute({
   path,
   component: Component,
@@ -15,6 +18,15 @@ export function ProtectedRoute({
   component: () => React.JSX.Element;
 }) {
   const { user, isLoading, isAuthorized, betaStatus, isBetaLoading } = useAuth();
+
+  // Demo mode: allow all access without authentication
+  if (isDemoMode) {
+    return (
+      <Route path={path}>
+        <Component />
+      </Route>
+    );
+  }
 
   // Show loading while checking auth or beta status
   if (isLoading || isBetaLoading) {
