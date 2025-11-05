@@ -26,8 +26,9 @@ interface RvSession {
   sessionId: string;
   trainingClass: string;
   target?: {
-    name: string;
-    description: string;
+    targetId: string;
+    name?: string;
+    description?: string;
     category: string;
   };
   currentStage: number;
@@ -435,6 +436,18 @@ export default function RVTraining() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
+          <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+            <div className="text-center">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Target Coordinates</span>
+              <div className="text-3xl font-bold text-red-500 mt-2 font-mono tracking-wide" data-testid="text-coordinates">
+                {activeSession.target?.targetId || 'CLASSIFIED'}
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Focus on this coordinate for remote viewing
+              </p>
+            </div>
+          </div>
+
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Session Progress</span>
