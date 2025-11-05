@@ -179,11 +179,16 @@ export class DatabaseStorage implements IStorage {
   }
 
   async upsertReplitUser(userData: UpsertUser): Promise<User> {
+    // Generate username from email or use firstName/lastName
+    const username = userData.email?.split('@')[0] || `user_${userData.id.substring(0, 8)}`;
+    
     const [user] = await db
       .insert(users)
       .values({
         id: userData.id,
+        username: username,
         email: userData.email,
+        password: 'replit_oauth', // Placeholder password for Replit Auth users
         firstName: userData.firstName,
         lastName: userData.lastName,
         profileImageUrl: userData.profileImageUrl,
