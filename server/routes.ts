@@ -101,6 +101,7 @@ declare module 'express-session' {
   interface SessionData {
     userId?: number | string; // Support both in-memory (number) and database (string) IDs
     discordState?: string;
+    auth0State?: string;
   }
 }
 
@@ -495,6 +496,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     };
   };
 
+  // Auth0 OAuth environment variables check
+  const getAuth0Config = () => {
+    return {
+      domain: process.env.AUTH0_DOMAIN,
+      clientId: process.env.AUTH0_CLIENT_ID,
+      clientSecret: process.env.AUTH0_CLIENT_SECRET,
+      callbackUrl: process.env.AUTH0_CALLBACK_URL || `${process.env.REPL_URL || 'http://localhost:5000'}/api/auth/auth0/callback`,
+    };
+  };
+
   // Helper function to check Discord guild membership
   const checkGuildMembership = async (accessToken: string, guildId: string): Promise<boolean> => {
     try {
@@ -885,6 +896,281 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Discord recheck error:', error);
       res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+
+  // Auth0 OAuth login endpoint
+  app.get("/api/auth/auth0/login", (req, res) => {
+    const config = getAuth0Config();
+    
+    console.log('🟣 Auth0 OAuth Login - Start', {
+      sessionId: req.sessionID,
+      hasSession: !!req.session,
+      userAgent: req.headers['user-agent'],
+      referer: req.headers['referer'],
+      host: req.headers['host']
+    });
+    
+    if (!config.domain || !config.clientId || !config.callbackUrl) {
+      return res.status(500).json({ 
+        message: 'Auth0 OAuth not configured. Missing DOMAIN, CLIENT_ID, or CALLBACK_URL.' 
+      });
+    }
+
+    const state = randomBytes(32).toString('hex');
+    req.session.auth0State = state;
+    
+    // Force session save to ensure it persists
+    req.session.save((err) => {
+      if (err) {
+        console.error('❌ Session save error:', err);
+      } else {
+        console.log('✅ Session saved successfully');
+      }
+    });
+
+    console.log('🟣 Auth0 OAuth Login - Generated State', {
+      state: state,
+      sessionAuth0State: req.session.auth0State,
+      sessionId: req.sessionID,
+      callbackUrl: config.callbackUrl
+    });
+
+    const auth0AuthUrl = new URL(`https://${config.domain}/authorize`);
+    auth0AuthUrl.searchParams.set('client_id', config.clientId);
+    auth0AuthUrl.searchParams.set('redirect_uri', config.callbackUrl);
+    auth0AuthUrl.searchParams.set('response_type', 'code');
+    auth0AuthUrl.searchParams.set('scope', 'openid profile email');
+    auth0AuthUrl.searchParams.set('state', state);
+
+    console.log('🟣 Redirecting to Auth0:', auth0AuthUrl.toString());
+    res.redirect(auth0AuthUrl.toString());
+  });
+
+  // Auth0 OAuth callback endpoint
+  app.get("/api/auth/auth0/callback", async (req, res) => {
+    try {
+      console.log('🟢 Auth0 OAuth Callback - Start', {
+        sessionId: req.sessionID,
+        hasSession: !!req.session,
+        sessionAuth0State: req.session?.auth0State,
+        userAgent: req.headers['user-agent'],
+        referer: req.headers['referer'],
+        host: req.headers['host']
+      });
+      
+      const config = getAuth0Config();
+      const { code, state } = req.query;
+
+      console.log('🟢 Auth0 OAuth Callback - Parameters', {
+        code: code ? 'present' : 'missing',
+        state: state,
+        sessionState: req.session?.auth0State,
+        stateMatch: state === req.session?.auth0State
+      });
+
+      if (!config.domain || !config.clientId || !config.clientSecret || !config.callbackUrl) {
+        console.error('❌ Auth0 OAuth configuration missing:', {
+          hasDomain: !!config.domain,
+          hasClientId: !!config.clientId,
+          hasClientSecret: !!config.clientSecret,
+          hasCallbackUrl: !!config.callbackUrl
+        });
+        return res.status(500).json({ 
+          message: 'Auth0 OAuth not configured properly' 
+        });
+      }
+
+      // Verify state parameter
+      if (!state || state !== req.session.auth0State) {
+        console.error('❌ State parameter validation failed', {
+          providedState: state,
+          sessionState: req.session?.auth0State,
+          hasSession: !!req.session,
+          sessionId: req.sessionID,
+          sessionKeys: req.session ? Object.keys(req.session) : 'no session'
+        });
+        return res.status(400).json({ 
+          message: 'Invalid state parameter',
+          debug: process.env.NODE_ENV === 'development' ? {
+            providedState: state,
+            sessionState: req.session?.auth0State,
+            sessionId: req.sessionID
+          } : undefined
+        });
+      }
+
+      console.log('✅ State parameter validation passed');
+
+      if (!code) {
+        console.error('❌ Authorization code not provided');
+        return res.status(400).json({ message: 'Authorization code not provided' });
+      }
+
+      // Exchange code for access token
+      console.log('🟡 Exchanging code for access token...');
+      let tokenResponse;
+      try {
+        tokenResponse = await fetch(`https://${config.domain}/oauth/token`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            grant_type: 'authorization_code',
+            client_id: config.clientId,
+            client_secret: config.clientSecret,
+            code: code as string,
+            redirect_uri: config.callbackUrl
+          })
+        });
+
+        if (!tokenResponse.ok) {
+          const errorText = await tokenResponse.text();
+          console.error('❌ Auth0 token exchange failed:', {
+            status: tokenResponse.status,
+            statusText: tokenResponse.statusText,
+            error: errorText
+          });
+          return res.status(400).json({ message: 'Failed to exchange authorization code' });
+        }
+      } catch (error) {
+        console.error('❌ Error during token exchange request:', error);
+        return res.status(500).json({ message: 'Network error during token exchange' });
+      }
+
+      let tokenData;
+      try {
+        tokenData = await tokenResponse.json() as { access_token: string; id_token?: string };
+        console.log('✅ Token exchange successful');
+      } catch (error) {
+        console.error('❌ Error parsing token response:', error);
+        return res.status(500).json({ message: 'Invalid token response from Auth0' });
+      }
+
+      // Get user info
+      console.log('🟡 Fetching Auth0 user info...');
+      let userResponse;
+      try {
+        userResponse = await fetch(`https://${config.domain}/userinfo`, {
+          headers: {
+            'Authorization': `Bearer ${tokenData.access_token}`
+          }
+        });
+
+        if (!userResponse.ok) {
+          const errorText = await userResponse.text();
+          console.error('❌ Failed to fetch Auth0 user info:', {
+            status: userResponse.status,
+            statusText: userResponse.statusText,
+            error: errorText
+          });
+          return res.status(400).json({ message: 'Failed to get user information' });
+        }
+      } catch (error) {
+        console.error('❌ Error during user info request:', error);
+        return res.status(500).json({ message: 'Network error during user info fetch' });
+      }
+
+      let auth0User;
+      try {
+        auth0User = await userResponse.json() as {
+          sub: string;
+          name?: string;
+          nickname?: string;
+          picture?: string;
+          email?: string;
+        };
+        console.log('✅ Auth0 user info fetched:', {
+          sub: auth0User.sub,
+          name: auth0User.name,
+          hasEmail: !!auth0User.email
+        });
+      } catch (error) {
+        console.error('❌ Error parsing user info response:', error);
+        return res.status(500).json({ message: 'Invalid user info response from Auth0' });
+      }
+
+      // Upsert user in database
+      console.log('🟡 Upserting user in database...');
+      let user;
+      try {
+        const username = auth0User.name || auth0User.nickname || auth0User.email?.split('@')[0] || 'User';
+        const avatarUrl = auth0User.picture || '';
+        
+        user = await storage.upsertUserByAuth0(
+          auth0User.sub,
+          username,
+          avatarUrl,
+          auth0User.email
+        );
+        console.log('✅ User upserted successfully:', { userId: user.id, username: user.username });
+      } catch (error) {
+        console.error('❌ Error upserting user in database:', error);
+        console.error('❌ Auth0 user data:', {
+          sub: auth0User.sub,
+          name: auth0User.name,
+          email: auth0User.email
+        });
+        if (error instanceof Error) {
+          console.error('❌ Database error details:', {
+            name: error.name,
+            message: error.message,
+            stack: error.stack
+          });
+        }
+        return res.status(500).json({ 
+          message: 'Database error during user creation',
+          ...(process.env.NODE_ENV === 'development' && { 
+            error: error instanceof Error ? error.message : 'Unknown database error',
+            auth0Data: {
+              sub: auth0User.sub,
+              name: auth0User.name,
+              hasEmail: !!auth0User.email
+            }
+          })
+        });
+      }
+
+      // Set session
+      console.log('🟡 Setting user session...');
+      try {
+        req.session.userId = user.id;
+        req.session.auth0State = undefined;
+        
+        await new Promise<void>((resolve, reject) => {
+          req.session.save((err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        });
+        console.log('✅ Session set successfully');
+      } catch (error) {
+        console.error('❌ Error setting session:', error);
+        return res.status(500).json({ message: 'Session error during authentication' });
+      }
+
+      // Redirect to frontend
+      console.log('✅ Auth0 OAuth callback completed successfully, redirecting to /');
+      res.redirect('/');
+    } catch (error) {
+      console.error('❌ Unexpected error in Auth0 OAuth callback:', error);
+      if (error instanceof Error) {
+        console.error('Error details:', {
+          name: error.name,
+          message: error.message,
+          stack: error.stack
+        });
+      }
+      res.status(500).json({ 
+        message: 'Internal server error during Auth0 authentication',
+        ...(process.env.NODE_ENV === 'development' && { 
+          error: error instanceof Error ? error.message : 'Unknown error' 
+        })
+      });
     }
   });
 
